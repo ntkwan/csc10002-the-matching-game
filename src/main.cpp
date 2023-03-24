@@ -2,7 +2,12 @@
 #include "table.h"
 
 int main() {
-    Table board(4, 20, 3);
-    board.generateTableData();
-    board.printTableData();
+    bool flag = false;
+    while (flag == false || Screen::getConsoleInput() != 1) {
+        Screen::setUpConsole(18);
+        Table board(4, 50, 3);
+        board.displayTableData();
+        flag = true;
+    }
+    Screen::clearConsole();
 }
