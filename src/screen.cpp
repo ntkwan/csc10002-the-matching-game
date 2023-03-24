@@ -3,8 +3,8 @@
 HWND Screen::console_window = GetConsoleWindow();
 HANDLE Screen::console_output = GetStdHandle(STD_OUTPUT_HANDLE);
 
-void Screen::setUpConsole(int fontSize) {
-	setFontInfo(fontSize,fontSize);
+void Screen::setUpConsole(int font_size) {
+	setFontInfo(font_size,font_size);
 	setAndCenterWindow();
 	disableMaximize();
 	setConsoleTitle();
@@ -13,7 +13,7 @@ void Screen::setUpConsole(int fontSize) {
 	disableMouseInput();
 }
 
-void Screen::gotoXY(int pX, int pY) { SetConsoleCursorPosition(console_output, COORD{ (short)pX, (short)pY }); }
+void Screen::gotoXY(int pos_x, int pos_y) { SetConsoleCursorPosition(console_output, COORD{ (short)pos_x, (short)pos_y }); }
 
 void Screen::setAndCenterWindow() {
 	RECT rect_client, rect_window;

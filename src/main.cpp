@@ -6,6 +6,7 @@ int main() {
     while (flag == false || Screen::getConsoleInput() != 1) {
         Screen::setUpConsole(18);
         Table board(4, 50, 3);
+        board.generateTableData();
         board.displayTableData();
         flag = true;
     }

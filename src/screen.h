@@ -19,7 +19,7 @@ struct Screen
 	static void setConsoleTitle();
 	static void disableMaximize();
 	static void showCursor(bool);
-	static void setFontInfo(int sizeX, int sizeY);
+	static void setFontInfo(int size_x, int size_y);
 	static void clearConsole();
 	static void disableMouseInput();
 	static int getConsoleInput();

@@ -22,6 +22,10 @@ Table::~Table() {
     table_data = nullptr;
 }
 
+int Table::getXInConsole(int c) const { return padding_left + 5 + CELL_LENGTH * c; }
+
+int Table::getYInConsole(int r) const { return padding_top + 2 + CELL_HEIGHT * r; }
+
 void Table::generateTableData() {
     srand(time(NULL));
 
@@ -49,6 +53,8 @@ void Table::generateTableData() {
     for (int i = 0; i < table_size * table_size; ++i) {
         int x = character_order[i] / table_size;
         int y = character_order[i] % table_size;
+        table_data[x][y].setCellCoordX(getXInConsole(x));
+        table_data[x][y].setCellCoordY(getYInConsole(y));
         table_data[x][y].setCellValue((char)(character_list[i] + 'A'));
     }
 
@@ -59,11 +65,6 @@ void Table::generateTableData() {
     delete[] is_marked;
     is_marked = nullptr;
 }
-
-int Table::getXInConsole(int c) const { return padding_left + 5 + CELL_LENGTH * c; }
-
-int Table::getYInConsole(int r) const { return padding_top + 2 + CELL_HEIGHT * r; }
-
 
 void Table::displayTableData() {
     Screen::setConsoleColor(15, 8);
@@ -155,7 +156,15 @@ void Table::displayTableData() {
 		Sleep(2);
 	}
 
+    for (int i = 0; i < table_size; ++i) {
+        for (int j = 0; j < table_size; ++j) {
+            Screen::gotoXY(table_data[i][j].getCellCoordX(), table_data[i][j].getCellCoordY());
+            putchar(table_data[i][j].cell_value);
+        }
+    }
+
 }
+
 
 void Table::printTableData() {
     for (int i = 0; i < table_size; ++i) {
