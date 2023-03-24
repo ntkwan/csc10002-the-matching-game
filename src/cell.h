@@ -10,6 +10,7 @@ struct Cell {
     int cell_pos_y;
 
     Cell();
+    Cell(Cell* _ptr);
 
     char getCellValue() const;
     int getCellState() const;

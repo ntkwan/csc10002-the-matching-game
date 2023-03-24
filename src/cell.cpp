@@ -8,6 +8,14 @@ Cell::Cell()
       cell_pos_x(-1),
       cell_pos_y(-1) {}
 
+Cell::Cell(Cell* _ptr)
+    : cell_value(_ptr->cell_value),
+      cell_state(_ptr->cell_state),
+      cell_coord_x(_ptr->cell_coord_x),
+      cell_coord_y(_ptr->cell_coord_y),
+      cell_pos_x(_ptr->cell_pos_x),
+      cell_pos_y(_ptr->cell_pos_y) {}
+
 char Cell::getCellValue() const { return cell_value; }
 
 int Cell::getCellState() const { return cell_state; }
@@ -31,7 +39,3 @@ void Cell::setCellCoordY(int _cell_coord_y) { cell_coord_y = _cell_coord_y; }
 void Cell::setCellPosX(int _cell_pos_x) { cell_pos_x = _cell_pos_x; }
 
 void Cell::setCellPosY(int _cell_pos_y) { cell_pos_y = _cell_pos_y; }
-
-
-
-
