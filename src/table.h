@@ -5,8 +5,11 @@
 #include <time.h>
 #include <iostream>
 
+#include "screen.h"
 #include "cell.h"
 
+const int CELL_LENGTH = 8;
+const int CELL_HEIGHT = 4;
 
 struct Table {
     int table_size;
@@ -20,8 +23,12 @@ struct Table {
     Table(int _table_size, int _TL_x, int _TL_y);
     ~Table();
 
-    generateTableData();
-    printTableData();
+    int getXInConsole(int c) const;
+    int getYInConsole(int r) const;
+
+    void generateTableData();
+    void displayTableData();
+    void printTableData();
 };
 
 #endif // TABLE_H
