@@ -4,13 +4,13 @@
 #include <windows.h>
 #include <conio.h>
 
-struct screen
+struct Screen
 {
 	static HWND console_window;
 	static HANDLE console_output;
 
-	screen() {}
-	~screen() {}
+	Screen() {}
+	~Screen() {}
 	static void setUpConsole(int fontSize);
 	static void gotoXY(int, int);
 	static void setAndCenterWindow();

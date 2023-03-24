@@ -1,9 +1,9 @@
 #include "screen.h"
 
-HWND screen::console_window = GetConsoleWindow();
-HANDLE screen::console_output = GetStdHandle(STD_OUTPUT_HANDLE);
+HWND Screen::console_window = GetConsoleWindow();
+HANDLE Screen::console_output = GetStdHandle(STD_OUTPUT_HANDLE);
 
-void screen::setUpConsole(int fontSize) {
+void Screen::setUpConsole(int fontSize) {
 	setFontInfo(fontSize,fontSize);
 	setAndCenterWindow();
 	disableMaximize();
@@ -13,9 +13,9 @@ void screen::setUpConsole(int fontSize) {
 	disableMouseInput();
 }
 
-void screen::gotoXY(int pX, int pY) { SetConsoleCursorPosition(console_output, COORD{ (short)pX, (short)pY }); }
+void Screen::gotoXY(int pX, int pY) { SetConsoleCursorPosition(console_output, COORD{ (short)pX, (short)pY }); }
 
-void screen::setAndCenterWindow() {
+void Screen::setAndCenterWindow() {
 	RECT rect_client, rect_window;
 	GetClientRect(console_window, &rect_client), GetWindowRect(console_window, &rect_window);
 
@@ -27,20 +27,20 @@ void screen::setAndCenterWindow() {
 	MoveWindow(console_window, pos_x, pos_y, width, height, TRUE);
 }
 
-void screen::setConsoleColor(int background, int text) { SetConsoleTextAttribute(console_output, background * 16 + text); }
+void Screen::setConsoleColor(int background, int text) { SetConsoleTextAttribute(console_output, background * 16 + text); }
 
-void screen::hideScrollBars() { ShowScrollBar(console_window, SB_BOTH, 0); }
+void Screen::hideScrollBars() { ShowScrollBar(console_window, SB_BOTH, 0); }
 
-void screen::setConsoleTitle() { SetConsoleTitle("THE MATCHING GAME"); }
+void Screen::setConsoleTitle() { SetConsoleTitle("THE MATCHING GAME"); }
 
-void screen::disableMaximize() { SetWindowLong(console_window, GWL_STYLE, GetWindowLong(console_window, GWL_STYLE) & ~(WS_MAXIMIZEBOX) & ~(WS_THICKFRAME)); }
+void Screen::disableMaximize() { SetWindowLong(console_window, GWL_STYLE, GetWindowLong(console_window, GWL_STYLE) & ~(WS_MAXIMIZEBOX) & ~(WS_THICKFRAME)); }
 
-void screen::showCursor(bool show) {
+void Screen::showCursor(bool show) {
 	CONSOLE_CURSOR_INFO info = { 1, show };
 	SetConsoleCursorInfo(console_output, &info);
 }
 
-void screen::setFontInfo(int size_x, int size_y) {
+void Screen::setFontInfo(int size_x, int size_y) {
 	CONSOLE_FONT_INFOEX info;
 	info.cbSize = sizeof(info);
 	GetCurrentConsoleFontEx(console_output, FALSE, &info);
@@ -50,16 +50,16 @@ void screen::setFontInfo(int size_x, int size_y) {
 	SetCurrentConsoleFontEx(console_output, FALSE, &info);
 }
 
-void screen::clearConsole() { system("cls"); }
+void Screen::clearConsole() { system("cls"); }
 
-void screen::disableMouseInput() {
+void Screen::disableMouseInput() {
 	DWORD prev_mode;
 	HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
 	GetConsoleMode(hInput, &prev_mode);
 	SetConsoleMode(hInput, prev_mode & ~ENABLE_QUICK_EDIT_MODE);
 }
 
-int screen::getConsoleInput() {
+int Screen::getConsoleInput() {
 	int input_key = _getch();
     if (input_key == 0 || input_key == 224) {
         switch (_getch()) {
@@ -96,4 +96,4 @@ int screen::getConsoleInput() {
 	}
 }
 
-void screen::playSound(int i) {}
+void Screen::playSound(int i) {}
