@@ -11,7 +11,7 @@
 #define RED 4
 #define PURPLE 5
 #define YELLOW 6
-#define WHITE 7
+#define LIGHT_WHITE 7
 #define GRAY 8
 #define LIGHT_BLUE 9
 #define LIGHT_GREEN 10
@@ -28,7 +28,7 @@ struct Screen
 
 	Screen() {}
 	~Screen() {}
-	static void setUpConsole(int font_size);
+	static void setUpConsole(int);
 	static void gotoXY(int, int);
 	static void setAndCenterWindow();
 	static void setConsoleColor(int, int);
@@ -36,7 +36,7 @@ struct Screen
 	static void setConsoleTitle();
 	static void disableMaximize();
 	static void showCursor(bool);
-	static void setFontInfo(int size_x, int size_y);
+	static void setFontInfo(int, int);
 	static void clearConsole();
 	static void disableMouseInput();
 	static int getConsoleInput();

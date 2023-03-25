@@ -4,7 +4,7 @@ HWND Screen::console_window = GetConsoleWindow();
 HANDLE Screen::console_output = GetStdHandle(STD_OUTPUT_HANDLE);
 
 void Screen::setUpConsole(int font_size) {
-	setFontInfo(font_size,font_size);
+	setFontInfo(font_size, font_size);
 	setAndCenterWindow();
 	disableMaximize();
 	setConsoleTitle();

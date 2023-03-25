@@ -23,8 +23,8 @@ struct Table {
     Table(int _table_size, int _TL_x, int _TL_y);
     ~Table();
 
-    int getXInConsole(int c) const;
-    int getYInConsole(int r) const;
+    int getXInConsole(int _c) const;
+    int getYInConsole(int _r) const;
 
     void generateTableData();
     void displayTableData();

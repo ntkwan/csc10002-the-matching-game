@@ -22,9 +22,9 @@ Table::~Table() {
     table_data = nullptr;
 }
 
-int Table::getXInConsole(int c) const { return padding_left + 5 + CELL_LENGTH * c; }
+int Table::getXInConsole(int _c) const { return padding_left + 5 + CELL_LENGTH * _c; }
 
-int Table::getYInConsole(int r) const { return padding_top + 2 + CELL_HEIGHT * r; }
+int Table::getYInConsole(int _r) const { return padding_top + 2 + CELL_HEIGHT * _r; }
 
 void Table::generateTableData() {
     srand(time(NULL));
@@ -70,12 +70,12 @@ void Table::displayTableData() {
     Screen::setConsoleColor(15, 8);
     Screen::clearConsole();
 
-    for (int i = 0; i < table_size; i++) {
+    for (int i = 0; i < table_size; ++i) {
         Screen::gotoXY(getXInConsole(i), padding_top - 1);
         putchar(i + '1');
     }
 
-    for (int i = 0; i < table_size; i++) {
+    for (int i = 0; i < table_size; ++i) {
         Screen::gotoXY(padding_left - 1, getYInConsole(i));
         putchar(i + 'A');
     }
@@ -84,7 +84,7 @@ void Table::displayTableData() {
 
     Screen::gotoXY(padding_left + 1, padding_top);
 	putchar(201);
-	for (int i = 1; i < table_size * CELL_LENGTH; i++) {
+	for (int i = 1; i < table_size * CELL_LENGTH; ++i) {
 		Sleep(2);
 		if (i % CELL_LENGTH == 0) {
             putchar(205);
@@ -96,7 +96,7 @@ void Table::displayTableData() {
 	putchar(187);
 
 
-	for (int i = 1; i < table_size * CELL_HEIGHT; i++) {
+	for (int i = 1; i < table_size * CELL_HEIGHT; ++i) {
 		Sleep(5);
 		Screen::gotoXY(table_size * CELL_LENGTH + padding_left + 1, i + padding_top);
 		if (i % CELL_HEIGHT == 0) {
@@ -109,7 +109,7 @@ void Table::displayTableData() {
 	Screen::gotoXY(table_size * CELL_LENGTH + padding_left + 1, table_size * CELL_HEIGHT + padding_top);
 	putchar(188);
 
-	for (int i = 1; i < table_size * CELL_LENGTH; i++) {
+	for (int i = 1; i < table_size * CELL_LENGTH; ++i) {
 		Screen::gotoXY(table_size * CELL_LENGTH + padding_left - i + 1, table_size * CELL_HEIGHT + padding_top);
 		Sleep(2);
 		if (i % CELL_LENGTH == 0) {
@@ -122,7 +122,7 @@ void Table::displayTableData() {
 	Screen::gotoXY(padding_left + 1, table_size * CELL_HEIGHT + padding_top);
 	putchar(200);
 
-	for (int i = 1; i < table_size * CELL_HEIGHT; i++) {
+	for (int i = 1; i < table_size * CELL_HEIGHT; ++i) {
 		Sleep(5);
 		Screen::gotoXY(padding_left + 1, table_size * CELL_HEIGHT + padding_top - i);
 		if (i % CELL_HEIGHT == 0) {
@@ -133,7 +133,7 @@ void Table::displayTableData() {
 		}
 	}
 
-	for (int i = 1; i < table_size * CELL_HEIGHT; i++) {
+	for (int i = 1; i < table_size * CELL_HEIGHT; ++i) {
 		for (int j = CELL_LENGTH; j < table_size * CELL_LENGTH; j += CELL_LENGTH) {
 			if (i % CELL_HEIGHT != 0) {
 				Screen::gotoXY(j + padding_left + 1, i + padding_top);
@@ -143,7 +143,7 @@ void Table::displayTableData() {
 		Sleep(5);
 	}
 
-	for (int i = 1; i < table_size * CELL_LENGTH; i++) {
+	for (int i = 1; i < table_size * CELL_LENGTH; ++i) {
 		for (int j = CELL_HEIGHT; j < table_size * CELL_HEIGHT; j += CELL_HEIGHT) {
 			Screen::gotoXY(i + padding_left + 1, j + padding_top);
 			if (i % CELL_LENGTH == 0) {
