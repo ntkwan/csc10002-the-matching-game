@@ -13,7 +13,7 @@ void Screen::setUpConsole(int font_size) {
 	disableMouseInput();
 }
 
-void Screen::gotoXY(int pos_x, int pos_y) { SetConsoleCursorPosition(console_output, COORD{ (short)pos_x, (short)pos_y }); }
+void Screen::gotoXY(int coord_x, int coord_y) { SetConsoleCursorPosition(console_output, COORD{ (short)coord_x, (short)coord_y }); }
 
 void Screen::setAndCenterWindow() {
 	RECT rect_client, rect_window;

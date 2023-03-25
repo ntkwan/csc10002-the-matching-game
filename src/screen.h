@@ -4,6 +4,23 @@
 #include <windows.h>
 #include <conio.h>
 
+#define BLACK 0
+#define BLUE 1
+#define GREEN 2
+#define AQUARIUS 3
+#define RED 4
+#define PURPLE 5
+#define YELLOW 6
+#define WHITE 7
+#define GRAY 8
+#define LIGHT_BLUE 9
+#define LIGHT_GREEN 10
+#define LIGHT_AQUA 11
+#define LIGHT_RED 12
+#define LIGHT_PURPLE 13
+#define LIGHT_YELLOW 14
+#define WHITE 15
+
 struct Screen
 {
 	static HWND console_window;
@@ -11,7 +28,7 @@ struct Screen
 
 	Screen() {}
 	~Screen() {}
-	static void setUpConsole(int fontSize);
+	static void setUpConsole(int font_size);
 	static void gotoXY(int, int);
 	static void setAndCenterWindow();
 	static void setConsoleColor(int, int);
