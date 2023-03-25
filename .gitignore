@@ -1,0 +1,8 @@
+
+the-matching-game.cbp
+the-matching-game.depend
+the-matching-game.layout
+obj/Debug/src/table.o
+obj/Debug/src/screen.o
+obj/Debug/src/main.o
+obj/Debug/src/cell.o
