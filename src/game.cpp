@@ -212,9 +212,28 @@ bool Game::checkIMatching(std::pair<int, int> firstCell, std::pair<int,int> seco
 	return false;
 }
 
+bool Game::checkLMatching(std::pair<int, int> firstCell, std::pair<int,int> secondCell) {
+    std::pair<int, int> cornerCell = std::pair<int, int>(firstCell.first, secondCell.second);
+
+    if (table->table_data[cornerCell.first][cornerCell.second].getCellState() == DELETED) {
+        if (checkIMatching(firstCell, cornerCell) == true && checkIMatching(secondCell, cornerCell) == true) {
+            return true;
+        }
+    }
+
+    cornerCell = std::pair<int, int>(secondCell.first, firstCell.second);
+    if (table->table_data[cornerCell.first][cornerCell.second].getCellState() == DELETED) {
+        if (checkIMatching(firstCell, cornerCell) == true && checkIMatching(secondCell, cornerCell) == true) {
+            return true;
+        }
+    }
+
+return false;
+}
+
 bool Game::checkMatching(std::pair<int, int> firstCell, std::pair<int, int> secondCell) {
     if (isCharacterEqual(firstCell, secondCell) == false) return false;
     if (checkIMatching(firstCell, secondCell) == true) return true;
-
+    if (checkLMatching(firstCell, secondCell) == true) return true;
 return false;
 }

@@ -37,7 +37,8 @@ struct Game {
     void startGame();
     bool isCharacterEqual(std::pair<int, int>, std::pair<int, int>);
     bool checkMatching(std::pair<int, int>, std::pair<int, int>);
-    bool checkIMatching(std::pair<int,int>, std::pair<int,int>);
+    bool checkIMatching(std::pair<int,int>, std::pair<int, int>);
+    bool checkLMatching(std::pair<int, int>, std::pair<int, int>);
 };
 
 #endif // GAME_H
