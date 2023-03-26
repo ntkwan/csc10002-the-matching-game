@@ -24,6 +24,12 @@ void Game::selectCell(int _cell_pos_x, int _cell_pos_y, int _background) {
         for (int current_coord_x = _cell_coord_x - 3; current_coord_x <= _cell_coord_x + 3; ++current_coord_x) {
             Screen::gotoXY(current_coord_x, current_coord_y);
 
+            if (table->table_data[_cell_pos_x][_cell_pos_y].getCellState() == DELETED) {
+                table->table_data[_cell_pos_x][_cell_pos_y].setCellValue(' ');
+                putchar(table->table_data[_cell_pos_x][_cell_pos_y].getCellValue());
+                continue;
+            }
+
             if (current_coord_x == _cell_coord_x && current_coord_y == _cell_coord_y) {
                 putchar(table->table_data[_cell_pos_x][_cell_pos_y].getCellValue());
             }
@@ -65,23 +71,22 @@ void Game::unSelectCell() {
 
 void Game::deleteCell() {
     if (checkMatching(lockedList[0], lockedList[1]) == false) {
-
         for (auto cell : lockedList) {
             Screen::gotoXY(table->getXInConsole(cell.first), table->getYInConsole(cell.second));
-            selectCell(cell.first, cell.second, WHITE);
             table->table_data[cell.first][cell.second].setCellState(FREE);
+            selectCell(cell.first, cell.second, WHITE);
         }
         lockedList.clear();
     } else {
         remained_pairs -= 2;
 
-        for (auto cell : lockedList ){
-            table->table_data[cell.first][cell.second].setCellState(DELETE);
+        for (auto cell : lockedList) {
+            Screen::gotoXY(table->getXInConsole(cell.first), table->getYInConsole(cell.second));
+            table->table_data[cell.first][cell.second].setCellState(DELETED);
+            selectCell(cell.first, cell.second, WHITE);
         }
         lockedList.clear();
     }
-
-
 }
 void Game::lockCell() {
     int cell_state = table->table_data[cell_pos_x][cell_pos_y].getCellState();

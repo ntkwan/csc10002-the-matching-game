@@ -28,6 +28,7 @@ struct Screen
 
 	Screen() {}
 	~Screen() {}
+
 	static void setUpConsole(int);
 	static void gotoXY(int, int);
 	static void setAndCenterWindow();
