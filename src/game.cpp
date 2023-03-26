@@ -142,10 +142,16 @@ void Game::initTable() {
     table->displayTableData();
 }
 
-void Game::swapCells(int &A, int &B) {
-    int tmp = A;
-    A = B;
-    B = tmp;
+void Game::swapPoints(int &first_cell, int &second_cell) {
+    int tmp = first_cell;
+    first_cell = second_cell;
+    second_cell = tmp;
+}
+
+void Game::swapCells(std::pair<int, int> &first_cell, std::pair<int, int> &second_cell) {
+    std::pair<int, int> tmp = first_cell;
+    first_cell = second_cell;
+    second_cell = tmp;
 }
 
 void Game::startGame() {
@@ -181,52 +187,82 @@ void Game::startGame() {
     Screen::setConsoleColor(WHITE, BLACK);
 }
 
-bool Game::isCharacterEqual(std::pair<int,int> firstCell, std::pair<int, int> secondCell) {
-	return (table->table_data[firstCell.first][firstCell.second].getCellValue() ==
-            table->table_data[secondCell.first][secondCell.second].getCellValue());
+bool Game::isCharacterEqual(std::pair<int,int> first_cell, std::pair<int, int> second_cell) {
+	return (table->table_data[first_cell.first][first_cell.second].getCellValue() ==
+            table->table_data[second_cell.first][second_cell.second].getCellValue());
 }
 
-bool Game::checkIMatching(std::pair<int, int> firstCell, std::pair<int,int> secondCell) {
-	if (firstCell.first == secondCell.first) {
-		int start_point = firstCell.second;
-		int end_point = secondCell.second;
-		if (start_point > end_point) swapCells(start_point, end_point);
+bool Game::checkIMatching(std::pair<int, int> first_cell, std::pair<int,int> second_cell) {
+	if (first_cell.first == second_cell.first) {
+		int start_point = first_cell.second;
+		int end_point = second_cell.second;
+		if (start_point > end_point) swapPoints(start_point, end_point);
 
 		for (int i = start_point+1; i < end_point; ++i) {
-			if (table->table_data[firstCell.first][i].getCellState() != DELETED) return false;
+			if (table->table_data[first_cell.first][i].getCellState() != DELETED) return false;
 		}
 		return true;
 	}
 
-	if (firstCell.second == secondCell.second) {
-		int start_point = firstCell.second;
-		int end_point = secondCell.second;
-		if (start_point > end_point) swapCells(start_point, end_point);
+	if (first_cell.second == second_cell.second) {
+		int start_point = first_cell.second;
+		int end_point = second_cell.second;
+		if (start_point > end_point) swapPoints(start_point, end_point);
 
 		for (int i = start_point+1; i < end_point; ++i) {
-			if (table->table_data[i][firstCell.second].getCellState() != DELETED) return false;
+			if (table->table_data[i][first_cell.second].getCellState() != DELETED) return false;
 		}
 		return true;
 	}
 
-	return false;
+return false;
 }
 
-bool Game::checkLMatching(std::pair<int, int> firstCell, std::pair<int,int> secondCell) {
-    std::pair<int, int> cornerCell = std::pair<int, int>(firstCell.first, secondCell.second);
+bool Game::checkLMatching(std::pair<int, int> first_cell, std::pair<int,int> second_cell) {
+    std::pair<int, int> corner_cell = std::pair<int, int>(first_cell.first, second_cell.second);
 
-    if (table->table_data[cornerCell.first][cornerCell.second].getCellState() == DELETED) {
-        if (checkIMatching(firstCell, cornerCell) == true && checkIMatching(secondCell, cornerCell) == true) {
+    if (table->table_data[corner_cell.first][corner_cell.second].getCellState() == DELETED) {
+        if (checkIMatching(first_cell, corner_cell) == true && checkIMatching(second_cell, corner_cell) == true) {
             return true;
         }
     }
 
-    cornerCell = std::pair<int, int>(secondCell.first, firstCell.second);
-    if (table->table_data[cornerCell.first][cornerCell.second].getCellState() == DELETED) {
-        if (checkIMatching(firstCell, cornerCell) == true && checkIMatching(secondCell, cornerCell) == true) {
+    corner_cell = std::pair<int, int>(second_cell.first, first_cell.second);
+    if (table->table_data[corner_cell.first][corner_cell.second].getCellState() == DELETED) {
+        if (checkIMatching(first_cell, corner_cell) == true && checkIMatching(second_cell, corner_cell) == true) {
             return true;
         }
     }
+
+return false;
+}
+
+bool Game::checkZMatching(std::pair<int, int> first_cell, std::pair<int,int> second_cell) {
+	if (first_cell.second > second_cell.second) swapCells(first_cell, second_cell);
+
+	for (int current_pos_y = first_cell.second + 1; current_pos_y < second_cell.second; ++current_pos_y) {
+		std::pair<int, int> first_break(first_cell.first, current_pos_y);
+		std::pair<int, int> second_break(second_cell.first, current_pos_y);
+
+		bool first_line = checkIMatching(first_cell, first_break);
+		bool second_line = checkIMatching(first_break, second_break);
+		bool third_line = checkIMatching(second_break, second_cell);
+
+		if (first_line && second_line && third_line) return true;
+	}
+
+	if (first_cell.first > second_cell.first) swapCells(first_cell, second_cell);
+
+	for (int current_pos_x = first_cell.first + 1; current_pos_x < second_cell.first; ++current_pos_x) {
+		std::pair<int, int> first_break(current_pos_x, first_cell.second);
+		std::pair<int, int> second_break(current_pos_x, second_cell.second);
+
+		bool first_line = checkIMatching(first_cell, first_break);
+		bool second_line = checkIMatching(first_break, second_break);
+		bool third_line = checkIMatching(second_break, second_cell);
+
+		if (first_line && second_line && third_line) return true;
+	}
 
 return false;
 }
@@ -235,5 +271,6 @@ bool Game::checkMatching(std::pair<int, int> firstCell, std::pair<int, int> seco
     if (isCharacterEqual(firstCell, secondCell) == false) return false;
     if (checkIMatching(firstCell, secondCell) == true) return true;
     if (checkLMatching(firstCell, secondCell) == true) return true;
+    if (checkZMatching(firstCell, secondCell) == true) return true;
 return false;
 }

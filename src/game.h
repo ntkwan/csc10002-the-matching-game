@@ -23,7 +23,8 @@ struct Game {
 
     void initTable();
 
-    void swapCells(int &, int &);
+    void swapPoints(int &, int &);
+    void swapCells(std::pair<int, int> &, std::pair<int, int> &);
     void selectCell(int, int, int);
     void unSelectCell();
     void lockCell();
@@ -39,6 +40,7 @@ struct Game {
     bool checkMatching(std::pair<int, int>, std::pair<int, int>);
     bool checkIMatching(std::pair<int,int>, std::pair<int, int>);
     bool checkLMatching(std::pair<int, int>, std::pair<int, int>);
+    bool checkZMatching(std::pair<int, int>, std::pair<int, int>);
 };
 
 #endif // GAME_H
