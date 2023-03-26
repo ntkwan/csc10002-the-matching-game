@@ -22,7 +22,11 @@ struct Game {
     ~Game();
 
     void initTable();
+
     int getCellState(int, int) const;
+    char getCellValue(int, int) const;
+    void setCellState(int, int, int);
+    void setCellValue(int, int, char);
 
     void swapPoints(int &, int &);
     void swapCells(std::pair<int, int> &, std::pair<int, int> &);
@@ -42,6 +46,9 @@ struct Game {
     bool checkIMatching(std::pair<int,int>, std::pair<int, int>);
     bool checkLMatching(std::pair<int, int>, std::pair<int, int>);
     bool checkZMatching(std::pair<int, int>, std::pair<int, int>);
+    bool checkVerticalUMatching(std::pair<int, int>, std::pair<int, int>);
+    bool checkHorizontalUMatching(std::pair<int, int>, std::pair<int, int>);
+    bool checkUMatching(std::pair<int, int>, std::pair<int, int>);
 };
 
 #endif // GAME_H
