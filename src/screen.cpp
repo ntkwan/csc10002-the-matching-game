@@ -75,24 +75,26 @@ int Screen::getConsoleInput() {
                 return 0;
         }
     } else {
-		if (input_key == 27)
-            return 1;
-		else if (input_key == 87 || input_key == 119)
-			return 2;
-		else if (input_key == 65 || input_key == 97)
-			return 3;
-		else if (input_key == 68 || input_key == 100)
-			return 4;
-		else if (input_key == 83 || input_key == 115)
-			return 5;
-		else if (input_key == 13)
-			return 6;
-		else if (input_key == 72 || input_key == 104)
-			return 7;
-		else if (input_key == 77 || input_key == 109)
-			return 8;
-		else
-			return 0;
+        switch(input_key) {
+            case 27:
+                return 1;
+            case 87: case 119:
+                return 2;
+            case 65: case 97:
+                return 3;
+            case 68: case 100:
+                return 4;
+            case 83: case 115:
+                return 5;
+            case 13:
+                return 6;
+            case 72: case 104:
+                return 7;
+            case 77: case 109:
+                return 8;
+            default:
+                return 0;
+        }
 	}
 }
 

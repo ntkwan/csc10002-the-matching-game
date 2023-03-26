@@ -16,6 +16,7 @@ struct Game {
     int cell_pos_y;
     int cell_coord_x;
     int cell_coord_y;
+    bool end_loop;
     std::vector<std::pair<int, int>> lockedList;
 
     Game();

@@ -7,6 +7,7 @@ Game::Game() {
     cell_pos_y = 0;
     cell_coord_x = table->getXInConsole(cell_pos_x);
     cell_coord_y = table->getYInConsole(cell_pos_y);
+    end_loop = false;
 }
 
 Game::~Game() {
@@ -169,11 +170,10 @@ void Game::startGame() {
 
     selectCell(cell_pos_x, cell_pos_y, GREEN);
 
-    bool flag = false;
-    while (flag == false) {
+    while (end_loop == false && remained_pairs > 0) {
         switch(Screen::getConsoleInput()) {
             case 1:
-                    flag = true;
+                    end_loop = true;
                     break;
             case 2:
                     moveUp();
