@@ -1,6 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <vector>
+
 #include "table.h"
 
 struct Game {
@@ -14,18 +16,28 @@ struct Game {
     int cell_pos_y;
     int cell_coord_x;
     int cell_coord_y;
+    std::vector<std::pair<int, int>> lockedList;
 
     Game();
     ~Game();
 
     void initTable();
-    void selectCell(int _color);
+
+    void swapCells(int &, int &);
+    void selectCell(int, int, int);
     void unSelectCell();
+    void lockCell();
+    void deleteCell();
+
     void moveUp();
     void moveDown();
     void moveLeft();
     void moveRight();
+
     void startGame();
+    bool isCharacterEqual(std::pair<int, int>, std::pair<int, int>);
+    bool checkMatching(std::pair<int, int>, std::pair<int, int>);
+    bool checkIMatching(std::pair<int,int>, std::pair<int,int>);
 };
 
 #endif // GAME_H

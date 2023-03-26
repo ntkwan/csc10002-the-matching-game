@@ -14,18 +14,18 @@ Game::~Game() {
     table = nullptr;
 }
 
-void Game::selectCell(int _color) {
-    cell_coord_x = table->getXInConsole(cell_pos_x);
-    cell_coord_y = table->getYInConsole(cell_pos_y);
-    Screen::gotoXY(cell_coord_x, cell_coord_y);
-    Screen::setConsoleColor(_color, WHITE);
+void Game::selectCell(int _cell_pos_x, int _cell_pos_y, int _background) {
+    int _cell_coord_x = table->getXInConsole(_cell_pos_x);
+    int _cell_coord_y = table->getYInConsole(_cell_pos_y);
+    Screen::gotoXY(_cell_coord_x, _cell_coord_y);
+    Screen::setConsoleColor(_background, BLACK);
 
-    for (int current_coord_y = cell_coord_y - 1; current_coord_y <= cell_coord_y + 1; ++current_coord_y) {
-        for (int current_coord_x = cell_coord_x - 3; current_coord_x <= cell_coord_x + 3; ++current_coord_x) {
+    for (int current_coord_y = _cell_coord_y - 1; current_coord_y <= _cell_coord_y + 1; ++current_coord_y) {
+        for (int current_coord_x = _cell_coord_x - 3; current_coord_x <= _cell_coord_x + 3; ++current_coord_x) {
             Screen::gotoXY(current_coord_x, current_coord_y);
 
-            if (current_coord_x == cell_coord_x && current_coord_y == cell_coord_y) {
-                putchar(table->table_data[cell_pos_x][cell_pos_y].getCellValue());
+            if (current_coord_x == _cell_coord_x && current_coord_y == _cell_coord_y) {
+                putchar(table->table_data[_cell_pos_x][_cell_pos_y].getCellValue());
             }
             else {
                 putchar(' ');
@@ -33,14 +33,19 @@ void Game::selectCell(int _color) {
         }
     }
 
-    Screen::gotoXY(cell_coord_x, cell_coord_y);
+    Screen::gotoXY(_cell_coord_x, _cell_coord_y);
 }
 
 void Game::unSelectCell() {
     cell_coord_x = table->getXInConsole(cell_pos_x);
     cell_coord_y = table->getYInConsole(cell_pos_y);
     Screen::gotoXY(cell_coord_x, cell_coord_y);
-    Screen::setConsoleColor(WHITE, BLACK);
+
+    if (table->table_data[cell_pos_x][cell_pos_y].getCellState() == LOCKED) {
+        Screen::setConsoleColor(YELLOW, BLACK);
+    } else {
+        Screen::setConsoleColor(WHITE, BLACK);
+    }
 
     for (int current_coord_y = cell_coord_y - 1; current_coord_y <= cell_coord_y + 1; ++current_coord_y) {
         for (int current_coord_x = cell_coord_x - 3; current_coord_x <= cell_coord_x + 3; ++current_coord_x) {
@@ -58,11 +63,48 @@ void Game::unSelectCell() {
     Screen::gotoXY(cell_coord_x, cell_coord_y);
 }
 
+void Game::deleteCell() {
+    if (checkMatching(lockedList[0], lockedList[1]) == false) {
+
+        for (auto cell : lockedList) {
+            Screen::gotoXY(table->getXInConsole(cell.first), table->getYInConsole(cell.second));
+            selectCell(cell.first, cell.second, WHITE);
+            table->table_data[cell.first][cell.second].setCellState(FREE);
+        }
+        lockedList.clear();
+    } else {
+        remained_pairs -= 2;
+
+        for (auto cell : lockedList ){
+            table->table_data[cell.first][cell.second].setCellState(DELETE);
+        }
+        lockedList.clear();
+    }
+
+
+}
+void Game::lockCell() {
+    int cell_state = table->table_data[cell_pos_x][cell_pos_y].getCellState();
+
+    if (cell_state == LOCKED || cell_state == DELETED) return;
+
+    selectCell(cell_pos_x, cell_pos_y, YELLOW);
+    table->table_data[cell_pos_x][cell_pos_y].setCellState(LOCKED);
+    lockedList.push_back(std::pair<int, int>(cell_pos_x, cell_pos_y));
+
+    if (lockedList.size() == 2) {
+        Sleep(100);
+        deleteCell();
+        Sleep(100);
+        selectCell(cell_pos_x, cell_pos_y, GREEN);
+    }
+}
+
 void Game::moveUp() {
     if (cell_pos_y > 0) {
         unSelectCell();
         --cell_pos_y;
-        selectCell(GREEN);
+        selectCell(cell_pos_x, cell_pos_y, GREEN);
     }
 }
 
@@ -70,7 +112,7 @@ void Game::moveDown() {
     if (cell_pos_y < table_size-1) {
         unSelectCell();
         ++cell_pos_y;
-        selectCell(GREEN);
+        selectCell(cell_pos_x, cell_pos_y, GREEN);
     }
 }
 
@@ -78,7 +120,7 @@ void Game::moveLeft() {
     if (cell_pos_x > 0) {
         unSelectCell();
         --cell_pos_x;
-        selectCell(GREEN);
+        selectCell(cell_pos_x, cell_pos_y, GREEN);
     }
 }
 
@@ -86,7 +128,7 @@ void Game::moveRight() {
     if (cell_pos_x < table_size-1) {
         unSelectCell();
         ++cell_pos_x;
-        selectCell(GREEN);
+        selectCell(cell_pos_x, cell_pos_y, GREEN);
     }
 }
 
@@ -95,11 +137,17 @@ void Game::initTable() {
     table->displayTableData();
 }
 
+void Game::swapCells(int &A, int &B) {
+    int tmp = A;
+    A = B;
+    B = tmp;
+}
+
 void Game::startGame() {
     Screen::clearConsole();
     initTable();
 
-    selectCell(GREEN);
+    selectCell(cell_pos_x, cell_pos_y, GREEN);
 
     bool flag = false;
     while (flag == false) {
@@ -119,8 +167,49 @@ void Game::startGame() {
             case 5:
                     moveDown();
                     break;
+            case 6:
+                    lockCell();
+                    break;
         }
     }
 
     Screen::setConsoleColor(WHITE, BLACK);
+}
+
+bool Game::isCharacterEqual(std::pair<int,int> firstCell, std::pair<int, int> secondCell) {
+	return (table->table_data[firstCell.first][firstCell.second].getCellValue() ==
+            table->table_data[secondCell.first][secondCell.second].getCellValue());
+}
+
+bool Game::checkIMatching(std::pair<int, int> firstCell, std::pair<int,int> secondCell) {
+	if (firstCell.first == secondCell.first) {
+		int start_point = firstCell.second;
+		int end_point = secondCell.second;
+		if (start_point > end_point) swapCells(start_point, end_point);
+
+		for (int i = start_point+1; i < end_point; ++i) {
+			if (table->table_data[firstCell.first][i].getCellState() != DELETED) return false;
+		}
+		return true;
+	}
+
+	if (firstCell.second == secondCell.second) {
+		int start_point = firstCell.second;
+		int end_point = secondCell.second;
+		if (start_point > end_point) swapCells(start_point, end_point);
+
+		for (int i = start_point+1; i < end_point; ++i) {
+			if (table->table_data[i][firstCell.second].getCellState() != DELETED) return false;
+		}
+		return true;
+	}
+
+	return false;
+}
+
+bool Game::checkMatching(std::pair<int, int> firstCell, std::pair<int, int> secondCell) {
+    if (isCharacterEqual(firstCell, secondCell) == false) return false;
+    if (checkIMatching(firstCell, secondCell) == true) return true;
+
+return false;
 }

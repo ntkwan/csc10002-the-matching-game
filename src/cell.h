@@ -1,6 +1,10 @@
 #ifndef CELL_H
 #define CELL_H
 
+#define FREE 0
+#define LOCKED 1
+#define DELETED 2
+
 struct Cell {
     char cell_value;
     int cell_state;
