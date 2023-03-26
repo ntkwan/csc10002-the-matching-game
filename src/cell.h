@@ -19,10 +19,10 @@ struct Cell {
     int getCellCoordX() const;
     int getCellCoordY() const;
 
-    void setCellValue(char _cell_value);
-    void setCellState(int _cell_state);
-    void setCellCoordX(int _cell_coord_x);
-    void setCellCoordY(int _cell_coord_y);
+    void setCellValue(char);
+    void setCellState(int);
+    void setCellCoordX(int);
+    void setCellCoordY(int);
 };
 
 #endif // CELL_H

@@ -22,6 +22,7 @@ struct Game {
     ~Game();
 
     void initTable();
+    int getCellState(int, int) const;
 
     void swapPoints(int &, int &);
     void swapCells(std::pair<int, int> &, std::pair<int, int> &);

@@ -20,11 +20,11 @@ struct Table {
     int *character_order;
     Cell **table_data;
 
-    Table(int _table_size, int _TL_x, int _TL_y);
+    Table(int, int, int);
     ~Table();
 
-    int getXInConsole(int _c) const;
-    int getYInConsole(int _r) const;
+    int getXInConsole(int) const;
+    int getYInConsole(int) const;
 
     void generateTableData();
     void displayTableData();

@@ -201,6 +201,7 @@ bool Game::checkIMatching(std::pair<int, int> first_cell, std::pair<int,int> sec
 		for (int i = start_point+1; i < end_point; ++i) {
 			if (table->table_data[first_cell.first][i].getCellState() != DELETED) return false;
 		}
+
 		return true;
 	}
 
@@ -212,6 +213,7 @@ bool Game::checkIMatching(std::pair<int, int> first_cell, std::pair<int,int> sec
 		for (int i = start_point+1; i < end_point; ++i) {
 			if (table->table_data[i][first_cell.second].getCellState() != DELETED) return false;
 		}
+
 		return true;
 	}
 
