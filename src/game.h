@@ -2,13 +2,14 @@
 #define GAME_H
 
 #include <vector>
+#include <algorithm>
 
 #include "table.h"
 
 struct Game {
     int padding_left = 20;
     int padding_top = 3;
-    Table *table = new Table(4, padding_left, padding_top);
+    Table *table = new Table(6, padding_left, padding_top);
 
     int table_size;
     int remained_pairs;
@@ -17,7 +18,7 @@ struct Game {
     int cell_coord_x;
     int cell_coord_y;
     bool end_loop;
-    std::vector<std::pair<int, int>> lockedList;
+    std::vector<std::pair<int, int>> locked_list;
 
     Game();
     ~Game();
@@ -28,6 +29,7 @@ struct Game {
     char getCellValue(int, int) const;
     void setCellState(int, int, int);
     void setCellValue(int, int, char);
+    char getCharAt(int, int) const;
 
     void swapPoints(int &, int &);
     void swapCells(std::pair<int, int> &, std::pair<int, int> &);
