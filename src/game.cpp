@@ -15,24 +15,37 @@ Game::~Game() {
     table = nullptr;
 }
 
+char Game::getCharAt(int r, int c) const {
+	if (table->table_data[r][c].getCellState() == DELETED) return ' ';
+	return table->table_data[r][c].getCellValue();
+}
+
 void Game::selectCell(int _cell_pos_x, int _cell_pos_y, int _background) {
     int _cell_coord_x = table->getXInConsole(_cell_pos_x);
     int _cell_coord_y = table->getYInConsole(_cell_pos_y);
     Screen::gotoXY(_cell_coord_x, _cell_coord_y);
-    Screen::setConsoleColor(_background, BLACK);
+
+    if (table->table_data[cell_pos_x][cell_pos_y].getCellState() == DELETED) {
+        Screen::setConsoleColor(GREEN, RED | GREEN);
+    } else {
+        if (table->table_data[cell_pos_x][cell_pos_y].getCellState() == LOCKED) {
+            Screen::setConsoleColor(_background, RED | GREEN);
+        } else {
+            Screen::setConsoleColor(_background, BLACK);
+        }
+    }
 
     for (int current_coord_y = _cell_coord_y - 1; current_coord_y <= _cell_coord_y + 1; ++current_coord_y) {
         for (int current_coord_x = _cell_coord_x - 3; current_coord_x <= _cell_coord_x + 3; ++current_coord_x) {
             Screen::gotoXY(current_coord_x, current_coord_y);
 
             if (getCellState(_cell_pos_x, _cell_pos_y) == DELETED) {
-                setCellValue(_cell_pos_x, _cell_pos_y, ' ');
-                putchar(getCellValue(_cell_pos_x, _cell_pos_y));
+                putchar(table->table_image[current_coord_y - padding_top][current_coord_x - padding_left]);
                 continue;
             }
 
             if (current_coord_x == _cell_coord_x && current_coord_y == _cell_coord_y) {
-                putchar(getCellValue(_cell_pos_x, _cell_pos_y));
+                putchar(getCharAt(_cell_pos_x, _cell_pos_y));
             }
             else {
                 putchar(' ');
@@ -51,15 +64,24 @@ void Game::unSelectCell() {
     if (table->table_data[cell_pos_x][cell_pos_y].getCellState() == LOCKED) {
         Screen::setConsoleColor(YELLOW, BLACK);
     } else {
-        Screen::setConsoleColor(WHITE, BLACK);
+        if (table->table_data[cell_pos_x][cell_pos_y].getCellState() == DELETED) {
+            Screen::setConsoleColor(WHITE, RED | GREEN);
+        } else {
+            Screen::setConsoleColor(WHITE, BLACK);
+        }
     }
 
     for (int current_coord_y = cell_coord_y - 1; current_coord_y <= cell_coord_y + 1; ++current_coord_y) {
         for (int current_coord_x = cell_coord_x - 3; current_coord_x <= cell_coord_x + 3; ++current_coord_x) {
             Screen::gotoXY(current_coord_x, current_coord_y);
 
+            if (getCellState(cell_pos_x, cell_pos_y) == DELETED) {
+                putchar(table->table_image[current_coord_y - padding_top][current_coord_x - padding_left]);
+                continue;
+            }
+
             if (current_coord_x == cell_coord_x && current_coord_y == cell_coord_y) {
-                putchar(getCellValue(cell_pos_x, cell_pos_y));
+                putchar(getCharAt(cell_pos_x, cell_pos_y));
             }
             else {
                 putchar(' ');
@@ -71,22 +93,30 @@ void Game::unSelectCell() {
 }
 
 void Game::deleteCell() {
-    if (checkMatching(lockedList[0], lockedList[1]) == false) {
-        for (auto cell : lockedList) {
+    if (checkMatching(locked_list[0], locked_list[1]) == false) {
+        reverse(locked_list.begin(), locked_list.end());
+        for (auto cell : locked_list) {
             Screen::gotoXY(table->getXInConsole(cell.first), table->getYInConsole(cell.second));
             setCellState(cell.first, cell.second, FREE);
+            selectCell(cell.first, cell.second, RED);
+        }
+
+        Sleep(500);
+
+        for (auto cell : locked_list) {
+            Screen::gotoXY(table->getXInConsole(cell.first), table->getYInConsole(cell.second));
             selectCell(cell.first, cell.second, WHITE);
         }
-        lockedList.clear();
+
+        locked_list.clear();
     } else {
         remained_pairs -= 2;
 
-        for (auto cell : lockedList) {
-            Screen::gotoXY(table->getXInConsole(cell.first), table->getYInConsole(cell.second));
-            setCellState(cell.first, cell.second, DELETED);
+        for (auto cell : locked_list) {
+            table->table_data[cell.first][cell.second].setCellState(DELETED);
             selectCell(cell.first, cell.second, WHITE);
         }
-        lockedList.clear();
+        locked_list.clear();
     }
 }
 
@@ -97,9 +127,9 @@ void Game::lockCell() {
 
     selectCell(cell_pos_x, cell_pos_y, YELLOW);
     setCellState(cell_pos_x, cell_pos_y, LOCKED);
-    lockedList.push_back(std::pair<int, int>(cell_pos_x, cell_pos_y));
+    locked_list.push_back(std::pair<int, int>(cell_pos_x, cell_pos_y));
 
-    if (lockedList.size() == 2) {
+    if (locked_list.size() == 2) {
         Sleep(100);
         deleteCell();
         Sleep(100);
@@ -142,6 +172,7 @@ void Game::moveRight() {
 void Game::initTable() {
     table->generateTableData();
     table->displayTableData();
+    table->loadTableBackground("assets/charmander.txt");
 }
 
 int Game::getCellState(int _cell_pos_x, int _cell_pos_y) const { return table->table_data[_cell_pos_x][_cell_pos_y].getCellState(); }

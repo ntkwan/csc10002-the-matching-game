@@ -11,6 +11,8 @@ Table::Table(int _table_size, int _padding_left, int _padding_top) {
     for (int i = 0; i < table_size; ++i) {
         table_data[i] = new Cell[table_size];
     }
+
+    table_image = new std::string[table_size * 10];
 }
 
 Table::~Table() {
@@ -20,6 +22,9 @@ Table::~Table() {
 
     delete[] table_data;
     table_data = nullptr;
+
+    delete[] table_image;
+    table_image = nullptr;
 }
 
 int Table::getXInConsole(int _c) const { return padding_left + 5 + CELL_LENGTH * _c; }
@@ -133,29 +138,6 @@ void Table::displayTableData() {
 		}
 	}
 
-	for (int i = 1; i < table_size * CELL_HEIGHT; ++i) {
-		for (int j = CELL_LENGTH; j < table_size * CELL_LENGTH; j += CELL_LENGTH) {
-			if (i % CELL_HEIGHT != 0) {
-				Screen::gotoXY(j + padding_left + 1, i + padding_top);
-				putchar(179);
-			}
-		}
-		Sleep(5);
-	}
-
-	for (int i = 1; i < table_size * CELL_LENGTH; ++i) {
-		for (int j = CELL_HEIGHT; j < table_size * CELL_HEIGHT; j += CELL_HEIGHT) {
-			Screen::gotoXY(i + padding_left + 1, j + padding_top);
-			if (i % CELL_LENGTH == 0) {
-                putchar(32);
-			}
-			else {
-				putchar(196);
-			}
-		}
-		Sleep(2);
-	}
-
     for (int i = 0; i < table_size; ++i) {
         for (int j = 0; j < table_size; ++j) {
             Screen::gotoXY(table_data[i][j].getCellCoordX(), table_data[i][j].getCellCoordY());
@@ -165,6 +147,15 @@ void Table::displayTableData() {
 
 }
 
+void Table::loadTableBackground(const std::string &path) {
+    std::fstream bg(path, std::fstream::in);
+
+    for (int idx = 0; !bg.eof(); ++idx) {
+        getline(bg, table_image[idx]);
+    }
+
+    bg.close();
+}
 
 void Table::printTableData() {
     for (int i = 0; i < table_size; ++i) {
