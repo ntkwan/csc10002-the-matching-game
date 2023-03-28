@@ -32,6 +32,7 @@ struct Table {
     void generateTableData();
     void displayTableData();
     void loadTableBackground(const std::string &);
+    void displayTableBackground();
     void printTableData();
 };
 

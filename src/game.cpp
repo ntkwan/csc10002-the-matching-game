@@ -39,7 +39,7 @@ void Game::selectCell(int _cell_pos_x, int _cell_pos_y, int _background) {
         for (int current_coord_x = _cell_coord_x - 3; current_coord_x <= _cell_coord_x + 3; ++current_coord_x) {
             Screen::gotoXY(current_coord_x, current_coord_y);
 
-            if (getCellState(_cell_pos_x, _cell_pos_y) == DELETED) {
+            if (getCellState(_cell_pos_x, _cell_pos_y) == DELETED || getCellState(_cell_pos_x, _cell_pos_y) == EMPTY_BOARD) {
                 putchar(table->table_image[current_coord_y - padding_top][current_coord_x - padding_left]);
                 continue;
             }
@@ -224,6 +224,9 @@ void Game::startGame() {
         }
     }
 
+    table->table_data[cell_pos_x][cell_pos_y].setCellState(EMPTY_BOARD);
+    selectCell(cell_pos_x, cell_pos_y, WHITE);
+    table->displayTableBackground();
     Screen::setConsoleColor(WHITE, BLACK);
 }
 
