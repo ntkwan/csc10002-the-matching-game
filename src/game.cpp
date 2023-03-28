@@ -1,6 +1,12 @@
 #include "game.h"
 
-Game::Game() {
+Game::Game(int _mode, int _padding_left, int _padding_top) {
+    mode = _mode;
+    padding_left = _padding_left;
+    padding_top = _padding_top;
+
+    table = new Table(mode, padding_left, padding_top);
+
     table_size = table->table_size;
     remained_pairs = table_size * table_size;
     cell_pos_x = 0;
@@ -26,10 +32,10 @@ void Game::selectCell(int _cell_pos_x, int _cell_pos_y, int _background) {
     Screen::gotoXY(_cell_coord_x, _cell_coord_y);
 
     if (table->table_data[cell_pos_x][cell_pos_y].getCellState() == DELETED) {
-        Screen::setConsoleColor(GREEN, RED | GREEN);
+        Screen::setConsoleColor(GREEN, RED);
     } else {
         if (table->table_data[cell_pos_x][cell_pos_y].getCellState() == LOCKED || table->table_data[cell_pos_x][cell_pos_y].getCellState() == EMPTY_BOARD) {
-            Screen::setConsoleColor(_background, RED | GREEN);
+            Screen::setConsoleColor(_background, RED);
         } else {
             Screen::setConsoleColor(_background, BLACK);
         }
@@ -65,7 +71,7 @@ void Game::unSelectCell() {
         Screen::setConsoleColor(YELLOW, BLACK);
     } else {
         if (table->table_data[cell_pos_x][cell_pos_y].getCellState() == DELETED) {
-            Screen::setConsoleColor(WHITE, RED | GREEN);
+            Screen::setConsoleColor(WHITE, RED);
         } else {
             Screen::setConsoleColor(WHITE, BLACK);
         }

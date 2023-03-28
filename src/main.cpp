@@ -1,9 +1,9 @@
-#include "game.h"
+#include "menu_scene.h"
 
 int main() {
     Screen::setUpConsole(18);
-    Game game;
-    game.startGame();
+    Menu game;
+    game.menuController();
     Sleep(5000);
     Screen::clearConsole();
 }

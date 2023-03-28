@@ -9,9 +9,9 @@
 #define EMPTY_BOARD -1
 
 struct Game {
-    int padding_left = 20;
-    int padding_top = 3;
-    Table *table = new Table(6, padding_left, padding_top);
+    int padding_left = 0;
+    int padding_top = 0;
+    int mode = 0;
 
     int table_size;
     int remained_pairs;
@@ -21,8 +21,9 @@ struct Game {
     int cell_coord_y;
     bool end_loop;
     std::vector<std::pair<int, int>> locked_list;
+    Table* table;
 
-    Game();
+    Game(int, int, int);
     ~Game();
 
     void initTable();
