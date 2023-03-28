@@ -19,8 +19,8 @@ void Screen::setAndCenterWindow() {
 	RECT rect_client, rect_window;
 	GetClientRect(console_window, &rect_client), GetWindowRect(console_window, &rect_window);
 
-	const int width = 1600;
-	const int height = 900;
+	const int width = 1152;
+	const int height = 648;
 	const int pos_x = (GetSystemMetrics(SM_CXSCREEN) - width) / 2,
               pos_y = (GetSystemMetrics(SM_CYSCREEN) - height) / 2;
 

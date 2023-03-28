@@ -28,7 +28,7 @@ void Game::selectCell(int _cell_pos_x, int _cell_pos_y, int _background) {
     if (table->table_data[cell_pos_x][cell_pos_y].getCellState() == DELETED) {
         Screen::setConsoleColor(GREEN, RED | GREEN);
     } else {
-        if (table->table_data[cell_pos_x][cell_pos_y].getCellState() == LOCKED) {
+        if (table->table_data[cell_pos_x][cell_pos_y].getCellState() == LOCKED || table->table_data[cell_pos_x][cell_pos_y].getCellState() == EMPTY_BOARD) {
             Screen::setConsoleColor(_background, RED | GREEN);
         } else {
             Screen::setConsoleColor(_background, BLACK);

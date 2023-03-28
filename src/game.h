@@ -11,7 +11,7 @@
 struct Game {
     int padding_left = 20;
     int padding_top = 3;
-    Table *table = new Table(4, padding_left, padding_top);
+    Table *table = new Table(6, padding_left, padding_top);
 
     int table_size;
     int remained_pairs;
