@@ -7,3 +7,4 @@ obj/Debug/src/screen.o
 obj/Debug/src/main.o
 obj/Debug/src/cell.o
 obj/Debug/src/game.o
+obj/Debug/src/menu_scene.o
