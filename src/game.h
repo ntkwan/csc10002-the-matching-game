@@ -47,6 +47,10 @@ struct Game {
     void moveRight();
 
     void startGame();
+
+    void displayILine(std::pair<int, int>, std::pair<int, int>, bool);
+    void displayLLine(std::pair<int, int>, std::pair<int, int>, bool);
+
     bool isCharacterEqual(std::pair<int, int>, std::pair<int, int>);
     bool checkMatching(std::pair<int, int>, std::pair<int, int>);
     bool checkIMatching(std::pair<int,int>, std::pair<int, int>);

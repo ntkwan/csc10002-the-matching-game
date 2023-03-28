@@ -269,6 +269,63 @@ bool Game::checkIMatching(std::pair<int, int> first_cell, std::pair<int,int> sec
 return false;
 }
 
+void Game::displayILine(std::pair<int, int> first_cell, std::pair<int, int> second_cell, bool overwrite) {
+	if (first_cell.first == second_cell.first) {
+		int start_point = first_cell.second;
+		int end_point = second_cell.second;
+		if (start_point > end_point) swapPoints(start_point, end_point);
+
+        int x = table->getXInConsole(first_cell.first);
+        start_point = table->getYInConsole(start_point);
+        end_point = table->getYInConsole(end_point);
+
+        if (overwrite == true) {
+            Screen::setConsoleColor(WHITE, BLACK);
+        }
+
+		for (int current_pos_y = start_point + 1; current_pos_y < end_point; ++current_pos_y) {
+                Screen::gotoXY(x, current_pos_y);
+                if (overwrite == false) {
+                    std::cout<<"|";
+                } else {
+                    if (current_pos_y % CELL_HEIGHT == 3)
+                        putchar(196);
+                    else
+                        putchar(32);
+                }
+		}
+
+		return;
+	}
+
+    if (first_cell.second == second_cell.second) {
+        int start_point = first_cell.first;
+        int end_point = second_cell.first;
+        if (start_point > end_point) swapPoints(start_point, end_point);
+
+        int y = table->getYInConsole(first_cell.second);
+        start_point = table->getXInConsole(start_point);
+        end_point = table->getXInConsole(end_point);
+
+        if (overwrite == true) {
+            Screen::setConsoleColor(WHITE, BLACK);
+        }
+
+        for (int current_pos_x = start_point+1; current_pos_x < end_point; ++current_pos_x) {
+            Screen::gotoXY(current_pos_x, y);
+            if (overwrite == false) {
+                std::cout<<"-";
+            } else {
+                if (current_pos_x % CELL_LENGTH == 5)
+                    putchar(179);
+                else putchar(32);
+            }
+        }
+
+        return;
+    }
+}
+
 bool Game::checkLMatching(std::pair<int, int> first_cell, std::pair<int,int> second_cell) {
     if (first_cell.first == second_cell.first || first_cell.second == second_cell.second) return false;
 
@@ -287,6 +344,22 @@ bool Game::checkLMatching(std::pair<int, int> first_cell, std::pair<int,int> sec
     }
 
 return false;
+}
+
+void Game::displayLLine(std::pair<int, int> first_cell, std::pair<int, int> second_cell, bool overwrite) {
+    std::pair<int, int> corner_cell = std::pair<int, int>(first_cell.first, second_cell.second);
+    if (getCellState(corner_cell.first, corner_cell.second) == DELETED) {
+        displayILine(first_cell, corner_cell, overwrite);
+        displayILine(second_cell, corner_cell, overwrite);
+        return;
+    }
+
+    corner_cell = std::pair<int, int>(second_cell.first, first_cell.second);
+    if (getCellState(corner_cell.first, corner_cell.second) == DELETED) {
+        displayILine(first_cell, corner_cell, overwrite);
+        displayILine(second_cell, corner_cell, overwrite);
+        return;
+    }
 }
 
 bool Game::checkZMatching(std::pair<int, int> first_cell, std::pair<int,int> second_cell) {
@@ -392,8 +465,20 @@ return false;
 
 bool Game::checkMatching(std::pair<int, int> first_cell, std::pair<int, int> second_cell) {
     if (isCharacterEqual(first_cell, second_cell) == false) return false;
-    if (checkIMatching(first_cell, second_cell) == true) return true;
-    if (checkLMatching(first_cell, second_cell) == true) return true;
+    if (checkIMatching(first_cell, second_cell) == true) {
+        displayILine(first_cell, second_cell, false);
+        Sleep(500);
+        displayILine(first_cell, second_cell, true);
+        return true;
+    }
+
+    if (checkLMatching(first_cell, second_cell) == true) {
+        displayLLine(first_cell, second_cell, false);
+        Sleep(500);
+        displayLLine(first_cell, second_cell, true);
+        return true;
+    }
+
     if (checkZMatching(first_cell, second_cell) == true) return true;
     if (checkUMatching(first_cell, second_cell) == true) return true;
 return false;
