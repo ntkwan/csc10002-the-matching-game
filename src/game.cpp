@@ -281,17 +281,21 @@ void Game::displayILine(std::pair<int, int> first_cell, std::pair<int, int> seco
 
         if (overwrite == true) {
             Screen::setConsoleColor(WHITE, BLACK);
+        } else {
+            Screen::setConsoleColor(YELLOW, RED);
         }
 
-		for (int current_pos_y = start_point + 1; current_pos_y < end_point; ++current_pos_y) {
+		for (int current_pos_y = start_point+1; current_pos_y < end_point; ++current_pos_y) {
                 Screen::gotoXY(x, current_pos_y);
+
                 if (overwrite == false) {
-                    std::cout<<"|";
+                    putchar(179);
                 } else {
-                    if (current_pos_y % CELL_HEIGHT == 3)
+                    if (current_pos_y % CELL_HEIGHT == 3) {
                         putchar(196);
-                    else
+                    } else {
                         putchar(32);
+                    }
                 }
 		}
 
@@ -309,16 +313,21 @@ void Game::displayILine(std::pair<int, int> first_cell, std::pair<int, int> seco
 
         if (overwrite == true) {
             Screen::setConsoleColor(WHITE, BLACK);
+        } else {
+            Screen::setConsoleColor(YELLOW, RED);
         }
 
         for (int current_pos_x = start_point+1; current_pos_x < end_point; ++current_pos_x) {
             Screen::gotoXY(current_pos_x, y);
+
             if (overwrite == false) {
-                std::cout<<"-";
+                putchar(196);
             } else {
-                if (current_pos_x % CELL_LENGTH == 5)
+                if (current_pos_x % CELL_LENGTH == 5) {
                     putchar(179);
-                else putchar(32);
+                } else {
+                    putchar(32);
+                }
             }
         }
 
@@ -350,6 +359,15 @@ void Game::displayLLine(std::pair<int, int> first_cell, std::pair<int, int> seco
     std::pair<int, int> corner_cell = std::pair<int, int>(first_cell.first, second_cell.second);
     if (getCellState(corner_cell.first, corner_cell.second) == DELETED) {
         displayILine(first_cell, corner_cell, overwrite);
+
+        Screen::gotoXY(table->getXInConsole(corner_cell.first), table->getYInConsole(corner_cell.second));
+        if (overwrite == false) {
+            std::cout<<"@";
+        } else {
+            std::cout<<" ";
+        }
+
+
         displayILine(second_cell, corner_cell, overwrite);
         return;
     }
@@ -357,6 +375,14 @@ void Game::displayLLine(std::pair<int, int> first_cell, std::pair<int, int> seco
     corner_cell = std::pair<int, int>(second_cell.first, first_cell.second);
     if (getCellState(corner_cell.first, corner_cell.second) == DELETED) {
         displayILine(first_cell, corner_cell, overwrite);
+
+        Screen::gotoXY(table->getXInConsole(corner_cell.first), table->getYInConsole(corner_cell.second));
+        if (overwrite == false) {
+            std::cout<<"@";
+        } else {
+            std::cout<<" ";
+        }
+
         displayILine(second_cell, corner_cell, overwrite);
         return;
     }
