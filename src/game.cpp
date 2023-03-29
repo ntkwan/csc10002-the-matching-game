@@ -178,7 +178,7 @@ void Game::moveRight() {
 void Game::initTable() {
     table->generateTableData();
     table->displayTableData();
-    table->loadTableBackground("assets/charmander.txt");
+    table->loadTableBackground("assets/bunny.txt");
 }
 
 int Game::getCellState(int _cell_pos_x, int _cell_pos_y) const { return table->table_data[_cell_pos_x][_cell_pos_y].getCellState(); }
