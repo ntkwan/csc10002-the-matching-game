@@ -50,6 +50,7 @@ struct Game {
 
     void displayILine(std::pair<int, int>, std::pair<int, int>, bool);
     void displayLLine(std::pair<int, int>, std::pair<int, int>, bool);
+    void displayZLine(std::pair<int, int>, std::pair<int, int>, bool);
 
     bool isCharacterEqual(std::pair<int, int>, std::pair<int, int>);
     bool checkMatching(std::pair<int, int>, std::pair<int, int>);

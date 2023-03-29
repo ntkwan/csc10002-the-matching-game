@@ -279,10 +279,10 @@ void Game::displayILine(std::pair<int, int> first_cell, std::pair<int, int> seco
         start_point = table->getYInConsole(start_point);
         end_point = table->getYInConsole(end_point);
 
-        if (overwrite == true) {
-            Screen::setConsoleColor(WHITE, BLACK);
-        } else {
+        if (overwrite == false) {
             Screen::setConsoleColor(YELLOW, RED);
+        } else {
+            Screen::setConsoleColor(WHITE, BLACK);
         }
 
 		for (int current_pos_y = start_point+1; current_pos_y < end_point; ++current_pos_y) {
@@ -311,10 +311,10 @@ void Game::displayILine(std::pair<int, int> first_cell, std::pair<int, int> seco
         start_point = table->getXInConsole(start_point);
         end_point = table->getXInConsole(end_point);
 
-        if (overwrite == true) {
-            Screen::setConsoleColor(WHITE, BLACK);
-        } else {
+        if (overwrite == false) {
             Screen::setConsoleColor(YELLOW, RED);
+        } else {
+            Screen::setConsoleColor(WHITE, BLACK);
         }
 
         for (int current_pos_x = start_point+1; current_pos_x < end_point; ++current_pos_x) {
@@ -422,6 +422,67 @@ bool Game::checkZMatching(std::pair<int, int> first_cell, std::pair<int,int> sec
 return false;
 }
 
+void Game::displayZLine(std::pair<int, int> first_cell, std::pair<int, int> second_cell, bool overwrite) {
+	if (first_cell.second > second_cell.second) swapCells(first_cell, second_cell);
+
+	for (int current_pos_y = first_cell.second + 1; current_pos_y < second_cell.second; ++current_pos_y) {
+		std::pair<int, int> first_break(first_cell.first, current_pos_y);
+		std::pair<int, int> second_break(second_cell.first, current_pos_y);
+
+        if (getCellState(first_break.first, first_break.second) == DELETED && getCellState(second_break.first, second_break.second) == DELETED) {
+            displayILine(first_cell, first_break, overwrite);
+            Screen::gotoXY(table->getXInConsole(first_break.first), table->getYInConsole(first_break.second));
+            if (overwrite == false) {
+                std::cout<<"@";
+            } else {
+                std::cout<<" ";
+            }
+
+            displayILine(first_break, second_break, overwrite);
+            Screen::gotoXY(table->getXInConsole(second_break.first), table->getYInConsole(second_break.second));
+            if (overwrite == false) {
+                std::cout<<"@";
+            } else {
+                std::cout<<" ";
+            }
+
+            displayILine(second_break, second_cell, overwrite);
+
+            return;
+        }
+	}
+
+	if (first_cell.first > second_cell.first) swapCells(first_cell, second_cell);
+
+	for (int current_pos_x = first_cell.first + 1; current_pos_x < second_cell.first; ++current_pos_x) {
+		std::pair<int, int> first_break(current_pos_x, first_cell.second);
+		std::pair<int, int> second_break(current_pos_x, second_cell.second);
+
+        if (getCellState(first_break.first, first_break.second) == DELETED && getCellState(second_break.first, second_break.second) == DELETED) {
+            displayILine(first_cell, first_break, overwrite);
+            Screen::gotoXY(table->getXInConsole(first_break.first), table->getYInConsole(first_break.second));
+            if (overwrite == false) {
+                std::cout<<"@";
+            } else {
+                std::cout<<" ";
+            }
+
+            displayILine(first_break, second_break, overwrite);
+            Screen::gotoXY(table->getXInConsole(second_break.first), table->getYInConsole(second_break.second));
+            if (overwrite == false) {
+                std::cout<<"@";
+            } else {
+                std::cout<<" ";
+            }
+
+            displayILine(second_break, second_cell, overwrite);
+
+            return;
+        }
+	}
+}
+
+
 bool Game::checkVerticalUMatching(std::pair<int, int> first_cell, std::pair<int, int> second_cell) {
     if (first_cell.first != second_cell.first) return false;
     if (first_cell.first == 0 || first_cell.first == table_size-1) return true;
@@ -505,7 +566,13 @@ bool Game::checkMatching(std::pair<int, int> first_cell, std::pair<int, int> sec
         return true;
     }
 
-    if (checkZMatching(first_cell, second_cell) == true) return true;
+    if (checkZMatching(first_cell, second_cell) == true) {
+        displayZLine(first_cell, second_cell, false);
+        Sleep(500);
+        displayZLine(first_cell, second_cell, true);
+        return true;
+    }
+
     if (checkUMatching(first_cell, second_cell) == true) return true;
 return false;
 }
