@@ -237,7 +237,7 @@ void Game::startGame() {
 }
 
 bool Game::isCharacterEqual(std::pair<int,int> first_cell, std::pair<int, int> second_cell) {
-	return (table->table_data[first_cell.first][first_cell.second].getCellValue() ==
+    return (table->table_data[first_cell.first][first_cell.second].getCellValue() ==
             table->table_data[second_cell.first][second_cell.second].getCellValue());
 }
 
@@ -659,8 +659,8 @@ void Game::displayHorizontalULine(std::pair<int, int> first_cell, std::pair<int,
             displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
             return;
         } else if (current_pos_y == table_size-1) {
-            first_break = std::pair<int, int>(first_cell.first, -1);
-            second_break = std::pair<int, int>(second_cell.first, -1);
+            first_break = std::pair<int, int>(first_cell.first, table_size);
+            second_break = std::pair<int, int>(second_cell.first, table_size);
             displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
             return;
         }
