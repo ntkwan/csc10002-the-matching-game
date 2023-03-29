@@ -71,71 +71,82 @@ void Table::generateTableData() {
     is_marked = nullptr;
 }
 
+void Table::cleanMatchingEffect() {
+    Screen::setConsoleColor(WHITE, GRAY);
+
+    //left border cleaned
+    for (int i = 0; i < table_size; ++i) {
+        Screen::setConsoleColor(WHITE, BLACK);
+        Screen::gotoXY(padding_left+1, getYInConsole(i));
+        putchar(186);
+
+        Screen::setConsoleColor(WHITE, GRAY);
+        Screen::gotoXY(padding_left-1, getYInConsole(i));
+        putchar(i+'A');
+
+        Screen::gotoXY(padding_left-3, getYInConsole(i)+2);
+        putchar(' ');
+    }
+
+    //right border cleaned
+    for (int i = 0;i < table_size; ++i) {
+        Screen::setConsoleColor(WHITE, BLACK);
+        Screen::gotoXY(table_size * CELL_LENGTH + padding_left+1, getYInConsole(i));
+        putchar(186);
+
+        Screen::gotoXY(table_size * CELL_LENGTH + padding_left+5, getYInConsole(i)+2);
+        putchar(' ');
+    }
+}
+
 void Table::displayTableData() {
-    Screen::setConsoleColor(15, 8);
+    Screen::setConsoleColor(WHITE, GRAY);
     Screen::clearConsole();
 
     for (int i = 0; i < table_size; ++i) {
-        Screen::gotoXY(getXInConsole(i), padding_top - 1);
+        Screen::gotoXY(getXInConsole(i), padding_top-1);
         putchar(i + '1');
     }
 
     for (int i = 0; i < table_size; ++i) {
-        Screen::gotoXY(padding_left - 1, getYInConsole(i));
+        Screen::gotoXY(padding_left-1, getYInConsole(i));
         putchar(i + 'A');
     }
 
-    Screen::setConsoleColor(15, 0);
+    Screen::setConsoleColor(WHITE, BLACK);
 
+    //top border
     Screen::gotoXY(padding_left + 1, padding_top);
 	putchar(201);
 	for (int i = 1; i < table_size * CELL_LENGTH; ++i) {
 		Sleep(2);
-		if (i % CELL_LENGTH == 0) {
-            putchar(205);
-		}
-		else {
-			putchar(205);
-		}
+        putchar(205);
 	}
 	putchar(187);
 
-
+    //right border
 	for (int i = 1; i < table_size * CELL_HEIGHT; ++i) {
 		Sleep(5);
 		Screen::gotoXY(table_size * CELL_LENGTH + padding_left + 1, i + padding_top);
-		if (i % CELL_HEIGHT == 0) {
-            putchar(186);
-		}
-		else {
-			putchar(186);
-		}
+        putchar(186);
 	}
 	Screen::gotoXY(table_size * CELL_LENGTH + padding_left + 1, table_size * CELL_HEIGHT + padding_top);
 	putchar(188);
 
+    //bottom border
 	for (int i = 1; i < table_size * CELL_LENGTH; ++i) {
 		Screen::gotoXY(table_size * CELL_LENGTH + padding_left - i + 1, table_size * CELL_HEIGHT + padding_top);
 		Sleep(2);
-		if (i % CELL_LENGTH == 0) {
-            putchar(205);
-		}
-		else {
-			putchar(205);
-		}
+        putchar(205);
 	}
 	Screen::gotoXY(padding_left + 1, table_size * CELL_HEIGHT + padding_top);
 	putchar(200);
 
+    //left border
 	for (int i = 1; i < table_size * CELL_HEIGHT; ++i) {
 		Sleep(5);
 		Screen::gotoXY(padding_left + 1, table_size * CELL_HEIGHT + padding_top - i);
-		if (i % CELL_HEIGHT == 0) {
-			putchar(186);
-		}
-		else {
-			putchar(186);
-		}
+        putchar(186);
 	}
 
 	for (int i = 1; i < table_size * CELL_HEIGHT; ++i) {
