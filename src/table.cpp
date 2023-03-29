@@ -74,28 +74,51 @@ void Table::generateTableData() {
 void Table::cleanMatchingEffect() {
     Screen::setConsoleColor(WHITE, GRAY);
 
+    //top border cleaned
+    for (int i = 0; i < table_size; ++i) {
+        Screen::setConsoleColor(WHITE, BLACK);
+        Screen::gotoXY(getXInConsole(i), padding_top);
+        putchar(205);
+
+        Screen::setConsoleColor(WHITE, GRAY);
+        Screen::gotoXY(getXInConsole(i), padding_top - 1);
+        putchar(i + '1');
+
+        Screen::gotoXY(getXInConsole(i) + 4, padding_top - 2);
+        putchar(' ');
+    }
+
     //left border cleaned
     for (int i = 0; i < table_size; ++i) {
         Screen::setConsoleColor(WHITE, BLACK);
-        Screen::gotoXY(padding_left+1, getYInConsole(i));
+        Screen::gotoXY(padding_left + 1, getYInConsole(i));
         putchar(186);
 
         Screen::setConsoleColor(WHITE, GRAY);
-        Screen::gotoXY(padding_left-1, getYInConsole(i));
-        putchar(i+'A');
+        Screen::gotoXY(padding_left - 1, getYInConsole(i));
+        putchar(i + 'A');
 
-        Screen::gotoXY(padding_left-3, getYInConsole(i)+2);
+        Screen::gotoXY(padding_left - 3, getYInConsole(i) + 2);
         putchar(' ');
     }
 
     //right border cleaned
-    for (int i = 0;i < table_size; ++i) {
+    for (int i = 0; i < table_size; ++i) {
         Screen::setConsoleColor(WHITE, BLACK);
-        Screen::gotoXY(table_size * CELL_LENGTH + padding_left+1, getYInConsole(i));
+        Screen::gotoXY(table_size * CELL_LENGTH+padding_left + 1, getYInConsole(i));
         putchar(186);
 
-        Screen::gotoXY(table_size * CELL_LENGTH + padding_left+5, getYInConsole(i)+2);
+        Screen::gotoXY(table_size * CELL_LENGTH+padding_left + 5, getYInConsole(i) + 2);
         putchar(' ');
+    }
+
+    //bottom border cleaned
+    for (int i = 0; i < table_size; ++i) {
+        Screen::gotoXY(getXInConsole(i) + 4, table_size * CELL_HEIGHT + padding_top+2);
+        putchar(' ');
+
+        Screen::gotoXY(getXInConsole(i), table_size * CELL_HEIGHT + padding_top);
+        putchar(205);
     }
 }
 

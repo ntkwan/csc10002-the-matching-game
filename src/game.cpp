@@ -358,33 +358,36 @@ return false;
 void Game::displayLLine(std::pair<int, int> first_cell, std::pair<int, int> second_cell, bool overwrite) {
     std::pair<int, int> corner_cell = std::pair<int, int>(first_cell.first, second_cell.second);
     if (getCellState(corner_cell.first, corner_cell.second) == DELETED) {
-        displayILine(first_cell, corner_cell, overwrite);
+        if (checkIMatching(first_cell, corner_cell) == true && checkIMatching(second_cell, corner_cell) == true) {
+            displayILine(first_cell, corner_cell, overwrite);
 
-        Screen::gotoXY(table->getXInConsole(corner_cell.first), table->getYInConsole(corner_cell.second));
-        if (overwrite == false) {
-            std::cout<<"@";
-        } else {
-            std::cout<<" ";
+            Screen::gotoXY(table->getXInConsole(corner_cell.first), table->getYInConsole(corner_cell.second));
+            if (overwrite == false) {
+                std::cout<<"@";
+            } else {
+                std::cout<<" ";
+            }
+
+            displayILine(second_cell, corner_cell, overwrite);
+            return;
         }
-
-
-        displayILine(second_cell, corner_cell, overwrite);
-        return;
     }
 
     corner_cell = std::pair<int, int>(second_cell.first, first_cell.second);
     if (getCellState(corner_cell.first, corner_cell.second) == DELETED) {
-        displayILine(first_cell, corner_cell, overwrite);
+        if (checkIMatching(first_cell, corner_cell) == true && checkIMatching(second_cell, corner_cell) == true) {
+            displayILine(first_cell, corner_cell, overwrite);
 
-        Screen::gotoXY(table->getXInConsole(corner_cell.first), table->getYInConsole(corner_cell.second));
-        if (overwrite == false) {
-            std::cout<<"@";
-        } else {
-            std::cout<<" ";
+            Screen::gotoXY(table->getXInConsole(corner_cell.first), table->getYInConsole(corner_cell.second));
+            if (overwrite == false) {
+                std::cout<<"@";
+            } else {
+                std::cout<<" ";
+            }
+
+            displayILine(second_cell, corner_cell, overwrite);
+            return;
         }
-
-        displayILine(second_cell, corner_cell, overwrite);
-        return;
     }
 }
 
@@ -430,25 +433,31 @@ void Game::displayZLine(std::pair<int, int> first_cell, std::pair<int, int> seco
 		std::pair<int, int> second_break(second_cell.first, current_pos_y);
 
         if (getCellState(first_break.first, first_break.second) == DELETED && getCellState(second_break.first, second_break.second) == DELETED) {
-            displayILine(first_cell, first_break, overwrite);
-            Screen::gotoXY(table->getXInConsole(first_break.first), table->getYInConsole(first_break.second));
-            if (overwrite == false) {
-                std::cout<<"@";
-            } else {
-                std::cout<<" ";
+            bool first_line = checkIMatching(first_cell, first_break);
+            bool second_line = checkIMatching(first_break, second_break);
+            bool third_line = checkIMatching(second_break, second_cell);
+
+            if (first_line && second_line && third_line) {
+                displayILine(first_cell, first_break, overwrite);
+                Screen::gotoXY(table->getXInConsole(first_break.first), table->getYInConsole(first_break.second));
+                if (overwrite == false) {
+                    std::cout<<"@";
+                } else {
+                    std::cout<<" ";
+                }
+
+                displayILine(first_break, second_break, overwrite);
+                Screen::gotoXY(table->getXInConsole(second_break.first), table->getYInConsole(second_break.second));
+                if (overwrite == false) {
+                    std::cout<<"@";
+                } else {
+                    std::cout<<" ";
+                }
+
+                displayILine(second_break, second_cell, overwrite);
+
+                return;
             }
-
-            displayILine(first_break, second_break, overwrite);
-            Screen::gotoXY(table->getXInConsole(second_break.first), table->getYInConsole(second_break.second));
-            if (overwrite == false) {
-                std::cout<<"@";
-            } else {
-                std::cout<<" ";
-            }
-
-            displayILine(second_break, second_cell, overwrite);
-
-            return;
         }
 	}
 
@@ -459,29 +468,34 @@ void Game::displayZLine(std::pair<int, int> first_cell, std::pair<int, int> seco
 		std::pair<int, int> second_break(current_pos_x, second_cell.second);
 
         if (getCellState(first_break.first, first_break.second) == DELETED && getCellState(second_break.first, second_break.second) == DELETED) {
-            displayILine(first_cell, first_break, overwrite);
-            Screen::gotoXY(table->getXInConsole(first_break.first), table->getYInConsole(first_break.second));
-            if (overwrite == false) {
-                std::cout<<"@";
-            } else {
-                std::cout<<" ";
+            bool first_line = checkIMatching(first_cell, first_break);
+            bool second_line = checkIMatching(first_break, second_break);
+            bool third_line = checkIMatching(second_break, second_cell);
+
+            if (first_line && second_line && third_line) {
+                displayILine(first_cell, first_break, overwrite);
+                Screen::gotoXY(table->getXInConsole(first_break.first), table->getYInConsole(first_break.second));
+                if (overwrite == false) {
+                    std::cout<<"@";
+                } else {
+                    std::cout<<" ";
+                }
+
+                displayILine(first_break, second_break, overwrite);
+                Screen::gotoXY(table->getXInConsole(second_break.first), table->getYInConsole(second_break.second));
+                if (overwrite == false) {
+                    std::cout<<"@";
+                } else {
+                    std::cout<<" ";
+                }
+
+                displayILine(second_break, second_cell, overwrite);
+
+                return;
             }
-
-            displayILine(first_break, second_break, overwrite);
-            Screen::gotoXY(table->getXInConsole(second_break.first), table->getYInConsole(second_break.second));
-            if (overwrite == false) {
-                std::cout<<"@";
-            } else {
-                std::cout<<" ";
-            }
-
-            displayILine(second_break, second_cell, overwrite);
-
-            return;
         }
 	}
 }
-
 
 bool Game::checkVerticalUMatching(std::pair<int, int> first_cell, std::pair<int, int> second_cell) {
     if (first_cell.first != second_cell.first) return false;
@@ -507,6 +521,79 @@ bool Game::checkVerticalUMatching(std::pair<int, int> first_cell, std::pair<int,
 return false;
 }
 
+void Game::displayBreakPointULine(std::pair<int, int> first_cell, std::pair<int, int> second_cell,
+                                  std::pair<int, int> first_break, std::pair<int, int> second_break, bool overwrite) {
+        displayILine(first_cell, first_break, overwrite);
+
+        Screen::gotoXY(table->getXInConsole(first_break.first), table->getYInConsole(first_break.second));
+        if (overwrite == false) {
+            std::cout<<"@";
+        } else {
+            std::cout<<" ";
+        }
+
+        displayILine(first_break, second_break, overwrite);
+
+        Screen::gotoXY(table->getXInConsole(second_break.first), table->getYInConsole(second_break.second));
+        if (overwrite == false) {
+            std::cout<<"@";
+        } else {
+            std::cout<<" ";
+        }
+
+        displayILine(second_cell, second_break, overwrite);
+}
+
+void Game::displayVerticalULine(std::pair<int, int> first_cell, std::pair<int, int> second_cell, bool overwrite) {
+    if (first_cell.first == 0) {
+        std::pair<int, int> first_break = std::pair<int, int>(-1, first_cell.second);
+        std::pair<int, int> second_break = std::pair<int, int>(-1, second_cell.second);
+        displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
+        return;
+    }
+
+    if (first_cell.first == table_size-1) {
+        std::pair<int, int> first_break = std::pair<int, int>(table_size, first_cell.second);
+        std::pair<int, int> second_break = std::pair<int, int>(table_size, second_cell.second);
+        displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
+        return;
+    }
+
+    for (int current_pos_x = first_cell.first-1; current_pos_x >= 0; --current_pos_x) {
+        std::pair<int, int> first_break(current_pos_x, first_cell.second);
+        std::pair<int, int> second_break(current_pos_x, second_cell.second);
+
+        if (getCellState(first_break.first, first_break.second) != DELETED || getCellState(second_break.first, second_break.second) != DELETED) break;
+
+        if (checkIMatching(first_break, second_break) == true) {
+            displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
+            return;
+        } else if (current_pos_x == 0) {
+            first_break = std::pair<int, int>(-1, first_cell.second);
+            second_break = std::pair<int, int>(-1, second_cell.second);
+            displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
+            return;
+        }
+    }
+
+    for (int current_pos_x = first_cell.first+1; current_pos_x < table_size; ++current_pos_x) {
+        std::pair<int, int> first_break(current_pos_x, first_cell.second);
+        std::pair<int, int> second_break(current_pos_x, second_cell.second);
+
+        if (getCellState(first_break.first, first_break.second) != DELETED || getCellState(second_break.first, second_break.second) != DELETED) break;
+
+        if (checkIMatching(first_break, second_break) == true) {
+            displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
+            return;
+        } else if (current_pos_x == table_size-1) {
+            first_break = std::pair<int, int>(-1, first_cell.second);
+            second_break = std::pair<int, int>(-1, second_cell.second);
+            displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
+            return;
+        }
+    }
+}
+
 bool Game::checkHorizontalUMatching(std::pair<int, int> first_cell, std::pair<int, int> second_cell) {
     if (first_cell.second != second_cell.second) return false;
     if (first_cell.second == 0 || first_cell.second == table_size-1) return true;
@@ -530,21 +617,152 @@ bool Game::checkHorizontalUMatching(std::pair<int, int> first_cell, std::pair<in
 return false;
 }
 
+void Game::displayHorizontalULine(std::pair<int, int> first_cell, std::pair<int, int> second_cell, bool overwrite) {
+    if (first_cell.second == 0) {
+        std::pair<int, int> first_break = std::pair<int, int>(first_cell.first, -1);
+        std::pair<int, int> second_break = std::pair<int, int>(second_cell.first, -1);
+        displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
+        return;
+    }
+
+    if (first_cell.second == table_size-1) {
+        std::pair<int, int> first_break = std::pair<int, int>(first_cell.first, table_size);
+        std::pair<int, int> second_break = std::pair<int, int>(second_cell.first, table_size);
+        displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
+        return;
+    }
+
+    for (int current_pos_y = first_cell.second-1; current_pos_y >= 0; --current_pos_y) {
+        std::pair<int, int> first_break(first_cell.first, current_pos_y);
+        std::pair<int, int> second_break(second_cell.first, current_pos_y);
+
+        if (getCellState(first_break.first, first_break.second) != DELETED || getCellState(second_break.first, second_break.second) != DELETED) break;
+
+        if (checkIMatching(first_break, second_break) == true) {
+            displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
+            return;
+        } else if (current_pos_y == 0) {
+            first_break = std::pair<int, int>(first_cell.first, -1);
+            second_break = std::pair<int, int>(second_cell.first, -1);
+            displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
+            return;
+        }
+    }
+
+    for (int current_pos_y = first_cell.second+1; current_pos_y < table_size; ++current_pos_y) {
+        std::pair<int, int> first_break(first_cell.first, current_pos_y);
+        std::pair<int, int> second_break(second_cell.first, current_pos_y);
+
+        if (getCellState(first_break.first, first_break.second) != DELETED || getCellState(second_break.first, second_break.second) != DELETED) break;
+
+        if (checkIMatching(first_break, second_break) == true) {
+            displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
+            return;
+        } else if (current_pos_y == table_size-1) {
+            first_break = std::pair<int, int>(first_cell.first, -1);
+            second_break = std::pair<int, int>(second_cell.first, -1);
+            displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
+            return;
+        }
+    }
+}
+
 bool Game::checkUMatching(std::pair<int, int> first_cell, std::pair<int, int> second_cell) {
-    if (checkVerticalUMatching(first_cell, second_cell) == true || checkHorizontalUMatching(first_cell, second_cell) == true) return true;
+    if (checkVerticalUMatching(first_cell, second_cell) == true) {
+        displayVerticalULine(first_cell, second_cell, false);
+        Sleep(500);
+        displayVerticalULine(first_cell, second_cell, true);
+        return true;
+    }
+
+    if (checkHorizontalUMatching(first_cell, second_cell) == true) {
+        displayHorizontalULine(first_cell, second_cell, false);
+        Sleep(500);
+        displayHorizontalULine(first_cell, second_cell, true);
+        return true;
+    }
 
     if (first_cell.first > second_cell.first) swapCells(first_cell, second_cell);
 
     std::pair<int, int> break_point(first_cell.first, second_cell.second);
     if (getCellState(break_point.first, break_point.second) == DELETED) {
-        if (checkIMatching(first_cell, break_point) == true && checkHorizontalUMatching(second_cell, break_point) == true) return true;
-        if (checkIMatching(second_cell, break_point) == true && checkVerticalUMatching(first_cell, break_point) == true) return true;
+        if (checkIMatching(first_cell, break_point) == true && checkHorizontalUMatching(second_cell, break_point) == true) {
+            displayILine(first_cell, break_point, false);
+
+            Screen::gotoXY(table->getXInConsole(break_point.first), table->getYInConsole(break_point.second));
+            putchar(179);
+
+            displayHorizontalULine(second_cell, break_point, false);
+
+            Sleep(500);
+
+            displayILine(first_cell, break_point, true);
+
+            Screen::gotoXY(table->getXInConsole(break_point.first), table->getYInConsole(break_point.second));
+            putchar(32);
+
+            displayHorizontalULine(second_cell, break_point, true);
+            return true;
+        }
+
+        if (checkIMatching(second_cell, break_point) == true && checkVerticalUMatching(first_cell, break_point) == true) {
+            displayILine(second_cell, break_point, false);
+
+            Screen::gotoXY(table->getXInConsole(break_point.first), table->getYInConsole(break_point.second));
+            putchar(196);
+
+            displayVerticalULine(first_cell, break_point, false);
+
+            Sleep(500);
+
+            displayILine(second_cell, break_point, true);
+
+            Screen::gotoXY(table->getXInConsole(break_point.first), table->getYInConsole(break_point.second));
+            putchar(32);
+
+            displayVerticalULine(first_cell, break_point, true);
+            return true;
+        }
     }
 
     break_point = std::pair<int, int>(second_cell.first, first_cell.second);
     if (getCellState(break_point.first, break_point.second) == DELETED) {
-        if (checkIMatching(first_cell, break_point) == true && checkVerticalUMatching(second_cell, break_point) == true) return true;
-        if (checkIMatching(second_cell, break_point) == true && checkHorizontalUMatching(first_cell, break_point) == true) return true;
+        if (checkIMatching(first_cell, break_point) == true && checkVerticalUMatching(second_cell, break_point) == true) {
+            displayILine(first_cell, break_point, false);
+
+            Screen::gotoXY(table->getXInConsole(break_point.first), table->getYInConsole(break_point.second));
+            putchar(196);
+
+            displayVerticalULine(second_cell, break_point, false);
+
+            Sleep(500);
+
+            displayILine(first_cell, break_point, true);
+
+            Screen::gotoXY(table->getXInConsole(break_point.first), table->getYInConsole(break_point.second));
+            putchar(32);
+
+            displayVerticalULine(second_cell, break_point, true);
+            return true;
+        }
+
+        if (checkIMatching(second_cell, break_point) == true && checkHorizontalUMatching(first_cell, break_point) == true) {
+            displayILine(second_cell, break_point, false);
+
+            Screen::gotoXY(table->getXInConsole(break_point.first), table->getYInConsole(break_point.second));
+            putchar(179);
+
+            displayHorizontalULine(first_cell, break_point, false);
+            Sleep(500);
+
+            displayILine(second_cell, break_point, true);
+
+            Screen::gotoXY(table->getXInConsole(break_point.first), table->getYInConsole(break_point.second));
+            putchar(32);
+
+            displayHorizontalULine(first_cell, break_point, true);
+            return true;
+        }
     }
 
 return false;
@@ -573,6 +791,11 @@ bool Game::checkMatching(std::pair<int, int> first_cell, std::pair<int, int> sec
         return true;
     }
 
-    if (checkUMatching(first_cell, second_cell) == true) return true;
+    if (checkUMatching(first_cell, second_cell) == true) {
+        table->cleanMatchingEffect();
+        return true;
+    }
+    table->cleanMatchingEffect();
+
 return false;
 }
