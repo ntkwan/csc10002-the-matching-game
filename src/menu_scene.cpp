@@ -65,6 +65,11 @@ void Menu::playStandardMode() {
     game.startGame();
 }
 
+void Menu::playDifficultMode() {
+    Screen::clearConsole();
+    DifficultMode game(DIFFICULT_MODE, 20, 3);
+    game.startGame();
+}
 void Menu::menuController() {
     displayMenuBackground();
     displayOptionText();
@@ -83,6 +88,9 @@ void Menu::menuController() {
                 switch(current_option) {
                     case 0:
                         playStandardMode();
+                        break;
+                    case 1:
+                        playDifficultMode();
                         break;
                 }
         }

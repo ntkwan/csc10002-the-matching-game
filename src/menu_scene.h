@@ -6,9 +6,10 @@
 #include <fstream>
 
 #include "standard_mode.h"
+#include "difficult_mode.h"
 
 #define STANDARD_MODE 4
-#define DIFFICULT_MODE 8
+#define DIFFICULT_MODE 6
 
 struct Menu {
 
@@ -24,6 +25,7 @@ struct Menu {
     ~Menu();
 
     void playStandardMode();
+    void playDifficultMode();
     void menuController();
     void loadMenuAssets(const std::string &, std::string *&);
     void displayMenuBackground();

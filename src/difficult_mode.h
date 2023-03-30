@@ -1,18 +1,18 @@
-#ifndef STANDARD_MODE_H
-#define STANDARD_MODE_H
+#ifndef DIFFICULT_MODE_H
+#define DIFFICULT_MODE_H
 
 #include <vector>
 #include <algorithm>
 
-#include "table.h"
+#include "linked_list_table.h"
 #include "game_scene.h"
 
 #define EMPTY_BOARD -1
 
-struct StandardMode {
-    int padding_left = 0;
-    int padding_top = 0;
-    int mode = 0;
+struct DifficultMode {
+    int padding_left;
+    int padding_top;
+    int mode;
 
     int table_size;
     int remained_pairs;
@@ -22,11 +22,11 @@ struct StandardMode {
     int cell_coord_y;
     bool end_loop;
     std::vector<std::pair<int, int>> locked_list;
-    Table* TableObject;
+    TableLL* TableObject;
     GameScene *GameObject;
 
-    StandardMode(int, int, int);
-    ~StandardMode();
+    DifficultMode(int, int, int);
+    ~DifficultMode();
 
     void initTable();
 
@@ -67,4 +67,4 @@ struct StandardMode {
     bool checkUMatching(std::pair<int, int>, std::pair<int, int>);
 };
 
-#endif // GAME_H
+#endif // DIFFICULT_MODE_H
