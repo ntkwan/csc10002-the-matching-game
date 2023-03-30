@@ -6,5 +6,5 @@ obj/Debug/src/table.o
 obj/Debug/src/screen.o
 obj/Debug/src/main.o
 obj/Debug/src/cell.o
-obj/Debug/src/game.o
+obj/Debug/src/standard_mode.o
 obj/Debug/src/menu_scene.o
