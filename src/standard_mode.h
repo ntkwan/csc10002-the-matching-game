@@ -1,14 +1,15 @@
-#ifndef GAME_H
-#define GAME_H
+#ifndef STANDARD_MODE_H
+#define STANDARD_MODE_H
 
 #include <vector>
 #include <algorithm>
 
 #include "table.h"
+#include "game_scene.h"
 
 #define EMPTY_BOARD -1
 
-struct Game {
+struct StandardMode {
     int padding_left = 0;
     int padding_top = 0;
     int mode = 0;
@@ -21,10 +22,11 @@ struct Game {
     int cell_coord_y;
     bool end_loop;
     std::vector<std::pair<int, int>> locked_list;
-    Table* table;
+    Table* TableObject;
+    GameScene *GameObject;
 
-    Game(int, int, int);
-    ~Game();
+    StandardMode(int, int, int);
+    ~StandardMode();
 
     void initTable();
 

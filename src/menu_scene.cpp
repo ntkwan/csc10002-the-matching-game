@@ -61,7 +61,7 @@ void Menu::unselectOption() {
 
 void Menu::playStandardMode() {
     Screen::clearConsole();
-    Game game(STANDARD_MODE, 20, 3);
+    StandardMode game(STANDARD_MODE, 20, 3);
     game.startGame();
 }
 

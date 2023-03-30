@@ -5,7 +5,7 @@
 #include <string>
 #include <fstream>
 
-#include "game.h"
+#include "standard_mode.h"
 
 #define STANDARD_MODE 4
 #define DIFFICULT_MODE 8
