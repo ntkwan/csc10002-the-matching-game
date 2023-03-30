@@ -5,6 +5,9 @@
 #define LOCKED 1
 #define DELETED 2
 
+const int CELL_LENGTH = 8;
+const int CELL_HEIGHT = 4;
+
 struct Cell {
     char cell_value;
     int cell_state;
