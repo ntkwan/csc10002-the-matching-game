@@ -25,9 +25,29 @@ StandardMode::~StandardMode() {
     GameObject = nullptr;
 }
 
-char StandardMode::getCharAt(int r, int c) const {
-	if (TableObject->table_data[r][c].getCellState() == DELETED) return ' ';
-	return TableObject->table_data[r][c].getCellValue();
+int StandardMode::getCellState(int _cell_pos_x, int _cell_pos_y) const { return TableObject->table_data[_cell_pos_x][_cell_pos_y].getCellState(); }
+
+char StandardMode::getCellValue(int _cell_pos_x, int _cell_pos_y) const { return TableObject->table_data[_cell_pos_x][_cell_pos_y].getCellValue(); }
+
+void StandardMode::setCellState(int _cell_pos_x, int _cell_pos_y, int _state)  { TableObject->table_data[_cell_pos_x][_cell_pos_y].setCellState(_state); }
+
+void StandardMode::setCellValue(int _cell_pos_x, int _cell_pos_y, char _value) { TableObject->table_data[_cell_pos_x][_cell_pos_y].setCellValue(_value); }
+
+void StandardMode::swapPoints(int &first_cell, int &second_cell) {
+    int tmp = first_cell;
+    first_cell = second_cell;
+    second_cell = tmp;
+}
+
+void StandardMode::swapCells(std::pair<int, int> &first_cell, std::pair<int, int> &second_cell) {
+    std::pair<int, int> tmp = first_cell;
+    first_cell = second_cell;
+    second_cell = tmp;
+}
+
+char StandardMode::getCharAt(int _cell_pos_x, int _cell_pos_y) const {
+	if (getCellState(_cell_pos_x, _cell_pos_y) == DELETED) return ' ';
+return getCellValue(_cell_pos_x, _cell_pos_y);
 }
 
 void StandardMode::selectCell(int _cell_pos_x, int _cell_pos_y, int _background) {
@@ -35,10 +55,10 @@ void StandardMode::selectCell(int _cell_pos_x, int _cell_pos_y, int _background)
     int _cell_coord_y = TableObject->getYInConsole(_cell_pos_y);
     Screen::gotoXY(_cell_coord_x, _cell_coord_y);
 
-    if (TableObject->table_data[cell_pos_x][cell_pos_y].getCellState() == DELETED) {
+    if (getCellState(cell_pos_x, cell_pos_y) == DELETED) {
         Screen::setConsoleColor(GREEN, RED);
     } else {
-        if (TableObject->table_data[cell_pos_x][cell_pos_y].getCellState() == LOCKED || TableObject->table_data[cell_pos_x][cell_pos_y].getCellState() == EMPTY_BOARD) {
+        if (getCellState(cell_pos_x, cell_pos_y) == LOCKED || getCellState(cell_pos_x, cell_pos_y) == EMPTY_BOARD) {
             Screen::setConsoleColor(_background, RED);
         } else {
             Screen::setConsoleColor(_background, BLACK);
@@ -123,7 +143,7 @@ void StandardMode::deleteCell() {
         remained_pairs -= 2;
 
         for (auto cell : locked_list) {
-            TableObject->table_data[cell.first][cell.second].setCellState(DELETED);
+            setCellState(cell.first, cell.second, DELETED);
             selectCell(cell.first, cell.second, WHITE);
         }
         locked_list.clear();
@@ -186,26 +206,6 @@ void StandardMode::initTable() {
     GameObject->loadTableBackground("assets/bunny.txt");
 }
 
-int StandardMode::getCellState(int _cell_pos_x, int _cell_pos_y) const { return TableObject->table_data[_cell_pos_x][_cell_pos_y].getCellState(); }
-
-char StandardMode::getCellValue(int _cell_pos_x, int _cell_pos_y) const { return TableObject->table_data[_cell_pos_x][_cell_pos_y].getCellValue(); }
-
-void StandardMode::setCellState(int _cell_pos_x, int _cell_pos_y, int _state)  { TableObject->table_data[_cell_pos_x][_cell_pos_y].setCellState(_state); }
-
-void StandardMode::setCellValue(int _cell_pos_x, int _cell_pos_y, char _value) { TableObject->table_data[_cell_pos_x][_cell_pos_y].setCellValue(_value); }
-
-void StandardMode::swapPoints(int &first_cell, int &second_cell) {
-    int tmp = first_cell;
-    first_cell = second_cell;
-    second_cell = tmp;
-}
-
-void StandardMode::swapCells(std::pair<int, int> &first_cell, std::pair<int, int> &second_cell) {
-    std::pair<int, int> tmp = first_cell;
-    first_cell = second_cell;
-    second_cell = tmp;
-}
-
 void StandardMode::startGame() {
     Screen::clearConsole();
     initTable();
@@ -235,16 +235,13 @@ void StandardMode::startGame() {
         }
     }
 
-    TableObject->table_data[cell_pos_x][cell_pos_y].setCellState(EMPTY_BOARD);
+    setCellState(cell_pos_x, cell_pos_y, EMPTY_BOARD);
     selectCell(cell_pos_x, cell_pos_y, WHITE);
     GameObject->displayTableBackground();
     Screen::setConsoleColor(WHITE, BLACK);
 }
 
-bool StandardMode::isCharacterEqual(std::pair<int,int> first_cell, std::pair<int, int> second_cell) {
-    return (TableObject->table_data[first_cell.first][first_cell.second].getCellValue() ==
-            TableObject->table_data[second_cell.first][second_cell.second].getCellValue());
-}
+bool StandardMode::isCharacterEqual(std::pair<int,int> first_cell, std::pair<int, int> second_cell) { return (getCellValue(first_cell.first, first_cell.second) == getCellValue(second_cell.first, second_cell.second)); }
 
 bool StandardMode::checkIMatching(std::pair<int, int> first_cell, std::pair<int,int> second_cell) {
 	if (first_cell.first == second_cell.first) {
