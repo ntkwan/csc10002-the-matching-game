@@ -10,9 +10,6 @@
 #include "screen.h"
 #include "cell.h"
 
-const int CELL_LENGTH = 8;
-const int CELL_HEIGHT = 4;
-
 struct Table {
     int table_size;
     int padding_left;
@@ -21,7 +18,6 @@ struct Table {
     int *character_list;
     int *character_order;
     Cell **table_data;
-    std::string* table_image;
 
     Table(int, int, int);
     ~Table();
@@ -31,9 +27,6 @@ struct Table {
 
     void generateTableData();
     void displayTableData();
-    void loadTableBackground(const std::string &);
-    void cleanMatchingEffect();
-    void displayTableBackground();
     void printTableData();
 };
 
