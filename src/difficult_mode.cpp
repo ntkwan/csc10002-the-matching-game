@@ -50,6 +50,26 @@ void DifficultMode::swapCells(std::pair<int, int> &first_cell, std::pair<int, in
     second_cell = tmp;
 }
 
+void DifficultMode::displayCellAt(int _cell_pos_x, int _cell_pos_y, int _background, int _text) {
+    Screen::setConsoleColor(_background, _text);
+    int _cell_coord_x = TableObject->getXInConsole(_cell_pos_x);
+    int _cell_coord_y = TableObject->getYInConsole(_cell_pos_y);
+    Screen::gotoXY(_cell_coord_x, _cell_coord_y);
+
+    for (int current_coord_y = _cell_coord_y - 1; current_coord_y <= _cell_coord_y + 1; ++current_coord_y) {
+        for (int current_coord_x = _cell_coord_x - 3; current_coord_x <= _cell_coord_x + 3; ++current_coord_x) {
+            Screen::gotoXY(current_coord_x, current_coord_y);
+
+            putchar(GameObject->table_image[current_coord_y - padding_top][current_coord_x - padding_left]);
+        }
+    }
+}
+
+void DifficultMode::cleanTableAtRow(int _cell_pos_y) {
+    for (int _cell_pos_x = 0; _cell_pos_x < table_size; ++_cell_pos_x) {
+        displayCellAt(_cell_pos_x, _cell_pos_y, WHITE, RED);
+    }
+}
 
 void DifficultMode::deleteCell() {
     if (checkMatching(locked_list[0], locked_list[1]) == false) {
@@ -72,9 +92,23 @@ void DifficultMode::deleteCell() {
         remained_pairs -= 2;
 
         for (auto cell : locked_list) {
+            cleanTableAtRow(cell.second);
             setCellState(cell.first, cell.second, DELETED);
-            selectCell(cell.first, cell.second, WHITE);
+            TableObject->table_data[cell.second].removePos(cell.first);
+
+            int x = table_size-1;
+            int y = cell.first;
+
+            Cell* cur_node = new Cell;
+            cur_node->cell_value = ' ';
+            cur_node->cell_state = EMPTY_BOARD;
+            cur_node->cell_coord_x = TableObject->getXInConsole(x);
+            cur_node->cell_coord_y = TableObject->getYInConsole(y);
+            cur_node->cell_pos_x = x;
+            cur_node->cell_pos_y = y;
+            TableObject->table_data[cell.second].addTail(cur_node);
         }
+
         locked_list.clear();
     }
 }
