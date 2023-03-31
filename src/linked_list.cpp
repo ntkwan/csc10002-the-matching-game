@@ -74,11 +74,11 @@ void LinkedList::removeTail() {
         return;
     }
 
-    Cell* next_node = head->prev;
-    delete head;
-    head->prev = nullptr;
+    Cell* next_node = tail->prev;
+    delete tail;
+    tail->prev = nullptr;
 
-    head = next_node;
+    tail = next_node;
 }
 
 void LinkedList::removeAll() {
