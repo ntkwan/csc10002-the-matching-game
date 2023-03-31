@@ -35,6 +35,7 @@ struct StandardMode {
     void setCellState(int, int, int);
     void setCellValue(int, int, char);
     char getCharAt(int, int) const;
+    void displayCellValueAt(int, int, int, int);
 
     void swapPoints(int &, int &);
     void swapCells(std::pair<int, int> &, std::pair<int, int> &);
@@ -58,13 +59,15 @@ struct StandardMode {
     void displayHorizontalULine(std::pair<int, int>, std::pair<int, int>, bool);
 
     bool isCharacterEqual(std::pair<int, int>, std::pair<int, int>);
-    bool checkMatching(std::pair<int, int>, std::pair<int, int>);
+    bool checkMatching(std::pair<int, int>, std::pair<int, int>, bool);
     bool checkIMatching(std::pair<int,int>, std::pair<int, int>);
     bool checkLMatching(std::pair<int, int>, std::pair<int, int>);
     bool checkZMatching(std::pair<int, int>, std::pair<int, int>);
     bool checkVerticalUMatching(std::pair<int, int>, std::pair<int, int>);
     bool checkHorizontalUMatching(std::pair<int, int>, std::pair<int, int>);
-    bool checkUMatching(std::pair<int, int>, std::pair<int, int>);
+    bool checkUMatching(std::pair<int, int>, std::pair<int, int>, bool);
+
+    bool findValidPairs();
 };
 
 #endif // STANDARD_MODE_H
