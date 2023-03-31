@@ -42,8 +42,10 @@ struct DifficultMode {
     void unselectCell();
     void lockCell();
     void deleteCell();
-    void displayCellAt(int, int, int, int);
-    void cleanTableAtRow(int);
+    void displayCellValueAt(int, int, int, int);
+    void displayCellBackgroundAt(int, int, int, int);
+    void cleanTableDataAtRow(int);
+    void displayTableDataAtRow(int);
 
     void moveUp();
     void moveDown();
