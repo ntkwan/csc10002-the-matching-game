@@ -33,7 +33,7 @@ void Menu::changeOption(int _direction) {
 
 void Menu::selectOption() {
     int padding_left = 59, padding_top = 18;
-    Screen::setConsoleColor(WHITE, GREEN);
+    Screen::setConsoleColor(BLACK, GREEN);
 
     Screen::gotoXY(padding_left-3, padding_top+current_option*2);
     putchar(175);
@@ -47,7 +47,7 @@ void Menu::selectOption() {
 
 void Menu::unselectOption() {
     int padding_left = 59, padding_top = 18;
-    Screen::setConsoleColor(WHITE, BLACK);
+    Screen::setConsoleColor(BLACK, WHITE);
 
     Screen::gotoXY(padding_left-3, padding_top+current_option*2);
     putchar(' ');
@@ -70,6 +70,7 @@ void Menu::playDifficultMode() {
     DifficultMode game(DIFFICULT_MODE, 20, 3);
     game.startGame();
 }
+
 void Menu::menuController() {
     displayMenuBackground();
     displayOptionText();
@@ -108,18 +109,18 @@ void Menu::loadMenuAssets(const std::string &path, std::string *&assets) {
 }
 
 void Menu::displayMenuBackground() {
-    Screen::setConsoleColor(WHITE, BLACK);
+    Screen::setConsoleColor(BLACK, BLACK);
     Screen::clearConsole();
     loadMenuAssets("assets/game_title.txt", game_title);
     loadMenuAssets("assets/menu_option.txt", menu_option);
     loadMenuAssets("assets/pikachu.txt", pikachu_asset);
     loadMenuAssets("assets/bulbasaur.txt", bulbasaur_asset);
 
-    int color[] = { LIGHT_AQUA, AQUA, LIGHT_BLUE, BLUE, LIGHT_PURPLE, PURPLE, BLUE};
+    int color[] = { LIGHT_AQUA, AQUA, LIGHT_BLUE, BLUE, LIGHT_PURPLE, PURPLE, YELLOW};
 
 	int loop = 14, colorCount = 0, padding_left = 33, padding_top = 1;
 	while (loop--) {
-		Screen::setConsoleColor(WHITE, color[colorCount % 7]);
+		Screen::setConsoleColor(BLACK, color[colorCount % 7]);
         Screen::gotoXY(padding_left, padding_top);
 		for (int i = 0; i < 12; ++i) {
             Screen::gotoXY(padding_left, padding_top + i);
@@ -129,21 +130,21 @@ void Menu::displayMenuBackground() {
 		colorCount++;
 	}
 
-    Screen::setConsoleColor(WHITE, BLACK);
+    Screen::setConsoleColor(BLACK, WHITE);
     padding_left = 50, padding_top = 15;
     for (int i = 0;i < 17; ++i) {
         Screen::gotoXY(padding_left, padding_top + i);
         std::cout<<menu_option[i]<<"\n";
     }
 
-    Screen::setConsoleColor(WHITE, YELLOW);
+    Screen::setConsoleColor(BLACK, YELLOW);
     padding_left = 10, padding_top = 18;
     for (int i = 0;i < 13; ++i) {
         Screen::gotoXY(padding_left, padding_top + i);
         std::cout<<pikachu_asset[i]<<"\n";
     }
 
-    Screen::setConsoleColor(WHITE, AQUA);
+    Screen::setConsoleColor(BLACK, YELLOW);
     padding_left = 100, padding_top = 15;
     for (int i = 0;i < 17; ++i) {
         Screen::gotoXY(padding_left, padding_top + i);
@@ -152,7 +153,7 @@ void Menu::displayMenuBackground() {
 }
 
 void Menu::displayOptionText() {
-    Screen::setConsoleColor(WHITE, BLACK);
+    Screen::setConsoleColor(BLACK, WHITE);
     int padding_left = 59, padding_top = 18;
     for (int i = 0;i < option_slot; ++i) {
         Screen::gotoXY(padding_left, padding_top + i * 2);
