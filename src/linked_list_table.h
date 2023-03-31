@@ -1,10 +1,12 @@
 #ifndef TABLE_LL_H
 #define TABLE_LL_H
 
+#include <random>
 #include <time.h>
+#include <iostream>
 
-#include "linked_list.h"
 #include "screen.h"
+#include "linked_list.h"
 
 struct TableLL {
     int table_size;
@@ -13,8 +15,9 @@ struct TableLL {
     int remained_pairs;
     int *character_list;
     int *character_order;
+    int max_distinct_number = 2;
+    int *occurs;
     LinkedList *table_data;
-    std::string* table_image;
 
     TableLL(int, int, int);
     ~TableLL();
@@ -24,9 +27,6 @@ struct TableLL {
 
     void generateTableData();
     void displayTableData();
-    void loadTableBackground(const std::string &);
-    void cleanMatchingEffect();
-    void displayTableBackground();
     void printTableData();
 
 };

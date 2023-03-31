@@ -8,15 +8,11 @@ TableLL::TableLL(int _table_size, int _padding_left, int _padding_top) {
     remained_pairs = (table_size * table_size) / 2;
 
     table_data = new LinkedList[table_size];
-    table_image = new std::string[table_size * 10];
 }
 
 TableLL::~TableLL() {
     delete[] table_data;
     table_data = nullptr;
-
-    delete[] table_image;
-    table_image = nullptr;
 }
 
 int TableLL::getXInConsole(int _c) const { return padding_left + 5 + CELL_LENGTH * _c; }
@@ -27,8 +23,14 @@ void TableLL::generateTableData() {
     srand(time(NULL));
 
     character_list = new int[table_size * table_size];
+    occurs = new int[26];
+
     for (int i = 0; i < table_size * table_size; i += 2) {
+        int char_gen = rand() % 26;
+        while (occurs[char_gen] > max_distinct_number) char_gen = rand() % 26;
+
         character_list[i] = character_list[i+1] = rand() % 26;
+        ++occurs[char_gen];
     }
 
     character_order = new int[table_size * table_size];

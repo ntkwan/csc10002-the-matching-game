@@ -3,8 +3,6 @@
 
 #include <random>
 #include <time.h>
-#include <string>
-#include <fstream>
 #include <iostream>
 
 #include "screen.h"
@@ -17,6 +15,8 @@ struct Table {
     int remained_pairs;
     int *character_list;
     int *character_order;
+    int max_distinct_number = 1;
+    int *occurs;
     Cell **table_data;
 
     Table(int, int, int);

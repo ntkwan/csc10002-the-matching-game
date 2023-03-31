@@ -30,8 +30,14 @@ void Table::generateTableData() {
     srand(time(NULL));
 
     character_list = new int[table_size * table_size];
+    occurs = new int[26];
+
     for (int i = 0; i < table_size * table_size; i += 2) {
+        int char_gen = rand() % 26;
+        while (occurs[char_gen] > max_distinct_number) char_gen = rand() % 26;
+
         character_list[i] = character_list[i+1] = rand() % 26;
+        ++occurs[char_gen];
     }
 
     character_order = new int[table_size * table_size];
