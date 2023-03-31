@@ -676,8 +676,8 @@ void DifficultMode::displayVerticalULine(std::pair<int, int> first_cell, std::pa
             displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
             return;
         } else if (current_pos_x == table_size-1) {
-            first_break = std::pair<int, int>(-1, first_cell.second);
-            second_break = std::pair<int, int>(-1, second_cell.second);
+            first_break = std::pair<int, int>(table_size, first_cell.second);
+            second_break = std::pair<int, int>(table_size, second_cell.second);
             displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
             return;
         }
