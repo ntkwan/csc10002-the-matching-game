@@ -96,6 +96,15 @@ void LinkedList::removeAll() {
     tail = head = nullptr;
 }
 
+void LinkedList::shiftCellToLeft() {
+    Cell* cur_node = head;
+    while (cur_node != nullptr) {
+        int cell_pos_x = cur_node->getCellPosX();
+        cur_node->setCellPosX(cell_pos_x-1);
+        cur_node = cur_node->next;
+    }
+}
+
 Cell* LinkedList::getPos(int _idx) {
     if (isEmpty() == true) return nullptr;
 
@@ -107,6 +116,65 @@ Cell* LinkedList::getPos(int _idx) {
     }
 
 return cur_node;
+}
+
+void LinkedList::removePos(int _idx) {
+    if (isEmpty() == true) return;
+
+    if (_idx < 0 || _idx >= list_size) return;
+
+    if (head->next == nullptr) {
+        if (_idx == 0) {
+            removeHead();
+            return;
+        }
+
+        return;
+    }
+
+    if (head->next->next == nullptr) {
+        if (_idx == 0) {
+            removeHead();
+            shiftCellToLeft();
+            return;
+        }
+
+        if (_idx == 1) {
+            removeTail();
+            return;
+        }
+
+        return;
+    }
+
+    if (_idx == 0) {
+        removeHead();
+        shiftCellToLeft();
+        return;
+    }
+
+    if (_idx == list_size-1) {
+        removeTail();
+        return;
+    }
+
+    Cell* prev_node = nullptr;
+    Cell* cur_node = head;
+    Cell* next_node = head->next;
+
+    for (int i = 0; i < _idx; ++i) {
+        prev_node = cur_node;
+        cur_node = next_node;
+        next_node = next_node->next;
+    }
+
+    prev_node->next = next_node;
+    next_node->prev = prev_node;
+    delete cur_node;
+    cur_node->next = nullptr;
+    cur_node->prev = nullptr;
+
+    shiftCellToLeft();
 }
 
 void LinkedList::printList() {

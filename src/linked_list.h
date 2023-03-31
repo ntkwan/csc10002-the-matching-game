@@ -22,6 +22,8 @@ struct LinkedList {
     void addTail(Cell*);
     void removeHead();
     void removeTail();
+    void removePos(int);
+    void shiftCellToLeft();
     void removeAll();
     void printList();
 };
