@@ -88,9 +88,11 @@ void Menu::menuController() {
                 in_menu = 0;
                 switch(current_option) {
                     case 0:
+                        std::cerr<<"";
                         playStandardMode();
                         break;
                     case 1:
+                        std::cerr<<"";
                         playDifficultMode();
                         break;
                 }

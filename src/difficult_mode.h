@@ -10,9 +10,9 @@
 #define EMPTY_BOARD -1
 
 struct DifficultMode {
-    int padding_left;
-    int padding_top;
-    int mode;
+    int padding_left = 0;
+    int padding_top = 0;
+    int mode = 0;
 
     int table_size;
     int remained_pairs;

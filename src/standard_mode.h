@@ -67,4 +67,4 @@ struct StandardMode {
     bool checkUMatching(std::pair<int, int>, std::pair<int, int>);
 };
 
-#endif // GAME_H
+#endif // STANDARD_MODE_H
