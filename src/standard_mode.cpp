@@ -204,6 +204,85 @@ void StandardMode::initTable() {
     GameObject->displayTableBorder();
     TableObject->displayTableData();
     GameObject->loadTableBackground("assets/bunny.txt");
+    displayUserInterface();
+}
+
+void StandardMode::displayUserInterface() {
+    GameObject->displayInfomationBoard(70, 1, 50, 10);
+    GameObject->displayInfomationBoard(70, 11, 50, 10);
+    GameObject->displayInfomationBoard(70, 21, 50, 11);
+
+    Screen::setConsoleColor(WHITE, RED);
+    Screen::gotoXY(88, 1);
+    std::cout<<"PLAYER INFORMATION";
+    Screen::gotoXY(88, 11);
+    std::cout<<"GAME NOTIFICATION";
+    Screen::gotoXY(88, 21);
+    std::cout<<"QUICK INSTRUCTIONS";
+
+    Screen::setConsoleColor(WHITE, BLACK);
+    Screen::gotoXY(75, 3);
+    std::cout<<"USERNAME: ";
+    Screen::gotoXY(75, 5);
+    std::cout<<"CURRENT POINTS: ";
+    Screen::gotoXY(75, 6);
+    std::cout<<"BEST POINTS: ";
+    Screen::gotoXY(75, 8);
+    std::cout<<"LEVELS PLAYED: ";
+    Screen::gotoXY(75, 9);
+    std::cout<<"HIGHEST LEVEL: ";
+
+    Screen::gotoXY(75, 13);
+    std::cout<<"MISTAKES REMAIN: ";
+
+    auto printIns = [](const std::string& text_1, const std::string &text_2) {
+        Screen::setConsoleColor(WHITE, YELLOW);
+        std::cout<<text_1<<": ";
+        Screen::setConsoleColor(WHITE, BLACK);
+        std::cout<<text_2;
+    };
+
+    Screen::gotoXY(75, 23);
+    printIns("ARROWS", "MOVE");
+    Screen::gotoXY(75, 25);
+    printIns("ENTER", "SELECT CELL");
+    Screen::gotoXY(75, 27);
+    printIns("H", "MOVING SUGGESTIONS");
+    Screen::gotoXY(75, 29);
+    printIns("F", "SHUFFLE");
+    Screen::gotoXY(75, 31);
+    printIns("ESC", "EXIT THE GAME");
+
+    std::string *flowers;
+    flowers = new std::string[20];
+    auto loadTableAssets = [](const std::string &path, std::string *&flowers) {
+        std::fstream in(path, std::fstream::in);
+        int n = 0;
+        for (int i = 0; !in.eof(); ++i, n = i) {
+            getline(in, flowers[i]);
+        }
+        in.close();
+        return n;
+    };
+
+    int n = loadTableAssets("assets/left_flowers.txt", flowers);
+    int _padding_left = 0;
+    int _padding_top = 23;
+    Screen::setConsoleColor(WHITE, GREEN);
+    for (int i = 0; i < n; ++i) {
+        Screen::gotoXY(_padding_left, _padding_top + i);
+        std::cout<<flowers[i];
+    }
+
+    n = loadTableAssets("assets/right_flowers.txt", flowers);
+    for (int i = 0; i < n; ++i) {
+        Screen::gotoXY(_padding_left + 122, _padding_top + i - 1);
+        std::cout<<flowers[i];
+    }
+    Screen::setConsoleColor(WHITE, BLACK);
+
+    delete flowers;
+    flowers = nullptr;
 }
 
 void StandardMode::startGame() {

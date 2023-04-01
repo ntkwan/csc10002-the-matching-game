@@ -25,6 +25,7 @@ struct GameScene {
     void loadTableBackground(const std::string &);
     void displayTableBorder();
     void displayTableBackground();
+    void displayInfomationBoard(int, int, int, int);
 };
 
 #endif // GAME_SCENE_H

@@ -68,8 +68,30 @@ void GameScene::cleanMatchingEffect() {
     }
 }
 
+void GameScene::displayInfomationBoard(int left, int top, int width, int height) {
+	Screen::gotoXY(left, top);
+	putchar(218);
+	for (int i = 0; i < width; ++i) putchar(196);
+	putchar(191);
+
+	for (int i = 0; i < height; ++i)
+	{
+		Screen::gotoXY(left, top + i + 1);
+		putchar(179);
+		Screen::gotoXY(left + width + 1, top + i + 1);
+		putchar(179);
+		if (i == height-1) {
+            Screen::gotoXY(left, top + i + 1);
+            putchar(192);
+		}
+	}
+
+	for (int i = 0; i < width; ++i) putchar(196);
+	putchar(217);
+}
+
 void GameScene::displayTableBorder() {
-        Screen::setConsoleColor(WHITE, GRAY);
+    Screen::setConsoleColor(WHITE, GRAY);
     Screen::clearConsole();
 
     for (int i = 0; i < table_size; ++i) {
