@@ -214,28 +214,23 @@ void StandardMode::displayUserInterface() {
     GameObject->displayInfomationBoard(_padding_left, 11, 50, 10);
     GameObject->displayInfomationBoard(_padding_left, 21, 50, 11);
 
+    auto printInf = [](const std::string& text, const int pd_left, const int pd_top) {
+        Screen::gotoXY(pd_left, pd_top);
+        std::cout<<text;
+    };
+
     Screen::setConsoleColor(WHITE, RED);
-    Screen::gotoXY(_padding_left + 18, 1);
-    std::cout<<"PLAYER INFORMATION";
-    Screen::gotoXY(_padding_left + 18, 11);
-    std::cout<<"GAME NOTIFICATION";
-    Screen::gotoXY(_padding_left + 18, 21);
-    std::cout<<"QUICK INSTRUCTIONS";
+    printInf("PLAYER INFORMATION", _padding_left + 18, 1);
+    printInf("GAME NOTIFICATION", _padding_left + 18, 11);
+    printInf("QUICK INSTRUCTIONS", _padding_left + 18, 21);
 
     Screen::setConsoleColor(WHITE, BLACK);
-    Screen::gotoXY(_padding_left + 5, 3);
-    std::cout<<"USERNAME: ";
-    Screen::gotoXY(_padding_left + 5, 5);
-    std::cout<<"CURRENT POINTS: ";
-    Screen::gotoXY(_padding_left + 5, 6);
-    std::cout<<"BEST POINTS: ";
-    Screen::gotoXY(_padding_left + 5, 8);
-    std::cout<<"LEVELS PLAYED: ";
-    Screen::gotoXY(_padding_left + 5, 9);
-    std::cout<<"HIGHEST LEVEL: ";
-
-    Screen::gotoXY(_padding_left + 5, 13);
-    std::cout<<"MISTAKES REMAIN: ";
+    printInf("USERNAME: ", _padding_left + 5, 3);
+    printInf("CURRENT POINTS: ", _padding_left + 5, 5);
+    printInf("BEST POINTS: ", _padding_left + 5, 6);
+    printInf("LEVELS PLAYED: ", _padding_left + 5, 8);
+    printInf("HIGHEST LEVEL: ", _padding_left + 5, 9);
+    printInf("MISTAKES REMAIN: ", _padding_left + 5, 13);
 
     auto printIns = [](const std::string& text_1, const std::string &text_2, const int pd_left, const int pd_top) {
         Screen::gotoXY(pd_left, pd_top);
@@ -251,9 +246,8 @@ void StandardMode::displayUserInterface() {
     printIns("F", "SHUFFLE", _padding_left + 5, 29);
     printIns("ESC", "EXIT THE GAME", _padding_left + 5, 31);
 
-    std::string *flowers;
-    flowers = new std::string[20];
-    auto loadTableAssets = [](const std::string &path, std::string *&flowers) {
+    std::string *flowers = new std::string[20];
+    auto loadFlowersAssets = [](const std::string &path, std::string *&flowers) {
         std::fstream in(path, std::fstream::in);
         int n = 0;
         for (int i = 0; !in.eof(); ++i, n = i) {
@@ -263,20 +257,21 @@ void StandardMode::displayUserInterface() {
         return n;
     };
 
-    int n = loadTableAssets("assets/left_flowers.txt", flowers);
+    auto displayFlowersAssets = [](const std::string *flowers, const int n, const int pd_left, const int pd_top) {
+        for (int i = 0; i < n; ++i) {
+            Screen::gotoXY(pd_left, pd_top + i);
+            std::cout<<flowers[i];
+        }
+    };
+
+    int n = loadFlowersAssets("assets/left_flowers.txt", flowers);
     _padding_left = 0;
     _padding_top = 23;
     Screen::setConsoleColor(WHITE, GREEN);
-    for (int i = 0; i < n; ++i) {
-        Screen::gotoXY(_padding_left, _padding_top + i);
-        std::cout<<flowers[i];
-    }
+    displayFlowersAssets(flowers, n, _padding_left, _padding_top);
 
-    n = loadTableAssets("assets/right_flowers.txt", flowers);
-    for (int i = 0; i < n; ++i) {
-        Screen::gotoXY(_padding_left + 122, _padding_top + i - 1);
-        std::cout<<flowers[i];
-    }
+    n = loadFlowersAssets("assets/right_flowers.txt", flowers);
+    displayFlowersAssets(flowers, n, _padding_left + 122, _padding_top - 1);
 
     Screen::setConsoleColor(WHITE, BLACK);
 }
