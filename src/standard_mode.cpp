@@ -277,6 +277,10 @@ void StandardMode::displayTableData() {
             displayCellValueAt(TableObject->table_data[i][j].cell_pos_x, TableObject->table_data[i][j].cell_pos_y, WHITE, BLACK);
         }
     }
+
+    for (auto cell : locked_list) {
+        selectCell(cell.first, cell.second, YELLOW);
+    }
     selectCell(cell_pos_x, cell_pos_y, GREEN);
     Screen::setConsoleColor(WHITE, BLACK);
 }
