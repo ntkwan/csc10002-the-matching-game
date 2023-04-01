@@ -38,14 +38,9 @@ char DifficultMode::getCharAt(int _cell_pos_x, int _cell_pos_y) const {
 return getCellValue(_cell_pos_x, _cell_pos_y);
 }
 
-void DifficultMode::swapPoints(int &first_cell, int &second_cell) {
-    int tmp = first_cell;
-    first_cell = second_cell;
-    second_cell = tmp;
-}
-
-void DifficultMode::swapCells(std::pair<int, int> &first_cell, std::pair<int, int> &second_cell) {
-    std::pair<int, int> tmp = first_cell;
+template<class T>
+void DifficultMode::swapPoints(T &first_cell, T &second_cell) {
+    T tmp = first_cell;
     first_cell = second_cell;
     second_cell = tmp;
 }
@@ -129,7 +124,7 @@ void DifficultMode::deleteCell() {
             std::pair<int, int> first_cell = locked_list[0];
             std::pair<int, int> second_cell = locked_list[1];
 
-            if (first_cell.first > second_cell.first) swapCells(first_cell, second_cell);
+            if (first_cell.first > second_cell.first) swapPoints(first_cell, second_cell);
 
             cleanTableDataAtRow(first_cell.second);
 
@@ -535,7 +530,7 @@ void DifficultMode::displayLLine(std::pair<int, int> first_cell, std::pair<int, 
 }
 
 bool DifficultMode::checkZMatching(std::pair<int, int> first_cell, std::pair<int,int> second_cell) {
-	if (first_cell.second > second_cell.second) swapCells(first_cell, second_cell);
+	if (first_cell.second > second_cell.second) swapPoints(first_cell, second_cell);
 
 	for (int current_pos_y = first_cell.second + 1; current_pos_y < second_cell.second; ++current_pos_y) {
 		std::pair<int, int> first_break(first_cell.first, current_pos_y);
@@ -550,7 +545,7 @@ bool DifficultMode::checkZMatching(std::pair<int, int> first_cell, std::pair<int
         }
 	}
 
-	if (first_cell.first > second_cell.first) swapCells(first_cell, second_cell);
+	if (first_cell.first > second_cell.first) swapPoints(first_cell, second_cell);
 
 	for (int current_pos_x = first_cell.first + 1; current_pos_x < second_cell.first; ++current_pos_x) {
 		std::pair<int, int> first_break(current_pos_x, first_cell.second);
@@ -569,7 +564,7 @@ return false;
 }
 
 void DifficultMode::displayZLine(std::pair<int, int> first_cell, std::pair<int, int> second_cell, bool overwrite) {
-	if (first_cell.second > second_cell.second) swapCells(first_cell, second_cell);
+	if (first_cell.second > second_cell.second) swapPoints(first_cell, second_cell);
 
 	for (int current_pos_y = first_cell.second + 1; current_pos_y < second_cell.second; ++current_pos_y) {
 		std::pair<int, int> first_break(first_cell.first, current_pos_y);
@@ -604,7 +599,7 @@ void DifficultMode::displayZLine(std::pair<int, int> first_cell, std::pair<int, 
         }
 	}
 
-	if (first_cell.first > second_cell.first) swapCells(first_cell, second_cell);
+	if (first_cell.first > second_cell.first) swapPoints(first_cell, second_cell);
 
 	for (int current_pos_x = first_cell.first + 1; current_pos_x < second_cell.first; ++current_pos_x) {
 		std::pair<int, int> first_break(current_pos_x, first_cell.second);
@@ -829,7 +824,7 @@ bool DifficultMode::checkUMatching(std::pair<int, int> first_cell, std::pair<int
         return true;
     }
 
-    if (first_cell.first > second_cell.first) swapCells(first_cell, second_cell);
+    if (first_cell.first > second_cell.first) swapPoints(first_cell, second_cell);
 
     std::pair<int, int> break_point(first_cell.first, second_cell.second);
     if (getCellState(break_point.first, break_point.second) == DELETED) {

@@ -7,8 +7,6 @@
 #include "table.h"
 #include "game_scene.h"
 
-#define EMPTY_BOARD -1
-
 struct StandardMode {
     int padding_left = 0;
     int padding_top = 0;
@@ -37,8 +35,7 @@ struct StandardMode {
     char getCharAt(int, int) const;
     void displayCellValueAt(int, int, int, int);
 
-    void swapPoints(int &, int &);
-    void swapCells(std::pair<int, int> &, std::pair<int, int> &);
+    template<class T> void swapPoints(T &, T &);
     void selectCell(int, int, int);
     void unselectCell();
     void lockCell();
@@ -70,7 +67,7 @@ struct StandardMode {
     bool checkHorizontalUMatching(std::pair<int, int>, std::pair<int, int>);
     bool checkUMatching(std::pair<int, int>, std::pair<int, int>, bool);
 
-    bool findValidPairs();
+    bool findValidPairs(bool);
 };
 
 #endif // STANDARD_MODE_H

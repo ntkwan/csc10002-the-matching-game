@@ -33,14 +33,9 @@ void StandardMode::setCellState(int _cell_pos_x, int _cell_pos_y, int _state)  {
 
 void StandardMode::setCellValue(int _cell_pos_x, int _cell_pos_y, char _value) { TableObject->table_data[_cell_pos_x][_cell_pos_y].setCellValue(_value); }
 
-void StandardMode::swapPoints(int &first_cell, int &second_cell) {
-    int tmp = first_cell;
-    first_cell = second_cell;
-    second_cell = tmp;
-}
-
-void StandardMode::swapCells(std::pair<int, int> &first_cell, std::pair<int, int> &second_cell) {
-    std::pair<int, int> tmp = first_cell;
+template<class T>
+void StandardMode::swapPoints(T &first_cell, T &second_cell) {
+    T tmp = first_cell;
     first_cell = second_cell;
     second_cell = tmp;
 }
@@ -313,10 +308,13 @@ void StandardMode::startGame() {
                     lockCell();
                     break;
             case 7:
-                    findValidPairs();
+                    findValidPairs(true);
                     break;
             case 8:
                     TableObject->shuffleTableData();
+                    while (findValidPairs(false) == false) {
+                        TableObject->shuffleTableData();
+                    }
                     displayTableData();
                     break;
         }
@@ -481,7 +479,7 @@ void StandardMode::displayLLine(std::pair<int, int> first_cell, std::pair<int, i
 }
 
 bool StandardMode::checkZMatching(std::pair<int, int> first_cell, std::pair<int,int> second_cell) {
-	if (first_cell.second > second_cell.second) swapCells(first_cell, second_cell);
+	if (first_cell.second > second_cell.second) swapPoints(first_cell, second_cell);
 
 	for (int current_pos_y = first_cell.second + 1; current_pos_y < second_cell.second; ++current_pos_y) {
 		std::pair<int, int> first_break(first_cell.first, current_pos_y);
@@ -496,7 +494,7 @@ bool StandardMode::checkZMatching(std::pair<int, int> first_cell, std::pair<int,
         }
 	}
 
-	if (first_cell.first > second_cell.first) swapCells(first_cell, second_cell);
+	if (first_cell.first > second_cell.first) swapPoints(first_cell, second_cell);
 
 	for (int current_pos_x = first_cell.first + 1; current_pos_x < second_cell.first; ++current_pos_x) {
 		std::pair<int, int> first_break(current_pos_x, first_cell.second);
@@ -515,7 +513,7 @@ return false;
 }
 
 void StandardMode::displayZLine(std::pair<int, int> first_cell, std::pair<int, int> second_cell, bool overwrite) {
-	if (first_cell.second > second_cell.second) swapCells(first_cell, second_cell);
+	if (first_cell.second > second_cell.second) swapPoints(first_cell, second_cell);
 
 	for (int current_pos_y = first_cell.second + 1; current_pos_y < second_cell.second; ++current_pos_y) {
 		std::pair<int, int> first_break(first_cell.first, current_pos_y);
@@ -550,7 +548,7 @@ void StandardMode::displayZLine(std::pair<int, int> first_cell, std::pair<int, i
         }
 	}
 
-	if (first_cell.first > second_cell.first) swapCells(first_cell, second_cell);
+	if (first_cell.first > second_cell.first) swapPoints(first_cell, second_cell);
 
 	for (int current_pos_x = first_cell.first + 1; current_pos_x < second_cell.first; ++current_pos_x) {
 		std::pair<int, int> first_break(current_pos_x, first_cell.second);
@@ -611,7 +609,7 @@ return false;
 }
 
 void StandardMode::displayBreakPointULine(std::pair<int, int> first_cell, std::pair<int, int> second_cell,
-                                  std::pair<int, int> first_break, std::pair<int, int> second_break, bool overwrite) {
+                                          std::pair<int, int> first_break, std::pair<int, int> second_break, bool overwrite) {
         displayILine(first_cell, first_break, overwrite);
 
         Screen::gotoXY(TableObject->getXInConsole(first_break.first), TableObject->getYInConsole(first_break.second));
@@ -775,7 +773,7 @@ bool StandardMode::checkUMatching(std::pair<int, int> first_cell, std::pair<int,
         return true;
     }
 
-    if (first_cell.first > second_cell.first) swapCells(first_cell, second_cell);
+    if (first_cell.first > second_cell.first) swapPoints(first_cell, second_cell);
 
     std::pair<int, int> break_point(first_cell.first, second_cell.second);
     if (getCellState(break_point.first, break_point.second) == DELETED) {
@@ -938,7 +936,7 @@ void StandardMode::displayCellValueAt(int _cell_pos_x, int _cell_pos_y, int _bac
     }
 }
 
-bool StandardMode::findValidPairs() {
+bool StandardMode::findValidPairs(bool isDisplay) {
     for (int x = 0; x < table_size; ++x) {
         for (int y = 0; y < table_size; ++y) {
             if (getCellState(x, y) == DELETED) continue;
@@ -953,12 +951,14 @@ bool StandardMode::findValidPairs() {
                     if (firstCellValue != secondCellValue) continue;
 
                     if (checkMatching(std::make_pair(x, y), std::make_pair(r, c), false) == true) {
-                        displayCellValueAt(x, y, PURPLE, BLACK);
-                        displayCellValueAt(r, c, PURPLE, BLACK);
-                        Sleep(500);
-                        displayCellValueAt(x, y, WHITE, BLACK);
-                        displayCellValueAt(r, c, WHITE, BLACK);
-                        selectCell(cell_pos_x, cell_pos_y, GREEN);
+                        if (isDisplay == true) {
+                            displayCellValueAt(x, y, PURPLE, BLACK);
+                            displayCellValueAt(r, c, PURPLE, BLACK);
+                            Sleep(500);
+                            displayCellValueAt(x, y, WHITE, BLACK);
+                            displayCellValueAt(r, c, WHITE, BLACK);
+                            selectCell(cell_pos_x, cell_pos_y, GREEN);
+                        }
                         return true;
                     }
                 }

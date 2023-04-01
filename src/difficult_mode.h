@@ -7,8 +7,6 @@
 #include "linked_list_table.h"
 #include "game_scene.h"
 
-#define EMPTY_BOARD -1
-
 struct DifficultMode {
     int padding_left = 0;
     int padding_top = 0;
@@ -36,8 +34,7 @@ struct DifficultMode {
     void setCellValue(int, int, char);
     char getCharAt(int, int) const;
 
-    void swapPoints(int &, int &);
-    void swapCells(std::pair<int, int> &, std::pair<int, int> &);
+    template<class T> void swapPoints(T &, T &);
     void selectCell(int, int, int);
     void unselectCell();
     void lockCell();
