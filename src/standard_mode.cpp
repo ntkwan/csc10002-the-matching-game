@@ -874,6 +874,7 @@ bool StandardMode::findValidPairs() {
                         Sleep(500);
                         displayCellValueAt(x, y, WHITE, BLACK);
                         displayCellValueAt(r, c, WHITE, BLACK);
+                        selectCell(cell_pos_x, cell_pos_y, GREEN);
                         return true;
                     }
                 }

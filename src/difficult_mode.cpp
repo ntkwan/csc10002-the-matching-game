@@ -105,7 +105,7 @@ void DifficultMode::displayTableDataAtRow(int _cell_pos_y) {
 }
 
 void DifficultMode::deleteCell() {
-    if (checkMatching(locked_list[0], locked_list[1]) == false) {
+    if (checkMatching(locked_list[0], locked_list[1], true) == false) {
         reverse(locked_list.begin(), locked_list.end());
         for (auto cell : locked_list) {
             Screen::gotoXY(TableObject->getXInConsole(cell.first), TableObject->getYInConsole(cell.second));
@@ -134,9 +134,10 @@ void DifficultMode::deleteCell() {
             cleanTableDataAtRow(first_cell.second);
 
             for (int i = 2; i >= 1; --i) {
-                TableObject->table_data[first_cell.second].removePos(first_cell.first);
+                if (i == 2) TableObject->table_data[first_cell.second].removePos(first_cell.first);
+                else TableObject->table_data[first_cell.second].removePos(second_cell.first-1);
 
-                int x = table_size-i;
+                int x = table_size-1;
                 int y = first_cell.second;
                 Cell* dummy_node = new Cell(' ', DELETED, TableObject->getXInConsole(x), TableObject->getYInConsole(y), x, y);
 
@@ -320,6 +321,9 @@ void DifficultMode::startGame() {
             case 6:
                     lockCell();
                     break;
+            case 7:
+                    findValidPairs();
+                    break;
         }
     }
 
@@ -328,6 +332,7 @@ void DifficultMode::startGame() {
     GameObject->displayTableBackground();
     Screen::setConsoleColor(WHITE, BLACK);
 }
+
 
 bool DifficultMode::isCharacterEqual(std::pair<int,int> first_cell, std::pair<int, int> second_cell) { return (getCellValue(first_cell.first, first_cell.second) == getCellValue(second_cell.first, second_cell.second)); }
 
@@ -757,18 +762,22 @@ void DifficultMode::displayHorizontalULine(std::pair<int, int> first_cell, std::
     }
 }
 
-bool DifficultMode::checkUMatching(std::pair<int, int> first_cell, std::pair<int, int> second_cell) {
+bool DifficultMode::checkUMatching(std::pair<int, int> first_cell, std::pair<int, int> second_cell, bool isDisplay) {
     if (checkVerticalUMatching(first_cell, second_cell) == true) {
-        displayVerticalULine(first_cell, second_cell, false);
-        Sleep(500);
-        displayVerticalULine(first_cell, second_cell, true);
+        if (isDisplay == true) {
+            displayVerticalULine(first_cell, second_cell, false);
+            Sleep(500);
+            displayVerticalULine(first_cell, second_cell, true);
+        }
         return true;
     }
 
     if (checkHorizontalUMatching(first_cell, second_cell) == true) {
-        displayHorizontalULine(first_cell, second_cell, false);
-        Sleep(500);
-        displayHorizontalULine(first_cell, second_cell, true);
+        if (isDisplay == true) {
+            displayHorizontalULine(first_cell, second_cell, false);
+            Sleep(500);
+            displayHorizontalULine(first_cell, second_cell, true);
+        }
         return true;
     }
 
@@ -777,40 +786,44 @@ bool DifficultMode::checkUMatching(std::pair<int, int> first_cell, std::pair<int
     std::pair<int, int> break_point(first_cell.first, second_cell.second);
     if (getCellState(break_point.first, break_point.second) == DELETED) {
         if (checkIMatching(first_cell, break_point) == true && checkHorizontalUMatching(second_cell, break_point) == true) {
-            displayILine(first_cell, break_point, false);
+            if (isDisplay == true) {
+                displayILine(first_cell, break_point, false);
 
-            Screen::gotoXY(TableObject->getXInConsole(break_point.first), TableObject->getYInConsole(break_point.second));
-            putchar(179);
+                Screen::gotoXY(TableObject->getXInConsole(break_point.first), TableObject->getYInConsole(break_point.second));
+                putchar(179);
 
-            displayHorizontalULine(second_cell, break_point, false);
+                displayHorizontalULine(second_cell, break_point, false);
 
-            Sleep(500);
+                Sleep(500);
 
-            displayILine(first_cell, break_point, true);
+                displayILine(first_cell, break_point, true);
 
-            Screen::gotoXY(TableObject->getXInConsole(break_point.first), TableObject->getYInConsole(break_point.second));
-            putchar(32);
+                Screen::gotoXY(TableObject->getXInConsole(break_point.first), TableObject->getYInConsole(break_point.second));
+                putchar(32);
 
-            displayHorizontalULine(second_cell, break_point, true);
+                displayHorizontalULine(second_cell, break_point, true);
+            }
             return true;
         }
 
         if (checkIMatching(second_cell, break_point) == true && checkVerticalUMatching(first_cell, break_point) == true) {
-            displayILine(second_cell, break_point, false);
+            if (isDisplay == true) {
+                displayILine(second_cell, break_point, false);
 
-            Screen::gotoXY(TableObject->getXInConsole(break_point.first), TableObject->getYInConsole(break_point.second));
-            putchar(196);
+                Screen::gotoXY(TableObject->getXInConsole(break_point.first), TableObject->getYInConsole(break_point.second));
+                putchar(196);
 
-            displayVerticalULine(first_cell, break_point, false);
+                displayVerticalULine(first_cell, break_point, false);
 
-            Sleep(500);
+                Sleep(500);
 
-            displayILine(second_cell, break_point, true);
+                displayILine(second_cell, break_point, true);
 
-            Screen::gotoXY(TableObject->getXInConsole(break_point.first), TableObject->getYInConsole(break_point.second));
-            putchar(32);
+                Screen::gotoXY(TableObject->getXInConsole(break_point.first), TableObject->getYInConsole(break_point.second));
+                putchar(32);
 
-            displayVerticalULine(first_cell, break_point, true);
+                displayVerticalULine(first_cell, break_point, true);
+            }
             return true;
         }
     }
@@ -818,39 +831,43 @@ bool DifficultMode::checkUMatching(std::pair<int, int> first_cell, std::pair<int
     break_point = std::pair<int, int>(second_cell.first, first_cell.second);
     if (getCellState(break_point.first, break_point.second) == DELETED) {
         if (checkIMatching(first_cell, break_point) == true && checkVerticalUMatching(second_cell, break_point) == true) {
-            displayILine(first_cell, break_point, false);
+            if (isDisplay == true) {
+                displayILine(first_cell, break_point, false);
 
-            Screen::gotoXY(TableObject->getXInConsole(break_point.first), TableObject->getYInConsole(break_point.second));
-            putchar(196);
+                Screen::gotoXY(TableObject->getXInConsole(break_point.first), TableObject->getYInConsole(break_point.second));
+                putchar(196);
 
-            displayVerticalULine(second_cell, break_point, false);
+                displayVerticalULine(second_cell, break_point, false);
 
-            Sleep(500);
+                Sleep(500);
 
-            displayILine(first_cell, break_point, true);
+                displayILine(first_cell, break_point, true);
 
-            Screen::gotoXY(TableObject->getXInConsole(break_point.first), TableObject->getYInConsole(break_point.second));
-            putchar(32);
+                Screen::gotoXY(TableObject->getXInConsole(break_point.first), TableObject->getYInConsole(break_point.second));
+                putchar(32);
 
-            displayVerticalULine(second_cell, break_point, true);
+                displayVerticalULine(second_cell, break_point, true);
+            }
             return true;
         }
 
         if (checkIMatching(second_cell, break_point) == true && checkHorizontalUMatching(first_cell, break_point) == true) {
-            displayILine(second_cell, break_point, false);
+            if (isDisplay == true) {
+                displayILine(second_cell, break_point, false);
 
-            Screen::gotoXY(TableObject->getXInConsole(break_point.first), TableObject->getYInConsole(break_point.second));
-            putchar(179);
+                Screen::gotoXY(TableObject->getXInConsole(break_point.first), TableObject->getYInConsole(break_point.second));
+                putchar(179);
 
-            displayHorizontalULine(first_cell, break_point, false);
-            Sleep(500);
+                displayHorizontalULine(first_cell, break_point, false);
+                Sleep(500);
 
-            displayILine(second_cell, break_point, true);
+                displayILine(second_cell, break_point, true);
 
-            Screen::gotoXY(TableObject->getXInConsole(break_point.first), TableObject->getYInConsole(break_point.second));
-            putchar(32);
+                Screen::gotoXY(TableObject->getXInConsole(break_point.first), TableObject->getYInConsole(break_point.second));
+                putchar(32);
 
-            displayHorizontalULine(first_cell, break_point, true);
+                displayHorizontalULine(first_cell, break_point, true);
+            }
             return true;
         }
     }
@@ -858,34 +875,80 @@ bool DifficultMode::checkUMatching(std::pair<int, int> first_cell, std::pair<int
 return false;
 }
 
-bool DifficultMode::checkMatching(std::pair<int, int> first_cell, std::pair<int, int> second_cell) {
+bool DifficultMode::checkMatching(std::pair<int, int> first_cell, std::pair<int, int> second_cell, bool isDisplay) {
     if (isCharacterEqual(first_cell, second_cell) == false) return false;
     if (checkIMatching(first_cell, second_cell) == true) {
-        displayILine(first_cell, second_cell, false);
-        Sleep(500);
-        displayILine(first_cell, second_cell, true);
+        if (isDisplay == true) {
+            displayILine(first_cell, second_cell, false);
+            Sleep(500);
+            displayILine(first_cell, second_cell, true);
+        }
         return true;
     }
 
     if (checkLMatching(first_cell, second_cell) == true) {
-        displayLLine(first_cell, second_cell, false);
-        Sleep(500);
-        displayLLine(first_cell, second_cell, true);
+        if (isDisplay == true) {
+            displayLLine(first_cell, second_cell, false);
+            Sleep(500);
+            displayLLine(first_cell, second_cell, true);
+        }
         return true;
     }
 
     if (checkZMatching(first_cell, second_cell) == true) {
-        displayZLine(first_cell, second_cell, false);
-        Sleep(500);
-        displayZLine(first_cell, second_cell, true);
+        if (isDisplay == true) {
+            displayZLine(first_cell, second_cell, false);
+            Sleep(500);
+            displayZLine(first_cell, second_cell, true);
+        }
         return true;
     }
 
-    if (checkUMatching(first_cell, second_cell) == true) {
-        GameObject->cleanMatchingEffect();
+    if (checkUMatching(first_cell, second_cell, isDisplay) == true) {
+        if (isDisplay == true) {
+            GameObject->cleanMatchingEffect();
+        }
         return true;
     }
-    GameObject->cleanMatchingEffect();
+
+    if (isDisplay == true) {
+        GameObject->cleanMatchingEffect();
+    }
 
 return false;
 }
+
+bool DifficultMode::findValidPairs() {
+    for (int y = 0; y < table_size; ++y) {
+        for (Cell* prev_node = TableObject->table_data[y].head; prev_node != nullptr; prev_node = prev_node->next) {
+            int x = prev_node->getCellPosX();
+
+            for (int Y = 0; Y < table_size; ++Y) {
+                for (Cell* cur_node = TableObject->table_data[y].head; cur_node != nullptr; cur_node = cur_node->next) {
+                    int X = cur_node->getCellPosX();
+
+                    if (x == X && y == Y) continue;
+
+                    if (x < 0 || y < 0) continue;
+                    if (getCellState(x, y) == DELETED) continue;
+
+                    if (X < 0 || Y < 0) continue;
+                    if (getCellState(X ,Y) == DELETED) continue;
+
+                    if (checkMatching(std::make_pair(x, y), std::make_pair(X, Y), false) == true) {
+                        displayCellValueAt(x, y, PURPLE, BLACK);
+                        displayCellValueAt(X, Y, PURPLE, BLACK);
+                        Sleep(500);
+                        displayCellValueAt(x, y, WHITE, BLACK);
+                        displayCellValueAt(X, Y, WHITE, BLACK);
+                        selectCell(cell_pos_x, cell_pos_y, GREEN);
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+
+return false;
+}
+

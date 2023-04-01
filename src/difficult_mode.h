@@ -62,13 +62,15 @@ struct DifficultMode {
     void displayHorizontalULine(std::pair<int, int>, std::pair<int, int>, bool);
 
     bool isCharacterEqual(std::pair<int, int>, std::pair<int, int>);
-    bool checkMatching(std::pair<int, int>, std::pair<int, int>);
+    bool checkMatching(std::pair<int, int>, std::pair<int, int>, bool);
     bool checkIMatching(std::pair<int,int>, std::pair<int, int>);
     bool checkLMatching(std::pair<int, int>, std::pair<int, int>);
     bool checkZMatching(std::pair<int, int>, std::pair<int, int>);
     bool checkVerticalUMatching(std::pair<int, int>, std::pair<int, int>);
     bool checkHorizontalUMatching(std::pair<int, int>, std::pair<int, int>);
-    bool checkUMatching(std::pair<int, int>, std::pair<int, int>);
+    bool checkUMatching(std::pair<int, int>, std::pair<int, int>, bool);
+
+    bool findValidPairs();
 };
 
 #endif // DIFFICULT_MODE_H

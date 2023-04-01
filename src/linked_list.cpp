@@ -97,10 +97,17 @@ void LinkedList::removeAll() {
 }
 
 void LinkedList::shiftCellToLeft() {
+    if (head == nullptr || isEmpty() == true) return;
+
     Cell* cur_node = head;
+
     while (cur_node != nullptr) {
-        int cell_pos_x = cur_node->getCellPosX();
-        cur_node->setCellPosX(cell_pos_x-1);
+        if (cur_node == head) {
+            cur_node->setCellPosX(0);
+        } else {
+            cur_node->setCellPosX(cur_node->prev->cell_pos_x+1);
+        }
+
         cur_node = cur_node->next;
     }
 }
