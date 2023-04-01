@@ -293,6 +293,54 @@ void DifficultMode::initTable() {
     GameObject->displayTableBorder();
     TableObject->displayTableData();
     GameObject->loadTableBackground("assets/charmander.txt");
+    displayUserInterface();
+}
+
+void DifficultMode::displayUserInterface() {
+    int _padding_left = 80;
+    int _padding_top = 0;
+    GameObject->displayInfomationBoard(_padding_left, 1, 50, 10);
+    GameObject->displayInfomationBoard(_padding_left, 11, 50, 10);
+    GameObject->displayInfomationBoard(_padding_left, 21, 50, 11);
+
+    Screen::setConsoleColor(WHITE, RED);
+    Screen::gotoXY(_padding_left + 18, 1);
+    std::cout<<"PLAYER INFORMATION";
+    Screen::gotoXY(_padding_left + 18, 11);
+    std::cout<<"GAME NOTIFICATION";
+    Screen::gotoXY(_padding_left + 18, 21);
+    std::cout<<"QUICK INSTRUCTIONS";
+
+    Screen::setConsoleColor(WHITE, BLACK);
+    Screen::gotoXY(_padding_left + 5, 3);
+    std::cout<<"USERNAME: ";
+    Screen::gotoXY(_padding_left + 5, 5);
+    std::cout<<"CURRENT POINTS: ";
+    Screen::gotoXY(_padding_left + 5, 6);
+    std::cout<<"BEST POINTS: ";
+    Screen::gotoXY(_padding_left + 5, 8);
+    std::cout<<"LEVELS PLAYED: ";
+    Screen::gotoXY(_padding_left + 5, 9);
+    std::cout<<"HIGHEST LEVEL: ";
+
+    Screen::gotoXY(_padding_left + 5, 13);
+    std::cout<<"MISTAKES REMAIN: ";
+
+    auto printIns = [](const std::string& text_1, const std::string &text_2, const int pd_left, const int pd_top) {
+        Screen::gotoXY(pd_left, pd_top);
+        Screen::setConsoleColor(WHITE, YELLOW);
+        std::cout<<text_1<<": ";
+        Screen::setConsoleColor(WHITE, BLACK);
+        std::cout<<text_2;
+    };
+
+    printIns("ARROWS", "MOVE", _padding_left + 5, 23);
+    printIns("ENTER", "SELECT CELL", _padding_left + 5, 25);
+    printIns("H", "MOVING SUGGESTIONS", _padding_left + 5, 27);
+    printIns("F", "SHUFFLE", _padding_left + 5, 29);
+    printIns("ESC", "EXIT THE GAME", _padding_left + 5, 31);
+
+    Screen::setConsoleColor(WHITE, BLACK);
 }
 
 void DifficultMode::startGame() {

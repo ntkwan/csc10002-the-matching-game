@@ -54,6 +54,8 @@ struct DifficultMode {
 
     void startGame();
 
+    void displayUserInterface();
+
     void displayILine(std::pair<int, int>, std::pair<int, int>, bool);
     void displayLLine(std::pair<int, int>, std::pair<int, int>, bool);
     void displayZLine(std::pair<int, int>, std::pair<int, int>, bool);

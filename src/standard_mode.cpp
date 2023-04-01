@@ -208,50 +208,48 @@ void StandardMode::initTable() {
 }
 
 void StandardMode::displayUserInterface() {
-    GameObject->displayInfomationBoard(70, 1, 50, 10);
-    GameObject->displayInfomationBoard(70, 11, 50, 10);
-    GameObject->displayInfomationBoard(70, 21, 50, 11);
+    int _padding_left = 70;
+    int _padding_top = 0;
+    GameObject->displayInfomationBoard(_padding_left, 1, 50, 10);
+    GameObject->displayInfomationBoard(_padding_left, 11, 50, 10);
+    GameObject->displayInfomationBoard(_padding_left, 21, 50, 11);
 
     Screen::setConsoleColor(WHITE, RED);
-    Screen::gotoXY(88, 1);
+    Screen::gotoXY(_padding_left + 18, 1);
     std::cout<<"PLAYER INFORMATION";
-    Screen::gotoXY(88, 11);
+    Screen::gotoXY(_padding_left + 18, 11);
     std::cout<<"GAME NOTIFICATION";
-    Screen::gotoXY(88, 21);
+    Screen::gotoXY(_padding_left + 18, 21);
     std::cout<<"QUICK INSTRUCTIONS";
 
     Screen::setConsoleColor(WHITE, BLACK);
-    Screen::gotoXY(75, 3);
+    Screen::gotoXY(_padding_left + 5, 3);
     std::cout<<"USERNAME: ";
-    Screen::gotoXY(75, 5);
+    Screen::gotoXY(_padding_left + 5, 5);
     std::cout<<"CURRENT POINTS: ";
-    Screen::gotoXY(75, 6);
+    Screen::gotoXY(_padding_left + 5, 6);
     std::cout<<"BEST POINTS: ";
-    Screen::gotoXY(75, 8);
+    Screen::gotoXY(_padding_left + 5, 8);
     std::cout<<"LEVELS PLAYED: ";
-    Screen::gotoXY(75, 9);
+    Screen::gotoXY(_padding_left + 5, 9);
     std::cout<<"HIGHEST LEVEL: ";
 
-    Screen::gotoXY(75, 13);
+    Screen::gotoXY(_padding_left + 5, 13);
     std::cout<<"MISTAKES REMAIN: ";
 
-    auto printIns = [](const std::string& text_1, const std::string &text_2) {
+    auto printIns = [](const std::string& text_1, const std::string &text_2, const int pd_left, const int pd_top) {
+        Screen::gotoXY(pd_left, pd_top);
         Screen::setConsoleColor(WHITE, YELLOW);
         std::cout<<text_1<<": ";
         Screen::setConsoleColor(WHITE, BLACK);
         std::cout<<text_2;
     };
 
-    Screen::gotoXY(75, 23);
-    printIns("ARROWS", "MOVE");
-    Screen::gotoXY(75, 25);
-    printIns("ENTER", "SELECT CELL");
-    Screen::gotoXY(75, 27);
-    printIns("H", "MOVING SUGGESTIONS");
-    Screen::gotoXY(75, 29);
-    printIns("F", "SHUFFLE");
-    Screen::gotoXY(75, 31);
-    printIns("ESC", "EXIT THE GAME");
+    printIns("ARROWS", "MOVE", _padding_left + 5, 23);
+    printIns("ENTER", "SELECT CELL", _padding_left + 5, 25);
+    printIns("H", "MOVING SUGGESTIONS", _padding_left + 5, 27);
+    printIns("F", "SHUFFLE", _padding_left + 5, 29);
+    printIns("ESC", "EXIT THE GAME", _padding_left + 5, 31);
 
     std::string *flowers;
     flowers = new std::string[20];
@@ -266,8 +264,8 @@ void StandardMode::displayUserInterface() {
     };
 
     int n = loadTableAssets("assets/left_flowers.txt", flowers);
-    int _padding_left = 0;
-    int _padding_top = 23;
+    _padding_left = 0;
+    _padding_top = 23;
     Screen::setConsoleColor(WHITE, GREEN);
     for (int i = 0; i < n; ++i) {
         Screen::gotoXY(_padding_left, _padding_top + i);
@@ -279,10 +277,8 @@ void StandardMode::displayUserInterface() {
         Screen::gotoXY(_padding_left + 122, _padding_top + i - 1);
         std::cout<<flowers[i];
     }
-    Screen::setConsoleColor(WHITE, BLACK);
 
-    delete flowers;
-    flowers = nullptr;
+    Screen::setConsoleColor(WHITE, BLACK);
 }
 
 void StandardMode::startGame() {
