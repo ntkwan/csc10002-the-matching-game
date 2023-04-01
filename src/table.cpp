@@ -39,6 +39,8 @@ void Table::generateTableData() {
         character_list[i] = character_list[i+1] = rand() % 26;
         ++occurs[char_gen];
     }
+    delete[] occurs;
+    occurs = nullptr;
 
     character_order = new int[table_size * table_size];
     bool *is_marked = new bool[table_size * table_size];
@@ -59,6 +61,8 @@ void Table::generateTableData() {
     for (int i = 0; i < table_size * table_size; ++i) {
         int x = character_order[i] / table_size;
         int y = character_order[i] % table_size;
+        table_data[x][y].setCellPosX(x);
+        table_data[x][y].setCellPosY(y);
         table_data[x][y].setCellCoordX(getXInConsole(x));
         table_data[x][y].setCellCoordY(getYInConsole(y));
         table_data[x][y].setCellValue((char)(character_list[i] + 'A'));
@@ -72,21 +76,51 @@ void Table::generateTableData() {
     is_marked = nullptr;
 }
 
-void Table::displayTableData() {
+void Table::shuffleTableData() {
+    srand(time(NULL));
+    Cell *shuffle_list = new Cell[table_size * table_size];
+    int sz_list = 0;
+
     for (int i = 0; i < table_size; ++i) {
         for (int j = 0; j < table_size; ++j) {
-            Screen::gotoXY(table_data[i][j].getCellCoordX(), table_data[i][j].getCellCoordY());
-            putchar(table_data[i][j].cell_value);
+            if (table_data[i][j].getCellState() == FREE) {
+                shuffle_list[sz_list] = table_data[i][j];
+                ++sz_list;
+            }
         }
     }
-}
 
-void Table::printTableData() {
+    int *shuffle_order = new int[sz_list];
+    bool *is_marked = new bool[sz_list];
+    for (int i = 0; i < sz_list; ++i) {
+        is_marked[i] = false;
+    }
+
+    for (int i = 0; i < sz_list; ++i) {
+        int cellPos = 0;
+        cellPos = rand() % sz_list;
+        while (is_marked[cellPos] == true) {
+            cellPos = rand() % sz_list;
+        }
+        is_marked[cellPos] = true;
+        shuffle_order[i] = cellPos;
+    }
+
+    int idx = 0;
     for (int i = 0; i < table_size; ++i) {
         for (int j = 0; j < table_size; ++j) {
-            std::cout<<table_data[i][j].cell_value<<" ";
+            if (table_data[i][j].getCellState() == FREE) {
+                int order = shuffle_order[idx];
+                table_data[i][j] = shuffle_list[order];
+                ++idx;
+            }
         }
-        std::cout<<"\n";
     }
-}
 
+    delete[] shuffle_list;
+    shuffle_list = nullptr;
+    delete[] shuffle_order;
+    shuffle_order = nullptr;
+    delete[] is_marked;
+    is_marked = nullptr;
+}

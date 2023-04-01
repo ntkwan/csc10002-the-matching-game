@@ -26,8 +26,7 @@ struct Table {
     int getYInConsole(int) const;
 
     void generateTableData();
-    void displayTableData();
-    void printTableData();
+    void shuffleTableData();
 };
 
 #endif // TABLE_H

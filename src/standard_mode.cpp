@@ -202,8 +202,8 @@ void StandardMode::moveRight() {
 void StandardMode::initTable() {
     TableObject->generateTableData();
     GameObject->displayTableBorder();
-    TableObject->displayTableData();
     GameObject->loadTableBackground("assets/bunny.txt");
+    displayTableData();
     displayUserInterface();
 }
 
@@ -281,6 +281,16 @@ void StandardMode::displayUserInterface() {
     Screen::setConsoleColor(WHITE, BLACK);
 }
 
+void StandardMode::displayTableData() {
+    for (int i = 0; i < table_size; ++i) {
+        for (int j = 0; j < table_size; ++j) {
+            displayCellValueAt(TableObject->table_data[i][j].cell_pos_x, TableObject->table_data[i][j].cell_pos_y, WHITE, BLACK);
+        }
+    }
+    selectCell(cell_pos_x, cell_pos_y, GREEN);
+    Screen::setConsoleColor(WHITE, BLACK);
+}
+
 void StandardMode::startGame() {
     Screen::clearConsole();
     initTable();
@@ -309,6 +319,10 @@ void StandardMode::startGame() {
                     break;
             case 7:
                     findValidPairs();
+                    break;
+            case 8:
+                    TableObject->shuffleTableData();
+                    displayTableData();
                     break;
         }
     }
