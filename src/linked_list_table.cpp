@@ -32,6 +32,8 @@ void TableLL::generateTableData() {
         character_list[i] = character_list[i+1] = rand() % 26;
         ++occurs[char_gen];
     }
+    delete[] occurs;
+    occurs = nullptr;
 
     character_order = new int[table_size * table_size];
     bool *is_marked = new bool[table_size * table_size];
@@ -65,22 +67,62 @@ void TableLL::generateTableData() {
     is_marked = nullptr;
 }
 
-void TableLL::displayTableData() {
+void TableLL::shuffleTableData() {
+    srand(time(NULL));
+    Cell *shuffle_list = new Cell[table_size * table_size];
+    int sz_list = 0;
+
     for (int i = 0; i < table_size; ++i) {
         for (Cell* cur_node = table_data[i].head; cur_node != nullptr; cur_node = cur_node->next) {
-            int x = cur_node->getCellCoordX();
-            int y = cur_node->getCellCoordY();
-            Screen::gotoXY(x, y);
-            putchar(cur_node->getCellValue());
+            if (cur_node->cell_state == FREE) {
+                shuffle_list[sz_list] = cur_node;
+                ++sz_list;
+            }
         }
     }
-}
 
-void TableLL::printTableData() {
-    for (int i = 0; i < table_size; ++i) {
-        table_data[i].printList();
-        std::cout<<"\n";
+    int *shuffle_order = new int[sz_list];
+    bool *is_marked = new bool[sz_list];
+    for (int i = 0; i < sz_list; ++i) {
+        is_marked[i] = false;
     }
+
+    for (int i = 0; i < sz_list; ++i) {
+        int cellPos = 0;
+        cellPos = rand() % sz_list;
+        while (is_marked[cellPos] == true) {
+            cellPos = rand() % sz_list;
+        }
+        is_marked[cellPos] = true;
+        shuffle_order[i] = cellPos;
+    }
+
+    int idx = 0;
+    for (int i = 0; i < table_size; ++i) {
+        for (Cell *cur_node = table_data[i].head; cur_node != nullptr; cur_node = cur_node->next) {
+            if (cur_node->cell_state == FREE) {
+                int order = shuffle_order[idx];
+                int x = shuffle_list[order].cell_pos_x;
+                int y = shuffle_list[order].cell_pos_y;
+                int cell_state = shuffle_list[order].cell_state;
+                int cell_value = shuffle_list[order].cell_value;
+                cur_node->setCellPosX(x);
+                cur_node->setCellPosY(y);
+                cur_node->setCellCoordX(getXInConsole(x));
+                cur_node->setCellCoordY(getYInConsole(y));
+                cur_node->setCellState(cell_state);
+                cur_node->setCellValue(cell_value);
+                ++idx;
+            }
+        }
+    }
+
+    delete[] shuffle_list;
+    shuffle_list = nullptr;
+    delete[] shuffle_order;
+    shuffle_order = nullptr;
+    delete[] is_marked;
+    is_marked = nullptr;
 }
 
 

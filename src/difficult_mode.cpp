@@ -286,8 +286,8 @@ void DifficultMode::moveRight() {
 void DifficultMode::initTable() {
     TableObject->generateTableData();
     GameObject->displayTableBorder();
-    TableObject->displayTableData();
     GameObject->loadTableBackground("assets/charmander.txt");
+    displayTableData();
     displayUserInterface();
 }
 
@@ -298,28 +298,23 @@ void DifficultMode::displayUserInterface() {
     GameObject->displayInfomationBoard(_padding_left, 11, 50, 10);
     GameObject->displayInfomationBoard(_padding_left, 21, 50, 11);
 
+    auto printInf = [](const std::string& text, const int pd_left, const int pd_top) {
+        Screen::gotoXY(pd_left, pd_top);
+        std::cout<<text;
+    };
+
     Screen::setConsoleColor(WHITE, RED);
-    Screen::gotoXY(_padding_left + 18, 1);
-    std::cout<<"PLAYER INFORMATION";
-    Screen::gotoXY(_padding_left + 18, 11);
-    std::cout<<"GAME NOTIFICATION";
-    Screen::gotoXY(_padding_left + 18, 21);
-    std::cout<<"QUICK INSTRUCTIONS";
+    printInf("PLAYER INFORMATION", _padding_left + 18, 1);
+    printInf("GAME NOTIFICATION", _padding_left + 18, 11);
+    printInf("QUICK INSTRUCTIONS", _padding_left + 18, 21);
 
     Screen::setConsoleColor(WHITE, BLACK);
-    Screen::gotoXY(_padding_left + 5, 3);
-    std::cout<<"USERNAME: ";
-    Screen::gotoXY(_padding_left + 5, 5);
-    std::cout<<"CURRENT POINTS: ";
-    Screen::gotoXY(_padding_left + 5, 6);
-    std::cout<<"BEST POINTS: ";
-    Screen::gotoXY(_padding_left + 5, 8);
-    std::cout<<"LEVELS PLAYED: ";
-    Screen::gotoXY(_padding_left + 5, 9);
-    std::cout<<"HIGHEST LEVEL: ";
-
-    Screen::gotoXY(_padding_left + 5, 13);
-    std::cout<<"MISTAKES REMAIN: ";
+    printInf("USERNAME: ", _padding_left + 5, 3);
+    printInf("CURRENT POINTS: ", _padding_left + 5, 5);
+    printInf("BEST POINTS: ", _padding_left + 5, 6);
+    printInf("LEVELS PLAYED: ", _padding_left + 5, 8);
+    printInf("HIGHEST LEVEL: ", _padding_left + 5, 9);
+    printInf("MISTAKES REMAIN: ", _padding_left + 5, 13);
 
     auto printIns = [](const std::string& text_1, const std::string &text_2, const int pd_left, const int pd_top) {
         Screen::gotoXY(pd_left, pd_top);
@@ -334,7 +329,15 @@ void DifficultMode::displayUserInterface() {
     printIns("H", "MOVING SUGGESTIONS", _padding_left + 5, 27);
     printIns("F", "SHUFFLE", _padding_left + 5, 29);
     printIns("ESC", "EXIT THE GAME", _padding_left + 5, 31);
+}
 
+void DifficultMode::displayTableData() {
+    for (int i = 0; i < table_size; ++i) {
+        for (int j = 0; j < table_size; ++j) {
+            displayCellValueAt(TableObject->table_data[i].getPos(j)->cell_pos_x, TableObject->table_data[i].getPos(j)->cell_pos_y, WHITE, BLACK);
+        }
+    }
+    selectCell(cell_pos_x, cell_pos_y, GREEN);
     Screen::setConsoleColor(WHITE, BLACK);
 }
 
@@ -365,7 +368,14 @@ void DifficultMode::startGame() {
                     lockCell();
                     break;
             case 7:
-                    findValidPairs();
+                    findValidPairs(true);
+                    break;
+            case 8:
+                    TableObject->shuffleTableData();
+                    while (findValidPairs(false) == false) {
+                        TableObject->shuffleTableData();
+                    }
+                    displayTableData();
                     break;
         }
     }
@@ -961,7 +971,7 @@ bool DifficultMode::checkMatching(std::pair<int, int> first_cell, std::pair<int,
 return false;
 }
 
-bool DifficultMode::findValidPairs() {
+bool DifficultMode::findValidPairs(bool isDisplay) {
     for (int y = 0; y < table_size; ++y) {
         for (Cell* prev_node = TableObject->table_data[y].head; prev_node != nullptr; prev_node = prev_node->next) {
             int x = prev_node->getCellPosX();
@@ -979,12 +989,14 @@ bool DifficultMode::findValidPairs() {
                     if (getCellState(X ,Y) == DELETED) continue;
 
                     if (checkMatching(std::make_pair(x, y), std::make_pair(X, Y), false) == true) {
-                        displayCellValueAt(x, y, PURPLE, BLACK);
-                        displayCellValueAt(X, Y, PURPLE, BLACK);
-                        Sleep(500);
-                        displayCellValueAt(x, y, WHITE, BLACK);
-                        displayCellValueAt(X, Y, WHITE, BLACK);
-                        selectCell(cell_pos_x, cell_pos_y, GREEN);
+                        if (isDisplay == true) {
+                            displayCellValueAt(x, y, PURPLE, BLACK);
+                            displayCellValueAt(X, Y, PURPLE, BLACK);
+                            Sleep(500);
+                            displayCellValueAt(x, y, WHITE, BLACK);
+                            displayCellValueAt(X, Y, WHITE, BLACK);
+                            selectCell(cell_pos_x, cell_pos_y, GREEN);
+                        }
                         return true;
                     }
                 }
