@@ -4,6 +4,7 @@
 #include <windows.h>
 #include <conio.h>
 #include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
 
 #define BLACK 0
 #define BLUE 1
