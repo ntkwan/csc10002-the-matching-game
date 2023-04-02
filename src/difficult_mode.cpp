@@ -346,6 +346,7 @@ void DifficultMode::startGame() {
                         TableObject->shuffleTableData();
                     }
                     displayTableData();
+                    GameObject->displayNotification(104, 16, "TABLE SHUFFLED!!", 1000);
                     break;
         }
     }
@@ -962,9 +963,13 @@ bool DifficultMode::findValidPairs(bool isDisplay) {
                         if (isDisplay == true) {
                             displayCellValueAt(x, y, PURPLE, BLACK);
                             displayCellValueAt(X, Y, PURPLE, BLACK);
-                            Sleep(500);
+                            GameObject->displayNotification(104, 16, "HINT DISPLAYED!!", 1000);
                             displayCellValueAt(x, y, WHITE, BLACK);
                             displayCellValueAt(X, Y, WHITE, BLACK);
+
+                            for (auto cell : locked_list) {
+                                selectCell(cell.first, cell.second, YELLOW);
+                            }
                             selectCell(cell_pos_x, cell_pos_y, GREEN);
                         }
                         return true;

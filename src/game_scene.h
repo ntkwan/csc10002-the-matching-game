@@ -29,6 +29,7 @@ struct GameScene {
     void displayTableBackground();
     void displayUserInterface(int, int, int);
     void displayInfomationBoard(int, int, int, int);
+    void displayNotification(int, int, const std::string &, int);
 };
 
 #endif // GAME_SCENE_H
