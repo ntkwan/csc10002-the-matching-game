@@ -1,15 +1,15 @@
 #include "standard_mode.h"
 
-StandardMode::StandardMode(int _mode, int _padding_left, int _padding_top) {
-    mode = _mode;
+StandardMode::StandardMode(int _table_size_n, int _table_size_m, int _padding_left, int _padding_top) {
     padding_left = _padding_left;
     padding_top = _padding_top;
 
-    TableObject = new Table(mode, padding_left, padding_top);
-    GameObject = new GameScene(mode, padding_left, padding_top);
+    TableObject = new Table(_table_size_n, _table_size_m, padding_left, padding_top);
+    GameObject = new GameScene(_table_size_n, _table_size_m, padding_left, padding_top);
 
-    table_size = TableObject->table_size;
-    remained_pairs = table_size * table_size;
+    table_size_n = _table_size_n;
+    table_size_m = _table_size_m;
+    remained_pairs = table_size_n * table_size_m;
     cell_pos_x = 0;
     cell_pos_y = 0;
     cell_coord_x = TableObject->getXInConsole(cell_pos_x);
@@ -179,7 +179,7 @@ void StandardMode::moveUp() {
 }
 
 void StandardMode::moveDown() {
-    if (cell_pos_y < table_size-1) {
+    if (cell_pos_y < table_size_m - 1) {
         unselectCell();
         ++cell_pos_y;
         selectCell(cell_pos_x, cell_pos_y, GREEN);
@@ -195,7 +195,7 @@ void StandardMode::moveLeft() {
 }
 
 void StandardMode::moveRight() {
-    if (cell_pos_x < table_size-1) {
+    if (cell_pos_x < table_size_n - 1) {
         unselectCell();
         ++cell_pos_x;
         selectCell(cell_pos_x, cell_pos_y, GREEN);
@@ -211,8 +211,8 @@ void StandardMode::initTable() {
 }
 
 void StandardMode::displayTableData() {
-    for (int i = 0; i < table_size; ++i) {
-        for (int j = 0; j < table_size; ++j) {
+    for (int i = 0; i < table_size_n; ++i) {
+        for (int j = 0; j < table_size_m; ++j) {
             displayCellValueAt(TableObject->table_data[i][j].cell_pos_x, TableObject->table_data[i][j].cell_pos_y, WHITE, BLACK);
         }
     }
@@ -227,7 +227,6 @@ void StandardMode::startGame() {
     initTable();
 
     selectCell(cell_pos_x, cell_pos_y, GREEN);
-
     while (end_loop == false && remained_pairs > 0) {
         switch(Screen::getConsoleInput()) {
             case 1:
@@ -527,7 +526,7 @@ void StandardMode::displayZLine(std::pair<int, int> first_cell, std::pair<int, i
 
 bool StandardMode::checkVerticalUMatching(std::pair<int, int> first_cell, std::pair<int, int> second_cell) {
     if (first_cell.first != second_cell.first) return false;
-    if (first_cell.first == 0 || first_cell.first == table_size-1) return true;
+    if (first_cell.first == 0 || first_cell.first == table_size_n - 1) return true;
 
 
     for (int current_pos_x = first_cell.first-1; current_pos_x >= 0; --current_pos_x) {
@@ -538,12 +537,12 @@ bool StandardMode::checkVerticalUMatching(std::pair<int, int> first_cell, std::p
         if (current_pos_x == 0 || checkIMatching(first_break, second_break) == true) return true;
     }
 
-    for (int current_pos_x = first_cell.first+1; current_pos_x < table_size; ++current_pos_x) {
+    for (int current_pos_x = first_cell.first+1; current_pos_x < table_size_n; ++current_pos_x) {
         std::pair<int, int> first_break(current_pos_x, first_cell.second);
         std::pair<int, int> second_break(current_pos_x, second_cell.second);
 
         if (getCellState(first_break.first, first_break.second) != DELETED || getCellState(second_break.first, second_break.second) != DELETED) break;
-        if (current_pos_x == table_size-1 || checkIMatching(first_break, second_break) == true) return true;
+        if (current_pos_x == table_size_n - 1 || checkIMatching(first_break, second_break) == true) return true;
     }
 
 return false;
@@ -580,9 +579,9 @@ void StandardMode::displayVerticalULine(std::pair<int, int> first_cell, std::pai
         return;
     }
 
-    if (first_cell.first == table_size-1) {
-        std::pair<int, int> first_break = std::pair<int, int>(table_size, first_cell.second);
-        std::pair<int, int> second_break = std::pair<int, int>(table_size, second_cell.second);
+    if (first_cell.first == table_size_n - 1) {
+        std::pair<int, int> first_break = std::pair<int, int>(table_size_n, first_cell.second);
+        std::pair<int, int> second_break = std::pair<int, int>(table_size_n, second_cell.second);
         displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
         return;
     }
@@ -604,7 +603,7 @@ void StandardMode::displayVerticalULine(std::pair<int, int> first_cell, std::pai
         }
     }
 
-    for (int current_pos_x = first_cell.first+1; current_pos_x < table_size; ++current_pos_x) {
+    for (int current_pos_x = first_cell.first+1; current_pos_x < table_size_n; ++current_pos_x) {
         std::pair<int, int> first_break(current_pos_x, first_cell.second);
         std::pair<int, int> second_break(current_pos_x, second_cell.second);
 
@@ -613,9 +612,9 @@ void StandardMode::displayVerticalULine(std::pair<int, int> first_cell, std::pai
         if (checkIMatching(first_break, second_break) == true) {
             displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
             return;
-        } else if (current_pos_x == table_size-1) {
-            first_break = std::pair<int, int>(table_size, first_cell.second);
-            second_break = std::pair<int, int>(table_size, second_cell.second);
+        } else if (current_pos_x == table_size_n - 1) {
+            first_break = std::pair<int, int>(table_size_n, first_cell.second);
+            second_break = std::pair<int, int>(table_size_n, second_cell.second);
             displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
             return;
         }
@@ -624,7 +623,7 @@ void StandardMode::displayVerticalULine(std::pair<int, int> first_cell, std::pai
 
 bool StandardMode::checkHorizontalUMatching(std::pair<int, int> first_cell, std::pair<int, int> second_cell) {
     if (first_cell.second != second_cell.second) return false;
-    if (first_cell.second == 0 || first_cell.second == table_size-1) return true;
+    if (first_cell.second == 0 || first_cell.second == table_size_m - 1) return true;
 
     for (int current_pos_y = first_cell.second-1; current_pos_y >= 0; --current_pos_y) {
         std::pair<int, int> first_break(first_cell.first, current_pos_y);
@@ -634,12 +633,12 @@ bool StandardMode::checkHorizontalUMatching(std::pair<int, int> first_cell, std:
         if (current_pos_y == 0 || checkIMatching(first_break, second_break) == true) return true;
     }
 
-    for (int current_pos_y = first_cell.second+1; current_pos_y < table_size; ++current_pos_y) {
+    for (int current_pos_y = first_cell.second+1; current_pos_y < table_size_m; ++current_pos_y) {
         std::pair<int, int> first_break(first_cell.first, current_pos_y);
         std::pair<int, int> second_break(second_cell.first, current_pos_y);
 
         if (getCellState(first_break.first, first_break.second) != DELETED || getCellState(second_break.first, second_break.second) != DELETED) break;
-        if (current_pos_y == table_size-1 || checkIMatching(first_break, second_break) == true) return true;
+        if (current_pos_y == table_size_m - 1 || checkIMatching(first_break, second_break) == true) return true;
     }
 
 return false;
@@ -653,9 +652,9 @@ void StandardMode::displayHorizontalULine(std::pair<int, int> first_cell, std::p
         return;
     }
 
-    if (first_cell.second == table_size-1) {
-        std::pair<int, int> first_break = std::pair<int, int>(first_cell.first, table_size);
-        std::pair<int, int> second_break = std::pair<int, int>(second_cell.first, table_size);
+    if (first_cell.second == table_size_m - 1) {
+        std::pair<int, int> first_break = std::pair<int, int>(first_cell.first, table_size_m);
+        std::pair<int, int> second_break = std::pair<int, int>(second_cell.first, table_size_m);
         displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
         return;
     }
@@ -677,7 +676,7 @@ void StandardMode::displayHorizontalULine(std::pair<int, int> first_cell, std::p
         }
     }
 
-    for (int current_pos_y = first_cell.second+1; current_pos_y < table_size; ++current_pos_y) {
+    for (int current_pos_y = first_cell.second+1; current_pos_y < table_size_m; ++current_pos_y) {
         std::pair<int, int> first_break(first_cell.first, current_pos_y);
         std::pair<int, int> second_break(second_cell.first, current_pos_y);
 
@@ -686,9 +685,9 @@ void StandardMode::displayHorizontalULine(std::pair<int, int> first_cell, std::p
         if (checkIMatching(first_break, second_break) == true) {
             displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
             return;
-        } else if (current_pos_y == table_size-1) {
-            first_break = std::pair<int, int>(first_cell.first, table_size);
-            second_break = std::pair<int, int>(second_cell.first, table_size);
+        } else if (current_pos_y == table_size_m - 1) {
+            first_break = std::pair<int, int>(first_cell.first, table_size_m);
+            second_break = std::pair<int, int>(second_cell.first, table_size_m);
             displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
             return;
         }
@@ -878,13 +877,13 @@ void StandardMode::displayCellValueAt(int _cell_pos_x, int _cell_pos_y, int _bac
 }
 
 bool StandardMode::findValidPairs(bool isDisplay) {
-    for (int x = 0; x < table_size; ++x) {
-        for (int y = 0; y < table_size; ++y) {
+    for (int x = 0; x < table_size_n; ++x) {
+        for (int y = 0; y < table_size_m; ++y) {
             if (getCellState(x, y) == DELETED) continue;
             char firstCellValue = getCellValue(x, y);
 
-            for (int r = x; r < table_size; ++r) {
-                for (int c = 0; c < table_size; ++c) {
+            for (int r = x; r < table_size_n; ++r) {
+                for (int c = 0; c < table_size_m; ++c) {
                     if (x == r && c <= y) continue;
                     if (getCellState(r, c) == DELETED) continue;
                     char secondCellValue = getCellValue(r, c);

@@ -10,9 +10,9 @@
 struct StandardMode {
     int padding_left = 0;
     int padding_top = 0;
-    int mode = 0;
 
-    int table_size;
+    int table_size_n;
+    int table_size_m;
     int remained_pairs;
     int cell_pos_x;
     int cell_pos_y;
@@ -23,7 +23,7 @@ struct StandardMode {
     Table* TableObject;
     GameScene *GameObject;
 
-    StandardMode(int, int, int);
+    StandardMode(int, int, int, int);
     ~StandardMode();
 
     void initTable();

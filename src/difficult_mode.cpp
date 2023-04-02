@@ -1,15 +1,15 @@
 #include "difficult_mode.h"
 
-DifficultMode::DifficultMode(int _mode, int _padding_left, int _padding_top) {
-    mode = _mode;
+DifficultMode::DifficultMode(int _table_size_n, int _table_size_m, int _padding_left, int _padding_top) {
     padding_left = _padding_left;
     padding_top = _padding_top;
 
-    TableObject = new TableLL(mode, padding_left, padding_top);
-    GameObject = new GameScene(mode, padding_left, padding_top);
+    TableObject = new TableLL(_table_size_n, _table_size_m, padding_left, padding_top);
+    GameObject = new GameScene(_table_size_n, _table_size_m, padding_left, padding_top);
 
-    table_size = TableObject->table_size;
-    remained_pairs = table_size * table_size;
+    table_size_n = _table_size_n;
+    table_size_m = _table_size_m;
+    remained_pairs = table_size_n * table_size_m;
     cell_pos_x = 0;
     cell_pos_y = 0;
     cell_coord_x = TableObject->getXInConsole(cell_pos_x);
@@ -88,13 +88,13 @@ void DifficultMode::displayCellValueAt(int _cell_pos_x, int _cell_pos_y, int _ba
 
 
 void DifficultMode::cleanTableDataAtRow(int _cell_pos_y) {
-    for (int _cell_pos_x = 0; _cell_pos_x < table_size; ++_cell_pos_x) {
+    for (int _cell_pos_x = 0; _cell_pos_x < table_size_n; ++_cell_pos_x) {
         displayCellBackgroundAt(_cell_pos_x, _cell_pos_y, WHITE, RED);
     }
 }
 
 void DifficultMode::displayTableDataAtRow(int _cell_pos_y) {
-    for (int _cell_pos_x = 0; _cell_pos_x < table_size; ++_cell_pos_x) {
+    for (int _cell_pos_x = 0; _cell_pos_x < table_size_n; ++_cell_pos_x) {
         displayCellValueAt(_cell_pos_x, _cell_pos_y, WHITE, BLACK);
     }
 }
@@ -132,7 +132,7 @@ void DifficultMode::deleteCell() {
                 if (i == 2) TableObject->table_data[first_cell.second].removePos(first_cell.first);
                 else TableObject->table_data[first_cell.second].removePos(second_cell.first-1);
 
-                int x = table_size-1;
+                int x = table_size_m - 1;
                 int y = first_cell.second;
                 Cell* dummy_node = new Cell(' ', DELETED, TableObject->getXInConsole(x), TableObject->getYInConsole(y), x, y);
 
@@ -144,7 +144,7 @@ void DifficultMode::deleteCell() {
                 cleanTableDataAtRow(cell.second);
                 TableObject->table_data[cell.second].removePos(cell.first);
 
-                int x = table_size-1;
+                int x = table_size_m - 1;
                 int y = cell.second;
                 Cell* dummy_node = new Cell(' ', DELETED, TableObject->getXInConsole(x), TableObject->getYInConsole(y), x, y);
 
@@ -267,7 +267,7 @@ void DifficultMode::moveUp() {
 }
 
 void DifficultMode::moveDown() {
-    if (cell_pos_y < table_size-1) {
+    if (cell_pos_y < table_size_m - 1) {
         unselectCell();
         ++cell_pos_y;
         selectCell(cell_pos_x, cell_pos_y, GREEN);
@@ -283,7 +283,7 @@ void DifficultMode::moveLeft() {
 }
 
 void DifficultMode::moveRight() {
-    if (cell_pos_x < table_size-1) {
+    if (cell_pos_x < table_size_n - 1) {
         unselectCell();
         ++cell_pos_x;
         selectCell(cell_pos_x, cell_pos_y, GREEN);
@@ -294,13 +294,14 @@ void DifficultMode::initTable() {
     TableObject->generateTableData();
     GameObject->displayTableBorder();
     GameObject->loadTableBackground("assets/charmander.txt");
-    GameObject->displayUserInterface(80, 0, DIFFICULT_MODE);
+    GameObject->displayUserInterface(85, 0, DIFFICULT_MODE);
     displayTableData();
 }
 
 void DifficultMode::displayTableData() {
-    for (int i = 0; i < table_size; ++i) {
+    for (int i = 0; i < table_size_m; ++i) {
         for (Cell* cur_node = TableObject->table_data[i].head; cur_node != nullptr; cur_node = cur_node->next) {
+            if (cur_node->cell_pos_x < 0 || cur_node->cell_pos_x >= TableObject->table_data[i].list_size) continue;
             displayCellValueAt(cur_node->cell_pos_x, cur_node->cell_pos_y, WHITE, BLACK);
         }
     }
@@ -616,7 +617,7 @@ void DifficultMode::displayZLine(std::pair<int, int> first_cell, std::pair<int, 
 
 bool DifficultMode::checkVerticalUMatching(std::pair<int, int> first_cell, std::pair<int, int> second_cell) {
     if (first_cell.first != second_cell.first) return false;
-    if (first_cell.first == 0 || first_cell.first == table_size-1) return true;
+    if (first_cell.first == 0 || first_cell.first == table_size_n - 1) return true;
 
 
     for (int current_pos_x = first_cell.first-1; current_pos_x >= 0; --current_pos_x) {
@@ -627,12 +628,12 @@ bool DifficultMode::checkVerticalUMatching(std::pair<int, int> first_cell, std::
         if (current_pos_x == 0 || checkIMatching(first_break, second_break) == true) return true;
     }
 
-    for (int current_pos_x = first_cell.first+1; current_pos_x < table_size; ++current_pos_x) {
+    for (int current_pos_x = first_cell.first+1; current_pos_x < table_size_n; ++current_pos_x) {
         std::pair<int, int> first_break(current_pos_x, first_cell.second);
         std::pair<int, int> second_break(current_pos_x, second_cell.second);
 
         if (getCellState(first_break.first, first_break.second) != DELETED || getCellState(second_break.first, second_break.second) != DELETED) break;
-        if (current_pos_x == table_size-1 || checkIMatching(first_break, second_break) == true) return true;
+        if (current_pos_x == table_size_n - 1 || checkIMatching(first_break, second_break) == true) return true;
     }
 
 return false;
@@ -669,9 +670,9 @@ void DifficultMode::displayVerticalULine(std::pair<int, int> first_cell, std::pa
         return;
     }
 
-    if (first_cell.first == table_size-1) {
-        std::pair<int, int> first_break = std::pair<int, int>(table_size, first_cell.second);
-        std::pair<int, int> second_break = std::pair<int, int>(table_size, second_cell.second);
+    if (first_cell.first == table_size_n - 1) {
+        std::pair<int, int> first_break = std::pair<int, int>(table_size_n, first_cell.second);
+        std::pair<int, int> second_break = std::pair<int, int>(table_size_n, second_cell.second);
         displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
         return;
     }
@@ -693,7 +694,7 @@ void DifficultMode::displayVerticalULine(std::pair<int, int> first_cell, std::pa
         }
     }
 
-    for (int current_pos_x = first_cell.first+1; current_pos_x < table_size; ++current_pos_x) {
+    for (int current_pos_x = first_cell.first + 1; current_pos_x < table_size_n; ++current_pos_x) {
         std::pair<int, int> first_break(current_pos_x, first_cell.second);
         std::pair<int, int> second_break(current_pos_x, second_cell.second);
 
@@ -702,9 +703,9 @@ void DifficultMode::displayVerticalULine(std::pair<int, int> first_cell, std::pa
         if (checkIMatching(first_break, second_break) == true) {
             displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
             return;
-        } else if (current_pos_x == table_size-1) {
-            first_break = std::pair<int, int>(table_size, first_cell.second);
-            second_break = std::pair<int, int>(table_size, second_cell.second);
+        } else if (current_pos_x == table_size_n - 1) {
+            first_break = std::pair<int, int>(table_size_n, first_cell.second);
+            second_break = std::pair<int, int>(table_size_n, second_cell.second);
             displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
             return;
         }
@@ -713,7 +714,7 @@ void DifficultMode::displayVerticalULine(std::pair<int, int> first_cell, std::pa
 
 bool DifficultMode::checkHorizontalUMatching(std::pair<int, int> first_cell, std::pair<int, int> second_cell) {
     if (first_cell.second != second_cell.second) return false;
-    if (first_cell.second == 0 || first_cell.second == table_size-1) return true;
+    if (first_cell.second == 0 || first_cell.second == table_size_m - 1) return true;
 
     for (int current_pos_y = first_cell.second-1; current_pos_y >= 0; --current_pos_y) {
         std::pair<int, int> first_break(first_cell.first, current_pos_y);
@@ -723,12 +724,12 @@ bool DifficultMode::checkHorizontalUMatching(std::pair<int, int> first_cell, std
         if (current_pos_y == 0 || checkIMatching(first_break, second_break) == true) return true;
     }
 
-    for (int current_pos_y = first_cell.second+1; current_pos_y < table_size; ++current_pos_y) {
+    for (int current_pos_y = first_cell.second+1; current_pos_y < table_size_m; ++current_pos_y) {
         std::pair<int, int> first_break(first_cell.first, current_pos_y);
         std::pair<int, int> second_break(second_cell.first, current_pos_y);
 
         if (getCellState(first_break.first, first_break.second) != DELETED || getCellState(second_break.first, second_break.second) != DELETED) break;
-        if (current_pos_y == table_size-1 || checkIMatching(first_break, second_break) == true) return true;
+        if (current_pos_y == table_size_m - 1 || checkIMatching(first_break, second_break) == true) return true;
     }
 
 return false;
@@ -742,9 +743,9 @@ void DifficultMode::displayHorizontalULine(std::pair<int, int> first_cell, std::
         return;
     }
 
-    if (first_cell.second == table_size-1) {
-        std::pair<int, int> first_break = std::pair<int, int>(first_cell.first, table_size);
-        std::pair<int, int> second_break = std::pair<int, int>(second_cell.first, table_size);
+    if (first_cell.second == table_size_m - 1) {
+        std::pair<int, int> first_break = std::pair<int, int>(first_cell.first, table_size_m);
+        std::pair<int, int> second_break = std::pair<int, int>(second_cell.first, table_size_m);
         displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
         return;
     }
@@ -766,7 +767,7 @@ void DifficultMode::displayHorizontalULine(std::pair<int, int> first_cell, std::
         }
     }
 
-    for (int current_pos_y = first_cell.second+1; current_pos_y < table_size; ++current_pos_y) {
+    for (int current_pos_y = first_cell.second+1; current_pos_y < table_size_m; ++current_pos_y) {
         std::pair<int, int> first_break(first_cell.first, current_pos_y);
         std::pair<int, int> second_break(second_cell.first, current_pos_y);
 
@@ -775,9 +776,9 @@ void DifficultMode::displayHorizontalULine(std::pair<int, int> first_cell, std::
         if (checkIMatching(first_break, second_break) == true) {
             displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
             return;
-        } else if (current_pos_y == table_size-1) {
-            first_break = std::pair<int, int>(first_cell.first, table_size);
-            second_break = std::pair<int, int>(second_cell.first, table_size);
+        } else if (current_pos_y == table_size_m - 1) {
+            first_break = std::pair<int, int>(first_cell.first, table_size_m);
+            second_break = std::pair<int, int>(second_cell.first, table_size_m);
             displayBreakPointULine(first_cell, second_cell, first_break, second_break, overwrite);
             return;
         }
@@ -941,20 +942,20 @@ return false;
 }
 
 bool DifficultMode::findValidPairs(bool isDisplay) {
-    for (int y = 0; y < table_size; ++y) {
+    for (int y = 0; y < table_size_m; ++y) {
         for (Cell* prev_node = TableObject->table_data[y].head; prev_node != nullptr; prev_node = prev_node->next) {
             int x = prev_node->getCellPosX();
 
-            for (int Y = 0; Y < table_size; ++Y) {
+            for (int Y = 0; Y < table_size_m; ++Y) {
                 for (Cell* cur_node = TableObject->table_data[y].head; cur_node != nullptr; cur_node = cur_node->next) {
                     int X = cur_node->getCellPosX();
 
                     if (x == X && y == Y) continue;
 
-                    if (x < 0 || y < 0) continue;
+                    if (x < 0 || y < 0 || x >= TableObject->table_data[y].list_size) continue;
                     if (getCellState(x, y) == DELETED) continue;
 
-                    if (X < 0 || Y < 0) continue;
+                    if (X < 0 || Y < 0 || X >= TableObject->table_data[Y].list_size) continue;
                     if (getCellState(X ,Y) == DELETED) continue;
 
                     if (checkMatching(std::make_pair(x, y), std::make_pair(X, Y), false) == true) {
