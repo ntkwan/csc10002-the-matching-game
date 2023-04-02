@@ -1,11 +1,12 @@
 #include "game_scene.h"
 
-GameScene::GameScene(int _table_size, int _padding_left, int _padding_top) {
-    table_size = _table_size;
+GameScene::GameScene(int _table_size_n, int _table_size_m, int _padding_left, int _padding_top) {
+    table_size_n = _table_size_n;
+    table_size_m = _table_size_m;
     padding_left = _padding_left;
     padding_top = _padding_top;
 
-    table_image = new std::string[table_size * 10];
+    table_image = new std::string[100];
 }
 
 GameScene::~GameScene() {
@@ -21,7 +22,7 @@ void GameScene::cleanMatchingEffect() {
     Screen::setConsoleColor(WHITE, GRAY);
 
     //top border cleaned
-    for (int i = 0; i < table_size; ++i) {
+    for (int i = 0; i < table_size_n; ++i) {
         Screen::setConsoleColor(WHITE, BLACK);
         Screen::gotoXY(getXInConsole(i), padding_top);
         putchar(205);
@@ -35,7 +36,7 @@ void GameScene::cleanMatchingEffect() {
     }
 
     //left border cleaned
-    for (int i = 0; i < table_size; ++i) {
+    for (int i = 0; i < table_size_m; ++i) {
         Screen::setConsoleColor(WHITE, BLACK);
         Screen::gotoXY(padding_left + 1, getYInConsole(i));
         putchar(186);
@@ -49,21 +50,21 @@ void GameScene::cleanMatchingEffect() {
     }
 
     //right border cleaned
-    for (int i = 0; i < table_size; ++i) {
+    for (int i = 0; i < table_size_m; ++i) {
         Screen::setConsoleColor(WHITE, BLACK);
-        Screen::gotoXY(table_size * CELL_LENGTH+padding_left + 1, getYInConsole(i));
+        Screen::gotoXY(table_size_n * CELL_LENGTH+padding_left + 1, getYInConsole(i));
         putchar(186);
 
-        Screen::gotoXY(table_size * CELL_LENGTH+padding_left + 5, getYInConsole(i) + 2);
+        Screen::gotoXY(table_size_n * CELL_LENGTH+padding_left + 5, getYInConsole(i) + 2);
         putchar(' ');
     }
 
     //bottom border cleaned
-    for (int i = 0; i < table_size; ++i) {
-        Screen::gotoXY(getXInConsole(i) + 4, table_size * CELL_HEIGHT + padding_top+2);
+    for (int i = 0; i < table_size_n; ++i) {
+        Screen::gotoXY(getXInConsole(i) + 4, table_size_m * CELL_HEIGHT + padding_top + 2);
         putchar(' ');
 
-        Screen::gotoXY(getXInConsole(i), table_size * CELL_HEIGHT + padding_top);
+        Screen::gotoXY(getXInConsole(i), table_size_m * CELL_HEIGHT + padding_top);
         putchar(205);
     }
 }
@@ -148,7 +149,7 @@ void GameScene::displayUserInterface(int _padding_left, int _padding_top, int _m
 
         int n = loadFlowersAssets("assets/left_flowers.txt", flowers);
         _padding_left = 0;
-        _padding_top = 23;
+        _padding_top = 28;
         Screen::setConsoleColor(WHITE, GREEN);
         displayFlowersAssets(flowers, n, _padding_left, _padding_top);
 
@@ -163,12 +164,12 @@ void GameScene::displayTableBorder() {
     Screen::setConsoleColor(WHITE, GRAY);
     Screen::clearConsole();
 
-    for (int i = 0; i < table_size; ++i) {
+    for (int i = 0; i < table_size_n; ++i) {
         Screen::gotoXY(getXInConsole(i), padding_top-1);
         putchar(i + '1');
     }
 
-    for (int i = 0; i < table_size; ++i) {
+    for (int i = 0; i < table_size_m; ++i) {
         Screen::gotoXY(padding_left-1, getYInConsole(i));
         putchar(i + 'A');
     }
@@ -178,40 +179,40 @@ void GameScene::displayTableBorder() {
     //top border
     Screen::gotoXY(padding_left + 1, padding_top);
 	putchar(201);
-	for (int i = 1; i < table_size * CELL_LENGTH; ++i) {
+	for (int i = 1; i < table_size_n * CELL_LENGTH; ++i) {
 		Sleep(2);
         putchar(205);
 	}
 	putchar(187);
 
     //right border
-	for (int i = 1; i < table_size * CELL_HEIGHT; ++i) {
+	for (int i = 1; i < table_size_m * CELL_HEIGHT; ++i) {
 		Sleep(5);
-		Screen::gotoXY(table_size * CELL_LENGTH + padding_left + 1, i + padding_top);
+		Screen::gotoXY(table_size_n * CELL_LENGTH + padding_left + 1, i + padding_top);
         putchar(186);
 	}
-	Screen::gotoXY(table_size * CELL_LENGTH + padding_left + 1, table_size * CELL_HEIGHT + padding_top);
+	Screen::gotoXY(table_size_n * CELL_LENGTH + padding_left + 1, table_size_m * CELL_HEIGHT + padding_top);
 	putchar(188);
 
     //bottom border
-	for (int i = 1; i < table_size * CELL_LENGTH; ++i) {
-		Screen::gotoXY(table_size * CELL_LENGTH + padding_left - i + 1, table_size * CELL_HEIGHT + padding_top);
+	for (int i = 1; i < table_size_n * CELL_LENGTH; ++i) {
+		Screen::gotoXY(table_size_n * CELL_LENGTH + padding_left - i + 1, table_size_m * CELL_HEIGHT + padding_top);
 		Sleep(2);
         putchar(205);
 	}
-	Screen::gotoXY(padding_left + 1, table_size * CELL_HEIGHT + padding_top);
+	Screen::gotoXY(padding_left + 1, table_size_m * CELL_HEIGHT + padding_top);
 	putchar(200);
 
     //left border
-	for (int i = 1; i < table_size * CELL_HEIGHT; ++i) {
+	for (int i = 1; i < table_size_m * CELL_HEIGHT; ++i) {
 		Sleep(5);
-		Screen::gotoXY(padding_left + 1, table_size * CELL_HEIGHT + padding_top - i);
+		Screen::gotoXY(padding_left + 1, table_size_m * CELL_HEIGHT + padding_top - i);
         putchar(186);
 	}
 
     //horizontal line inside the table
-	for (int i = 1; i < table_size * CELL_HEIGHT; ++i) {
-		for (int j = CELL_LENGTH; j < table_size * CELL_LENGTH; j += CELL_LENGTH) {
+	for (int i = 1; i < table_size_m * CELL_HEIGHT; ++i) {
+		for (int j = CELL_LENGTH; j < table_size_n * CELL_LENGTH; j += CELL_LENGTH) {
 			if (i % CELL_HEIGHT != 0) {
 				Screen::gotoXY(j + padding_left + 1, i + padding_top);
 				putchar(179);
@@ -221,8 +222,8 @@ void GameScene::displayTableBorder() {
 	}
 
 	//vertical line inside the table
-	for (int i = 1; i < table_size * CELL_LENGTH; ++i) {
-		for (int j = CELL_HEIGHT; j < table_size * CELL_HEIGHT; j += CELL_HEIGHT) {
+	for (int i = 1; i < table_size_n * CELL_LENGTH; ++i) {
+		for (int j = CELL_HEIGHT; j < table_size_m * CELL_HEIGHT; j += CELL_HEIGHT) {
 			Screen::gotoXY(i + padding_left + 1, j + padding_top);
 			if (i % CELL_LENGTH == 0) {
                 putchar(32);
@@ -247,8 +248,8 @@ void GameScene::loadTableBackground(const std::string &path) {
 
 void GameScene::displayTableBackground() {
     Screen::setConsoleColor(WHITE, WHITE);
-	for (int i = 1; i < table_size * CELL_HEIGHT; ++i) {
-		for (int j = CELL_LENGTH; j < table_size * CELL_LENGTH; j += CELL_LENGTH) {
+	for (int i = 1; i < table_size_m * CELL_HEIGHT; ++i) {
+		for (int j = CELL_LENGTH; j < table_size_n * CELL_LENGTH; j += CELL_LENGTH) {
 			if (i % CELL_HEIGHT != 0) {
 				Screen::gotoXY(j + padding_left + 1, i + padding_top);
 				putchar(' ');
@@ -256,15 +257,10 @@ void GameScene::displayTableBackground() {
 		}
 	}
 
-	for (int i = 1; i < table_size * CELL_LENGTH; ++i) {
-		for (int j = CELL_HEIGHT; j < table_size * CELL_HEIGHT; j += CELL_HEIGHT) {
+	for (int i = 1; i < table_size_n * CELL_LENGTH; ++i) {
+		for (int j = CELL_HEIGHT; j < table_size_m * CELL_HEIGHT; j += CELL_HEIGHT) {
 			Screen::gotoXY(i + padding_left + 1, j + padding_top);
-			if (i % CELL_LENGTH == 0) {
-                putchar(' ');
-			}
-			else {
-				putchar(' ');
-			}
+            putchar(' ');
 		}
 	}
 }

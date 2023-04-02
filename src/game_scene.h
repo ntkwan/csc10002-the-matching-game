@@ -10,12 +10,13 @@
 #include "cell.h"
 
 struct GameScene {
-    int table_size;
+    int table_size_n;
+    int table_size_m;
     int padding_left;
     int padding_top;
     std::string* table_image;
 
-    GameScene(int, int, int);
+    GameScene(int, int, int, int);
     ~GameScene();
 
     int getXInConsole(int);

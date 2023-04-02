@@ -9,7 +9,8 @@
 #include "linked_list.h"
 
 struct TableLL {
-    int table_size;
+    int table_size_n;
+    int table_size_m;
     int padding_left;
     int padding_top;
     int remained_pairs;
@@ -19,7 +20,7 @@ struct TableLL {
     int *occurs;
     LinkedList *table_data;
 
-    TableLL(int, int, int);
+    TableLL(int, int, int, int);
     ~TableLL();
 
     int getXInConsole(int) const;

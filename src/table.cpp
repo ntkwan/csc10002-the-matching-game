@@ -1,20 +1,21 @@
 #include "table.h"
 
-Table::Table(int _table_size, int _padding_left, int _padding_top) {
-    table_size = _table_size;
+Table::Table(int _table_size_n, int _table_size_m, int _padding_left, int _padding_top) {
+    table_size_n = _table_size_n;
+    table_size_m = _table_size_m;
     padding_left = _padding_left;
     padding_top = _padding_top;
 
-    remained_pairs = (table_size * table_size) / 2;
+    remained_pairs = (table_size_n * table_size_m) / 2;
 
-    table_data = new Cell*[table_size];
-    for (int i = 0; i < table_size; ++i) {
-        table_data[i] = new Cell[table_size];
+    table_data = new Cell*[table_size_n];
+    for (int i = 0; i < table_size_n; ++i) {
+        table_data[i] = new Cell[table_size_m];
     }
 }
 
 Table::~Table() {
-    for (int i = 0; i < table_size; ++i) {
+    for (int i = 0; i < table_size_n; ++i) {
         delete[] table_data[i];
     }
 
@@ -29,43 +30,51 @@ int Table::getYInConsole(int _r) const { return padding_top + 2 + CELL_HEIGHT * 
 void Table::generateTableData() {
     srand(time(NULL));
 
-    character_list = new int[table_size * table_size];
+    character_list = new int[table_size_n * table_size_m];
     occurs = new int[26];
+    for (int i = 0; i < 26; ++i) {
+        occurs[i] = 0;
+    }
 
-    for (int i = 0; i < table_size * table_size; i += 2) {
+    for (int i = 0; i < table_size_n * table_size_m; i += 2) {
         int char_gen = rand() % 26;
         while (occurs[char_gen] > max_distinct_number) char_gen = rand() % 26;
 
         character_list[i] = character_list[i+1] = rand() % 26;
         ++occurs[char_gen];
     }
+
+
     delete[] occurs;
     occurs = nullptr;
 
-    character_order = new int[table_size * table_size];
-    bool *is_marked = new bool[table_size * table_size];
-    for (int i = 0; i < table_size * table_size; ++i) {
+    character_order = new int[table_size_n * table_size_m];
+    bool *is_marked = new bool[table_size_n * table_size_m];
+    for (int i = 0; i < table_size_n * table_size_m; ++i) {
         is_marked[i] = false;
     }
 
-    for (int i = 0; i < table_size * table_size; ++i) {
-        int cellPos = 0;
-        cellPos = rand() % (table_size * table_size);
-        while (is_marked[cellPos] == true) {
-            cellPos = rand() % (table_size * table_size);
+    for (int i = 0; i < table_size_n * table_size_m; ++i) {
+        int cell_pos = 0;
+        cell_pos = rand() % (table_size_n * table_size_m);
+        while (is_marked[cell_pos] == true) {
+            cell_pos = rand() % (table_size_n * table_size_m);
         }
-        is_marked[cellPos] = true;
-        character_order[i] = cellPos;
+        is_marked[cell_pos] = true;
+        character_order[i] = cell_pos;
     }
 
-    for (int i = 0; i < table_size * table_size; ++i) {
-        int x = character_order[i] / table_size;
-        int y = character_order[i] % table_size;
-        table_data[x][y].setCellPosX(x);
-        table_data[x][y].setCellPosY(y);
-        table_data[x][y].setCellCoordX(getXInConsole(x));
-        table_data[x][y].setCellCoordY(getYInConsole(y));
-        table_data[x][y].setCellValue((char)(character_list[i] + 'A'));
+    int idx = 0;
+    for (int i = 0; i < table_size_n; ++i) {
+        for (int j = 0; j < table_size_m; ++j) {
+            int order = character_order[idx];
+            table_data[i][j].setCellPosX(i);
+            table_data[i][j].setCellPosY(j);
+            table_data[i][j].setCellCoordX(getXInConsole(i));
+            table_data[i][j].setCellCoordY(getYInConsole(j));
+            table_data[i][j].setCellValue((char)(character_list[order] + 'A'));
+            ++idx;
+        }
     }
 
     delete[] character_list;
@@ -78,11 +87,11 @@ void Table::generateTableData() {
 
 void Table::shuffleTableData() {
     srand(time(NULL));
-    Cell *shuffle_list = new Cell[table_size * table_size];
+    Cell *shuffle_list = new Cell[table_size_n * table_size_m];
     int sz_list = 0;
 
-    for (int i = 0; i < table_size; ++i) {
-        for (int j = 0; j < table_size; ++j) {
+    for (int i = 0; i < table_size_n; ++i) {
+        for (int j = 0; j < table_size_m; ++j) {
             int cell_state = table_data[i][j].getCellState();
             if (cell_state == LOCKED) {
                 table_data[i][j].setCellState(FREE);

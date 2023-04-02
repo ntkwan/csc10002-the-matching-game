@@ -9,7 +9,8 @@
 #include "cell.h"
 
 struct Table {
-    int table_size;
+    int table_size_n;
+    int table_size_m;
     int padding_left;
     int padding_top;
     int remained_pairs;
@@ -19,7 +20,7 @@ struct Table {
     int *occurs;
     Cell **table_data;
 
-    Table(int, int, int);
+    Table(int, int, int, int);
     ~Table();
 
     int getXInConsole(int) const;
