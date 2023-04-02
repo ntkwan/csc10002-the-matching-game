@@ -98,4 +98,6 @@ int Screen::getConsoleInput() {
 	}
 }
 
-void Screen::playSound(int i) {}
+void Screen::playSound(const char *path) {
+    PlaySound(path, NULL, SND_FILENAME | SND_ASYNC);
+}

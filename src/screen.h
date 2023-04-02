@@ -3,6 +3,7 @@
 
 #include <windows.h>
 #include <conio.h>
+#include <mmsystem.h>
 
 #define BLACK 0
 #define BLUE 1
@@ -41,7 +42,7 @@ struct Screen
 	static void clearConsole();
 	static void disableMouseInput();
 	static int getConsoleInput();
-	static void playSound(int);
+	static void playSound(const char*);
 };
 
 #endif // SCREEN_H
