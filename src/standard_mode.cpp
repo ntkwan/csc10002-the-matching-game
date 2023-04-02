@@ -119,6 +119,7 @@ void StandardMode::unselectCell() {
 
 void StandardMode::deleteCell() {
     if (checkMatching(locked_list[0], locked_list[1], true) == false) {
+        Screen::playSound("audio/mismatched.wav");
         reverse(locked_list.begin(), locked_list.end());
         for (auto cell : locked_list) {
             Screen::gotoXY(TableObject->getXInConsole(cell.first), TableObject->getYInConsole(cell.second));
@@ -135,6 +136,7 @@ void StandardMode::deleteCell() {
 
         locked_list.clear();
     } else {
+        Screen::playSound("audio/matched.wav");
         remained_pairs -= 2;
 
         for (auto cell : locked_list) {
@@ -234,23 +236,30 @@ void StandardMode::startGame() {
                     break;
             case 2:
                     moveUp();
+                    Screen::playSound("audio/ingame_cursor.wav");
                     break;
             case 3:
                     moveLeft();
+                    Screen::playSound("audio/ingame_cursor.wav");
                     break;
             case 4:
                     moveRight();
+                    Screen::playSound("audio/ingame_cursor.wav");
                     break;
             case 5:
                     moveDown();
+                    Screen::playSound("audio/ingame_cursor.wav");
                     break;
             case 6:
+                    Screen::playSound("audio/click.wav");
                     lockCell();
                     break;
             case 7:
+                    Screen::playSound("audio/hint.wav");
                     findValidPairs(true);
                     break;
             case 8:
+                    Screen::playSound("audio/shuffle.wav");
                     TableObject->shuffleTableData();
                     while (findValidPairs(false) == false) {
                         TableObject->shuffleTableData();
@@ -900,7 +909,7 @@ bool StandardMode::findValidPairs(bool isDisplay) {
                             displayCellValueAt(r, c, WHITE, BLACK);
 
                             for (auto cell : locked_list) {
-                                selectCell(cell.first, cell.second, YELLOW);
+                                displayCellValueAt(cell.first, cell.second, YELLOW, BLACK);
                             }
                             selectCell(cell_pos_x, cell_pos_y, GREEN);
                         }

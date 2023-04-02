@@ -144,8 +144,12 @@ bool Menu::inputTableSize(int _mode) {
 
     Screen::gotoXY(61, 14);
     Screen::setConsoleColor(BLACK, GREEN);
-    std::cout<<"BOARD GENERATING..";
-    Sleep(2000);
+    std::cout<<"BOARD GENERATING";
+    for (int i = 0; i < 3; ++i) {
+        Sleep(500);
+        std::cout<<".";
+    }
+    Sleep(500);
     std::swap(size_n, size_m);
 return true;
 }
@@ -163,6 +167,7 @@ void Menu::playDifficultMode() {
 }
 
 void Menu::menuController() {
+    Screen::playSound("audio/menu_sound.wav");
     displayMenuBackground();
     displayOptionText();
 
@@ -171,21 +176,23 @@ void Menu::menuController() {
         switch(Screen::getConsoleInput()) {
             case 2:
                 changeOption(-1);
+                Screen::playSound("audio/menu_cursor.wav");
                 break;
             case 5:
                 changeOption(1);
+                Screen::playSound("audio/menu_cursor.wav");
                 break;
             case 6:
                 in_menu = 0;
                 switch(current_option) {
                     case 0:
-                        std::cerr<<"";
+                        Screen::playSound("audio/click.wav");
                         while (inputTableSize(STANDARD_MODE) == false);
                         Screen::showCursor(false);
                         playStandardMode();
                         break;
                     case 1:
-                        std::cerr<<"";
+                        Screen::playSound("audio/click.wav");
                         while (inputTableSize(DIFFICULT_MODE) == false);
                         Screen::showCursor(false);
                         playDifficultMode();
