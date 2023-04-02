@@ -83,12 +83,31 @@ void Table::shuffleTableData() {
 
     for (int i = 0; i < table_size; ++i) {
         for (int j = 0; j < table_size; ++j) {
-            if (table_data[i][j].getCellState() == FREE) {
+            int cell_state = table_data[i][j].getCellState();
+            if (cell_state == LOCKED) {
+                table_data[i][j].setCellState(FREE);
+            }
+            if (cell_state == FREE) {
                 shuffle_list[sz_list] = table_data[i][j];
                 ++sz_list;
             }
         }
     }
+
+    occurs = new int[26];
+    for (int i = 0; i < 26; ++i) {
+        occurs[i] = 0;
+    }
+
+    for (int i = 0; i < sz_list; i += 2) {
+        int char_gen = rand() % 26;
+        while (occurs[char_gen] > max_distinct_number) char_gen = rand() % 26;
+
+        shuffle_list[i].cell_value = shuffle_list[i+1].cell_value = (char)(rand() % 26 + 'A');
+        ++occurs[char_gen];
+    }
+    delete[] occurs;
+    occurs = nullptr;
 
     int *shuffle_order = new int[sz_list];
     bool *is_marked = new bool[sz_list];
@@ -106,15 +125,16 @@ void Table::shuffleTableData() {
         shuffle_order[i] = cellPos;
     }
 
-    int idx = 0;
-    for (int i = 0; i < table_size; ++i) {
-        for (int j = 0; j < table_size; ++j) {
-            if (table_data[i][j].getCellState() == FREE) {
-                int order = shuffle_order[idx];
-                table_data[i][j] = shuffle_list[order];
-                ++idx;
-            }
-        }
+    for (int i = 0; i < sz_list; ++i) {
+        int order = shuffle_order[i];
+        int x = shuffle_list[i].cell_pos_x;
+        int y = shuffle_list[i].cell_pos_y;
+        table_data[x][y].setCellPosX(x);
+        table_data[x][y].setCellPosY(y);
+        table_data[x][y].setCellCoordX(getXInConsole(x));
+        table_data[x][y].setCellCoordY(getYInConsole(y));
+        table_data[x][y].setCellValue(shuffle_list[order].cell_value);
+        table_data[x][y].setCellState(shuffle_list[order].cell_state);
     }
 
     delete[] shuffle_list;

@@ -27,6 +27,7 @@ struct Table {
 
     void generateTableData();
     void shuffleTableData();
+    void printTableData();
 };
 
 #endif // TABLE_H

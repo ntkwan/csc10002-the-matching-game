@@ -148,11 +148,19 @@ void StandardMode::deleteCell() {
 void StandardMode::lockCell() {
     int cell_state = getCellState(cell_pos_x, cell_pos_y);
 
-    if (cell_state == LOCKED || cell_state == DELETED) return;
+    if (cell_state == DELETED) return;
+
+    if (locked_list.empty() == false && cell_pos_x == locked_list[0].first && cell_pos_y == locked_list[0].second) {
+        locked_list.pop_back();
+        setCellState(cell_pos_x, cell_pos_y, FREE);
+        selectCell(cell_pos_x, cell_pos_y, GREEN);
+        return;
+    }
 
     selectCell(cell_pos_x, cell_pos_y, YELLOW);
     setCellState(cell_pos_x, cell_pos_y, LOCKED);
     locked_list.push_back(std::pair<int, int>(cell_pos_x, cell_pos_y));
+
 
     if (locked_list.size() == 2) {
         Sleep(100);
@@ -278,9 +286,7 @@ void StandardMode::displayTableData() {
         }
     }
 
-    for (auto cell : locked_list) {
-        selectCell(cell.first, cell.second, YELLOW);
-    }
+    locked_list.clear();
     selectCell(cell_pos_x, cell_pos_y, GREEN);
     Screen::setConsoleColor(WHITE, BLACK);
 }
