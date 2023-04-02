@@ -6,6 +6,9 @@
 #define DELETED 2
 #define EMPTY_BOARD -1
 
+#define STANDARD_MODE 4
+#define DIFFICULT_MODE 6
+
 const int CELL_LENGTH = 8;
 const int CELL_HEIGHT = 4;
 

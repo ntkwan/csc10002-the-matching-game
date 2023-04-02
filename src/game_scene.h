@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string>
 #include <fstream>
+#include <iostream>
 
 #include "screen.h"
 #include "cell.h"
@@ -25,6 +26,7 @@ struct GameScene {
     void loadTableBackground(const std::string &);
     void displayTableBorder();
     void displayTableBackground();
+    void displayUserInterface(int, int, int);
     void displayInfomationBoard(int, int, int, int);
 };
 

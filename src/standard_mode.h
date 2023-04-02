@@ -48,7 +48,6 @@ struct StandardMode {
 
     void startGame();
 
-    void displayUserInterface();
     void displayTableData();
 
     void displayILine(std::pair<int, int>, std::pair<int, int>, bool);

@@ -8,9 +8,6 @@
 #include "standard_mode.h"
 #include "difficult_mode.h"
 
-#define STANDARD_MODE 4
-#define DIFFICULT_MODE 6
-
 struct Menu {
 
     const std::string options[6] = {"Standard Mode (4x4)", "Difficult Mode (6x6)", "Challenge Mode", "Tutorial", "Leaderboard", "Exit"};

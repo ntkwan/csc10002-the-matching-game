@@ -294,48 +294,8 @@ void DifficultMode::initTable() {
     TableObject->generateTableData();
     GameObject->displayTableBorder();
     GameObject->loadTableBackground("assets/charmander.txt");
+    GameObject->displayUserInterface(80, 0, DIFFICULT_MODE);
     displayTableData();
-    displayUserInterface();
-}
-
-void DifficultMode::displayUserInterface() {
-    int _padding_left = 80;
-    int _padding_top = 0;
-    GameObject->displayInfomationBoard(_padding_left, 1, 50, 10);
-    GameObject->displayInfomationBoard(_padding_left, 11, 50, 10);
-    GameObject->displayInfomationBoard(_padding_left, 21, 50, 11);
-
-    auto printInf = [](const std::string& text, const int pd_left, const int pd_top) {
-        Screen::gotoXY(pd_left, pd_top);
-        std::cout<<text;
-    };
-
-    Screen::setConsoleColor(WHITE, RED);
-    printInf("PLAYER INFORMATION", _padding_left + 18, 1);
-    printInf("GAME NOTIFICATION", _padding_left + 18, 11);
-    printInf("QUICK INSTRUCTIONS", _padding_left + 18, 21);
-
-    Screen::setConsoleColor(WHITE, BLACK);
-    printInf("USERNAME: ", _padding_left + 5, 3);
-    printInf("CURRENT POINTS: ", _padding_left + 5, 5);
-    printInf("BEST POINTS: ", _padding_left + 5, 6);
-    printInf("LEVELS PLAYED: ", _padding_left + 5, 8);
-    printInf("HIGHEST LEVEL: ", _padding_left + 5, 9);
-    printInf("MISTAKES REMAIN: ", _padding_left + 5, 13);
-
-    auto printIns = [](const std::string& text_1, const std::string &text_2, const int pd_left, const int pd_top) {
-        Screen::gotoXY(pd_left, pd_top);
-        Screen::setConsoleColor(WHITE, YELLOW);
-        std::cout<<text_1<<": ";
-        Screen::setConsoleColor(WHITE, BLACK);
-        std::cout<<text_2;
-    };
-
-    printIns("ARROWS", "MOVE", _padding_left + 5, 23);
-    printIns("ENTER", "SELECT CELL", _padding_left + 5, 25);
-    printIns("H", "MOVING SUGGESTIONS", _padding_left + 5, 27);
-    printIns("F", "SHUFFLE", _padding_left + 5, 29);
-    printIns("ESC", "EXIT THE GAME", _padding_left + 5, 31);
 }
 
 void DifficultMode::displayTableData() {
