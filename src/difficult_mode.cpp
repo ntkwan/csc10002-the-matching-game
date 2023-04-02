@@ -237,7 +237,14 @@ void DifficultMode::unselectCell() {
 void DifficultMode::lockCell() {
     int cell_state = getCellState(cell_pos_x, cell_pos_y);
 
-    if (cell_state == LOCKED || cell_state == DELETED) return;
+    if (cell_state == DELETED) return;
+
+    if (locked_list.empty() == false && cell_pos_x == locked_list[0].first && cell_pos_y == locked_list[0].second) {
+        locked_list.pop_back();
+        setCellState(cell_pos_x, cell_pos_y, FREE);
+        selectCell(cell_pos_x, cell_pos_y, GREEN);
+        return;
+    }
 
     selectCell(cell_pos_x, cell_pos_y, YELLOW);
     setCellState(cell_pos_x, cell_pos_y, LOCKED);
@@ -333,10 +340,12 @@ void DifficultMode::displayUserInterface() {
 
 void DifficultMode::displayTableData() {
     for (int i = 0; i < table_size; ++i) {
-        for (int j = 0; j < table_size; ++j) {
-            displayCellValueAt(TableObject->table_data[i].getPos(j)->cell_pos_x, TableObject->table_data[i].getPos(j)->cell_pos_y, WHITE, BLACK);
+        for (Cell* cur_node = TableObject->table_data[i].head; cur_node != nullptr; cur_node = cur_node->next) {
+            displayCellValueAt(cur_node->cell_pos_x, cur_node->cell_pos_y, WHITE, BLACK);
         }
     }
+
+    locked_list.clear();
     selectCell(cell_pos_x, cell_pos_y, GREEN);
     Screen::setConsoleColor(WHITE, BLACK);
 }

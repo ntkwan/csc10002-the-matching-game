@@ -74,12 +74,30 @@ void TableLL::shuffleTableData() {
 
     for (int i = 0; i < table_size; ++i) {
         for (Cell* cur_node = table_data[i].head; cur_node != nullptr; cur_node = cur_node->next) {
+            if (cur_node->cell_state == LOCKED) {
+                cur_node->cell_state = FREE;
+            }
             if (cur_node->cell_state == FREE) {
                 shuffle_list[sz_list] = cur_node;
                 ++sz_list;
             }
         }
     }
+
+    occurs = new int[26];
+    for (int i = 0; i < 26; ++i) {
+        occurs[i] = 0;
+    }
+
+    for (int i = 0; i < sz_list; i += 2) {
+        int char_gen = rand() % 26;
+        while (occurs[char_gen] > max_distinct_number) char_gen = rand() % 26;
+
+        shuffle_list[i].cell_value = shuffle_list[i+1].cell_value = (char)(rand() % 26 + 'A');
+        ++occurs[char_gen];
+    }
+    delete[] occurs;
+    occurs = nullptr;
 
     int *shuffle_order = new int[sz_list];
     bool *is_marked = new bool[sz_list];
@@ -99,11 +117,11 @@ void TableLL::shuffleTableData() {
 
     int idx = 0;
     for (int i = 0; i < table_size; ++i) {
-        for (Cell *cur_node = table_data[i].head; cur_node != nullptr; cur_node = cur_node->next) {
+        for (Cell* cur_node = table_data[i].head; cur_node != nullptr; cur_node = cur_node->next) {
             if (cur_node->cell_state == FREE) {
                 int order = shuffle_order[idx];
-                int x = shuffle_list[order].cell_pos_x;
-                int y = shuffle_list[order].cell_pos_y;
+                int x = shuffle_list[idx].cell_pos_x;
+                int y = shuffle_list[idx].cell_pos_y;
                 int cell_state = shuffle_list[order].cell_state;
                 int cell_value = shuffle_list[order].cell_value;
                 cur_node->setCellPosX(x);
