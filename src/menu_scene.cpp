@@ -59,15 +59,106 @@ void Menu::unselectOption() {
     putchar(' ');
 }
 
+bool Menu::inputTableSize(int _mode) {
+    Screen::clearConsole();
+    auto printInfo = [](const int left, const int top, const int width, const int height) {
+        Screen::setConsoleColor(BLACK, YELLOW);
+        Screen::gotoXY(left, top);
+        putchar('-');
+        for (int i = 0; i < width; ++i) putchar('-');
+        putchar('-');
+
+        for (int i = 0; i < height; ++i)
+        {
+            Screen::gotoXY(left, top + i + 1);
+            putchar(' ');
+            Screen::gotoXY(left + width + 1, top + i + 1);
+            putchar(' ');
+            if (i == height-1) {
+                Screen::gotoXY(left, top + i + 1);
+                putchar('-');
+            }
+        }
+
+        for (int i = 0; i < width; ++i) putchar('-');
+        putchar('-');
+    };
+
+    printInfo(56, 3, 25, 10);
+    Screen::gotoXY(63, 4);
+    std::cout<<"- TABLE SIZE -";
+    Screen::gotoXY(60, 6);
+    std::cout<<"ROWS: ";
+    Screen::gotoXY(60, 8);
+    std::cout<<"COLUMNS: ";
+    Screen::gotoXY(59, 11);
+    std::cout<<"INPUT A VALID NUMBER";
+    Screen::gotoXY(62, 12);
+    std::cout<<"BETWEEN 1 AND 9";
+
+    auto validateInput = [](const std::string &table_size) {
+        if (table_size.size() == 0 || table_size.size() > 1) return false;
+
+        for (size_t i = 0; i < table_size.size(); ++i) {
+            if (table_size[i] < '0' || table_size[i] > '9') return false;
+        }
+
+        return true;
+    };
+
+    Screen::showCursor(true);
+    std::string user_size_n;
+    Screen::gotoXY(73, 6);
+    std::cin>>user_size_n;
+    while (validateInput(user_size_n) == false) {
+        Screen::gotoXY(73, 6);
+        for (int i = 0; i < 100; ++i) std::cout<<" ";
+        Screen::gotoXY(73, 6);
+        std::cin>>user_size_n;
+    }
+    size_n = stoi(user_size_n);
+
+    std::string user_size_m;
+    Screen::gotoXY(73, 8);
+    std::cin>>user_size_m;
+    while (validateInput(user_size_m) == false) {
+        Screen::gotoXY(73, 8);
+        for (int i = 0; i < 100; ++i) std::cout<<" ";
+        Screen::gotoXY(73, 8);
+        std::cin>>user_size_m;
+    }
+    size_m = stoi(user_size_m);
+
+    if (size_n * size_m > _mode || size_n * size_m == 0 || (size_n * size_m) & 1) {
+        Screen::setConsoleColor(BLACK, RED);
+        Screen::gotoXY(56, 10);
+        std::cout<<"THE TABLE CELLS MUST BE EVEN";
+        Screen::gotoXY(59, 11);
+        std::cout<<"AND BETWEEN 2 AND "<<(_mode == STANDARD_MODE ? 20 : 42);
+        Screen::gotoXY(62, 12);
+        std::cout<<"               ";
+        Screen::gotoXY(79, 11);
+        Sleep(2000);
+        return false;
+    }
+
+    Screen::gotoXY(61, 14);
+    Screen::setConsoleColor(BLACK, GREEN);
+    std::cout<<"BOARD GENERATING..";
+    Sleep(2000);
+    std::swap(size_n, size_m);
+return true;
+}
+
 void Menu::playStandardMode() {
     Screen::clearConsole();
-    StandardMode game(STANDARD_MODE, 20, 3);
+    StandardMode game(size_n, size_m, 20, 3);
     game.startGame();
 }
 
 void Menu::playDifficultMode() {
     Screen::clearConsole();
-    DifficultMode game(DIFFICULT_MODE, 20, 3);
+    DifficultMode game(size_n, size_m, 20, 3);
     game.startGame();
 }
 
@@ -89,10 +180,14 @@ void Menu::menuController() {
                 switch(current_option) {
                     case 0:
                         std::cerr<<"";
+                        while (inputTableSize(STANDARD_MODE) == false);
+                        Screen::showCursor(false);
                         playStandardMode();
                         break;
                     case 1:
                         std::cerr<<"";
+                        while (inputTableSize(DIFFICULT_MODE) == false);
+                        Screen::showCursor(false);
                         playDifficultMode();
                         break;
                 }
