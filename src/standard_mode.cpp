@@ -257,7 +257,7 @@ void StandardMode::startGame() {
             case 7:
                     Screen::playSound("audio/hint.wav");
                     if (findValidPairs(true) == false) {
-                        GameObject->displayNotification(104, 16, "NO HINTS FOUND, PLEASE SHUFFLE!!", 1000);
+                        GameObject->displayNotification(80, 16, "NO HINTS FOUND, PLEASE SHUFFLE!!", 1000);
                     }
                     break;
             case 8:
