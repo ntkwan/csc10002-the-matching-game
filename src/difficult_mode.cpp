@@ -391,25 +391,12 @@ bool DifficultMode::isCharacterEqual(std::pair<int,int> first_cell, std::pair<in
 }
 
 bool DifficultMode::checkIMatching(std::pair<int, int> first_cell, std::pair<int,int> second_cell) {
+	if (first_cell.second == second_cell.second && abs(first_cell.first - second_cell.first) == 1) return true;
+
 	if (first_cell.first == second_cell.first) {
-		int start_point = first_cell.second;
-		int end_point = second_cell.second;
-		if (start_point > end_point) swapPoints(start_point, end_point);
-
-		for (int current_pos_y = start_point+1; current_pos_y < end_point; ++current_pos_y) {
-			if (getCellState(first_cell.first, current_pos_y) != DELETED) return false;
-		}
-
-		return true;
-	}
-
-	if (first_cell.second == second_cell.second) {
-		int start_point = first_cell.first;
-		int end_point = second_cell.first;
-		if (start_point > end_point) swapPoints(start_point, end_point);
-
-		for (int current_pos_x = start_point+1; current_pos_x < end_point; ++current_pos_x) {
-			if (getCellState(current_pos_x, first_cell.second) != DELETED) return false;
+		if (second_cell.second < first_cell.second) swap(first_cell, second_cell);
+		for (int current_pos_y = first_cell.second + 1; current_pos_y < second_cell.second; ++current_pos_y){
+			if (TableObject->table_data[current_pos_y].list_size >= first_cell.first + 1) return false;
 		}
 
 		return true;
