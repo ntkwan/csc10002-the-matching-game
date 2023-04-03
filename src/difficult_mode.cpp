@@ -362,7 +362,9 @@ void DifficultMode::startGame() {
                     break;
             case 7:
                     Screen::playSound("audio/hint.wav");
-                    findValidPairs(true);
+                    if (findValidPairs(true) == false) {
+                        GameObject->displayNotification(104, 16, "NO HINTS FOUND, PLEASE SHUFFLE!!", 1000);
+                    }
                     break;
             case 8:
                     Screen::playSound("audio/shuffle.wav");

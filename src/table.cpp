@@ -112,7 +112,7 @@ void Table::shuffleTableData() {
         int char_gen = rand() % 26;
         while (occurs[char_gen] > max_distinct_number) char_gen = rand() % 26;
 
-        shuffle_list[i].cell_value = shuffle_list[i+1].cell_value = (char)(rand() % 26 + 'A');
+        shuffle_list[i].cell_value = shuffle_list[i+1].cell_value = (char)(char_gen + 'A');
         ++occurs[char_gen];
     }
     delete[] occurs;
