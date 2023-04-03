@@ -61,21 +61,6 @@ void DifficultMode::swapPoints(T &first_cell, T &second_cell) {
     second_cell = tmp;
 }
 
-void DifficultMode::displayCellBackgroundAt(int _cell_pos_x, int _cell_pos_y, int _background, int _text) {
-    Screen::setConsoleColor(_background, _text);
-    int _cell_coord_x = TableObject->getXInConsole(_cell_pos_x);
-    int _cell_coord_y = TableObject->getYInConsole(_cell_pos_y);
-    Screen::gotoXY(_cell_coord_x, _cell_coord_y);
-
-    for (int current_coord_y = _cell_coord_y - 1; current_coord_y <= _cell_coord_y + 1; ++current_coord_y) {
-        for (int current_coord_x = _cell_coord_x - 3; current_coord_x <= _cell_coord_x + 3; ++current_coord_x) {
-            Screen::gotoXY(current_coord_x, current_coord_y);
-
-            putchar(GameObject->table_image[current_coord_y - padding_top][current_coord_x - padding_left]);
-        }
-    }
-}
-
 void DifficultMode::displayCellValueAt(int _cell_pos_x, int _cell_pos_y, int _background, int _text) {
     Screen::setConsoleColor(_background, _text);
     int _cell_coord_x = TableObject->getXInConsole(_cell_pos_x);
@@ -104,8 +89,20 @@ void DifficultMode::displayCellValueAt(int _cell_pos_x, int _cell_pos_y, int _ba
 
 
 void DifficultMode::cleanTableDataAtRow(int _cell_pos_y) {
+    auto displayCellBackgroundAt = [](int _cell_coord_x, int _cell_coord_y, int _background, int _text, const std::string *table_img, const int pd_top, const int pd_left) {
+        Screen::setConsoleColor(_background, _text);
+        Screen::gotoXY(_cell_coord_x, _cell_coord_y);
+
+        for (int current_coord_y = _cell_coord_y - 1; current_coord_y <= _cell_coord_y + 1; ++current_coord_y) {
+            for (int current_coord_x = _cell_coord_x - 3; current_coord_x <= _cell_coord_x + 3; ++current_coord_x) {
+                Screen::gotoXY(current_coord_x, current_coord_y);
+                putchar(table_img[current_coord_y - pd_top][current_coord_x - pd_left]);
+            }
+        }
+    };
+
     for (int _cell_pos_x = 0; _cell_pos_x < table_size_n; ++_cell_pos_x) {
-        displayCellBackgroundAt(_cell_pos_x, _cell_pos_y, WHITE, RED);
+        displayCellBackgroundAt(TableObject->getXInConsole(cell_pos_x), TableObject->getYInConsole(_cell_pos_y), WHITE, RED, GameObject->table_image, padding_top, padding_left);
     }
 }
 
