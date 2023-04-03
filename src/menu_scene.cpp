@@ -109,23 +109,23 @@ bool Menu::inputTableSize(int _mode) {
     Screen::showCursor(true);
     std::string user_size_n;
     Screen::gotoXY(73, 6);
-    std::cin>>user_size_n;
+    getline(std::cin, user_size_n);
     while (validateInput(user_size_n, _mode) == false) {
         Screen::gotoXY(73, 6);
         for (int i = 0; i < 100; ++i) std::cout<<" ";
         Screen::gotoXY(73, 6);
-        std::cin>>user_size_n;
+        getline(std::cin, user_size_n);
     }
     size_n = stoi(user_size_n);
 
     std::string user_size_m;
     Screen::gotoXY(73, 8);
-    std::cin>>user_size_m;
+    getline(std::cin, user_size_m);
     while (validateInput(user_size_m, _mode) == false) {
         Screen::gotoXY(73, 8);
         for (int i = 0; i < 100; ++i) std::cout<<" ";
         Screen::gotoXY(73, 8);
-        std::cin>>user_size_m;
+        getline(std::cin, user_size_m);
     }
     size_m = stoi(user_size_m);
 
