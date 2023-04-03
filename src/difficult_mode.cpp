@@ -151,8 +151,9 @@ void DifficultMode::deleteCell() {
                 int y = first_cell.second;
                 Cell* dummy_node = new Cell(' ', DELETED, TableObject->getXInConsole(x), TableObject->getYInConsole(y), x, y);
 
-                TableObject->table_data[first_cell.second].addTail(dummy_node);
+                TableObject->table_data[first_cell.second].addTail(dummy_node, false);
             }
+            TableObject->table_data[first_cell.second].list_size -= 2;
         } else {
 
             for (auto cell : locked_list) {
@@ -163,7 +164,8 @@ void DifficultMode::deleteCell() {
                 int y = cell.second;
                 Cell* dummy_node = new Cell(' ', DELETED, TableObject->getXInConsole(x), TableObject->getYInConsole(y), x, y);
 
-                TableObject->table_data[cell.second].addTail(dummy_node);
+                TableObject->table_data[cell.second].addTail(dummy_node, false);
+                TableObject->table_data[cell.second].list_size--;
             }
         }
 
@@ -218,10 +220,12 @@ void DifficultMode::unselectCell() {
     cell_coord_y = TableObject->getYInConsole(cell_pos_y);
     Screen::gotoXY(cell_coord_x, cell_coord_y);
 
-    if (getCellState(cell_pos_x, cell_pos_y) == LOCKED) {
+    int cell_state = getCellState(cell_pos_x, cell_pos_y);
+
+    if (cell_state == LOCKED) {
         Screen::setConsoleColor(YELLOW, BLACK);
     } else {
-        if (getCellState(cell_pos_x, cell_pos_y) == DELETED) {
+        if (cell_state == DELETED || cell_state == -1) {
             Screen::setConsoleColor(WHITE, RED);
         } else {
             Screen::setConsoleColor(WHITE, BLACK);
@@ -232,7 +236,7 @@ void DifficultMode::unselectCell() {
         for (int current_coord_x = cell_coord_x - 3; current_coord_x <= cell_coord_x + 3; ++current_coord_x) {
             Screen::gotoXY(current_coord_x, current_coord_y);
 
-            if (getCellState(cell_pos_x, cell_pos_y) == DELETED) {
+            if (cell_state == DELETED || cell_state == -1) {
                 putchar(GameObject->table_image[current_coord_y - padding_top][current_coord_x - padding_left]);
                 continue;
             }
@@ -252,7 +256,7 @@ void DifficultMode::unselectCell() {
 void DifficultMode::lockCell() {
     int cell_state = getCellState(cell_pos_x, cell_pos_y);
 
-    if (cell_state == DELETED) return;
+    if (cell_state == DELETED || cell_state == -1) return;
 
     if (locked_list.empty() == false && cell_pos_x == locked_list[0].first && cell_pos_y == locked_list[0].second) {
         locked_list.pop_back();

@@ -65,7 +65,7 @@ void TableLL::generateTableData() {
         int x = table_data[y].list_size;
 
         Cell* cur_node = new Cell((char)(character_list[i] + 'A'), FREE, getXInConsole(x), getYInConsole(y), x, y);
-        table_data[y].addTail(cur_node);
+        table_data[y].addTail(cur_node, true);
     }
 
     delete[] character_list;
