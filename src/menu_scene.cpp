@@ -94,13 +94,13 @@ bool Menu::inputTableSize(int _mode) {
     Screen::gotoXY(59, 11);
     std::cout<<"INPUT A VALID NUMBER";
     Screen::gotoXY(62, 12);
-    std::cout<<"BETWEEN 1 AND 9";
+    std::cout<<"BETWEEN 1 AND "<<(_mode == STANDARD_MODE ? 5 : 7);
 
-    auto validateInput = [](const std::string &table_size) {
+    auto validateInput = [](const std::string &table_size, int _mode) {
         if (table_size.size() == 0 || table_size.size() > 1) return false;
 
         for (size_t i = 0; i < table_size.size(); ++i) {
-            if (table_size[i] < '0' || table_size[i] > '9') return false;
+            if (table_size[i] < '0' || table_size[i] > (_mode == STANDARD_MODE ? '5' : '7')) return false;
         }
 
         return true;
@@ -110,7 +110,7 @@ bool Menu::inputTableSize(int _mode) {
     std::string user_size_n;
     Screen::gotoXY(73, 6);
     std::cin>>user_size_n;
-    while (validateInput(user_size_n) == false) {
+    while (validateInput(user_size_n, _mode) == false) {
         Screen::gotoXY(73, 6);
         for (int i = 0; i < 100; ++i) std::cout<<" ";
         Screen::gotoXY(73, 6);
@@ -121,7 +121,7 @@ bool Menu::inputTableSize(int _mode) {
     std::string user_size_m;
     Screen::gotoXY(73, 8);
     std::cin>>user_size_m;
-    while (validateInput(user_size_m) == false) {
+    while (validateInput(user_size_m, _mode) == false) {
         Screen::gotoXY(73, 8);
         for (int i = 0; i < 100; ++i) std::cout<<" ";
         Screen::gotoXY(73, 8);
