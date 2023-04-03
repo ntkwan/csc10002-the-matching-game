@@ -25,13 +25,29 @@ DifficultMode::~DifficultMode() {
     GameObject = nullptr;
 }
 
-int DifficultMode::getCellState(int _cell_pos_x, int _cell_pos_y) const { return TableObject->table_data[_cell_pos_y].getPos(_cell_pos_x)->getCellState(); }
+int DifficultMode::getCellState(int _cell_pos_x, int _cell_pos_y) const {
+    Cell* node = TableObject->table_data[_cell_pos_y].getPos(_cell_pos_x);
+    if (node == nullptr) return -1;
+    return node->getCellState();
+}
 
-char DifficultMode::getCellValue(int _cell_pos_x, int _cell_pos_y) const { return TableObject->table_data[_cell_pos_y].getPos(_cell_pos_x)->getCellValue(); }
+char DifficultMode::getCellValue(int _cell_pos_x, int _cell_pos_y) const {
+    Cell* node = TableObject->table_data[_cell_pos_y].getPos(_cell_pos_x);
+    if (node == nullptr) return ' ';
+    return node->getCellValue();
+}
 
-void DifficultMode::setCellState(int _cell_pos_x, int _cell_pos_y, int _state)  { TableObject->table_data[_cell_pos_y].getPos(_cell_pos_x)->setCellState(_state); }
+void DifficultMode::setCellState(int _cell_pos_x, int _cell_pos_y, int _state)  {
+    Cell* node = TableObject->table_data[_cell_pos_y].getPos(_cell_pos_x);
+    if (node == nullptr) return;
+    return node->setCellState(_state);
+}
 
-void DifficultMode::setCellValue(int _cell_pos_x, int _cell_pos_y, char _value) { TableObject->table_data[_cell_pos_y].getPos(_cell_pos_x)->setCellValue(_value); }
+void DifficultMode::setCellValue(int _cell_pos_x, int _cell_pos_y, char _value) {
+    Cell* node = TableObject->table_data[_cell_pos_y].getPos(_cell_pos_x);
+    if (node == nullptr) return;
+    return node->setCellValue(_value);
+}
 
 char DifficultMode::getCharAt(int _cell_pos_x, int _cell_pos_y) const {
 	if (getCellState(_cell_pos_x, _cell_pos_y) == DELETED) return ' ';
@@ -134,7 +150,7 @@ void DifficultMode::deleteCell() {
                 if (i == 2) TableObject->table_data[first_cell.second].removePos(first_cell.first);
                 else TableObject->table_data[first_cell.second].removePos(second_cell.first-1);
 
-                int x = table_size_m - 1;
+                int x = table_size_n - 1;
                 int y = first_cell.second;
                 Cell* dummy_node = new Cell(' ', DELETED, TableObject->getXInConsole(x), TableObject->getYInConsole(y), x, y);
 
@@ -146,7 +162,7 @@ void DifficultMode::deleteCell() {
                 cleanTableDataAtRow(cell.second);
                 TableObject->table_data[cell.second].removePos(cell.first);
 
-                int x = table_size_m - 1;
+                int x = table_size_n - 1;
                 int y = cell.second;
                 Cell* dummy_node = new Cell(' ', DELETED, TableObject->getXInConsole(x), TableObject->getYInConsole(y), x, y);
 
@@ -367,7 +383,9 @@ void DifficultMode::startGame() {
 }
 
 
-bool DifficultMode::isCharacterEqual(std::pair<int,int> first_cell, std::pair<int, int> second_cell) { return (getCellValue(first_cell.first, first_cell.second) == getCellValue(second_cell.first, second_cell.second)); }
+bool DifficultMode::isCharacterEqual(std::pair<int,int> first_cell, std::pair<int, int> second_cell) {
+    return (getCellValue(first_cell.first, first_cell.second) == getCellValue(second_cell.first, second_cell.second));
+}
 
 bool DifficultMode::checkIMatching(std::pair<int, int> first_cell, std::pair<int,int> second_cell) {
 	if (first_cell.first == second_cell.first) {
@@ -954,19 +972,21 @@ return false;
 bool DifficultMode::findValidPairs(bool isDisplay) {
     for (int y = 0; y < table_size_m; ++y) {
         for (Cell* prev_node = TableObject->table_data[y].head; prev_node != nullptr; prev_node = prev_node->next) {
-            int x = prev_node->getCellPosX();
+            int x = prev_node->cell_pos_x;
 
             for (int Y = 0; Y < table_size_m; ++Y) {
-                for (Cell* cur_node = TableObject->table_data[y].head; cur_node != nullptr; cur_node = cur_node->next) {
-                    int X = cur_node->getCellPosX();
+                for (Cell* cur_node = TableObject->table_data[Y].head; cur_node != nullptr; cur_node = cur_node->next) {
+                    int X = cur_node->cell_pos_x;
 
                     if (x == X && y == Y) continue;
 
-                    if (x < 0 || y < 0 || x >= TableObject->table_data[y].list_size) continue;
-                    if (getCellState(x, y) == DELETED) continue;
+                    if (x < 0) continue;
+                    int cell_state = getCellState(x ,y);
+                    if (cell_state == DELETED || cell_state == -1) continue;
 
-                    if (X < 0 || Y < 0 || X >= TableObject->table_data[Y].list_size) continue;
-                    if (getCellState(X ,Y) == DELETED) continue;
+                    if (X < 0) continue;
+                    cell_state = getCellState(X ,Y);
+                    if (cell_state == DELETED || cell_state == -1) continue;
 
                     if (checkMatching(std::make_pair(x, y), std::make_pair(X, Y), false) == true) {
                         if (isDisplay == true) {
