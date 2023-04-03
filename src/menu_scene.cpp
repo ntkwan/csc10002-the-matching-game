@@ -23,6 +23,7 @@ Menu::~Menu() {
 }
 
 void Menu::changeOption(int _direction) {
+    Screen::playSound("audio/menu_cursor.wav");
     int new_option = current_option + _direction;
     if (new_option < 0 || new_option >= option_slot) return;
 
@@ -166,6 +167,11 @@ void Menu::playDifficultMode() {
     game.startGame();
 }
 
+void Menu::playChallengeMode() {
+    ChallengeMode game(0, 0, 20, 3);
+    game.loopGame();
+}
+
 void Menu::menuController() {
     Screen::playSound("audio/menu_sound.wav");
     displayMenuBackground();
@@ -176,11 +182,9 @@ void Menu::menuController() {
         switch(Screen::getConsoleInput()) {
             case 2:
                 changeOption(-1);
-                Screen::playSound("audio/menu_cursor.wav");
                 break;
             case 5:
                 changeOption(1);
-                Screen::playSound("audio/menu_cursor.wav");
                 break;
             case 6:
                 in_menu = 0;
@@ -196,6 +200,11 @@ void Menu::menuController() {
                         while (inputTableSize(DIFFICULT_MODE) == false);
                         Screen::showCursor(false);
                         playDifficultMode();
+                        break;
+                    case 2:
+                        Screen::playSound("audio/click.wav");
+                        Screen::showCursor(false);
+                        playChallengeMode();
                         break;
                 }
         }
