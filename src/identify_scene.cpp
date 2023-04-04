@@ -117,7 +117,7 @@ bool IdentifyMenu::menuController() {
     displayMenuBackground(true);
     displayOptionText();
 
-    auto validateAccount = [](const std::string &username, const std::string &password, const int number_user, Player *user_list) {
+    auto validateAccountLogin = [](const std::string &username, const std::string &password, const int number_user, Player *user_list) {
         for (int i = 0; i < number_user; ++i) {
             if (username == user_list[i].username && password == user_list[i].password) {
                 return true;
@@ -126,6 +126,17 @@ bool IdentifyMenu::menuController() {
 
         return false;
     };
+
+    auto validateAccountRegister = [](const std::string &username, const std::string &password, const int number_user, Player *user_list) {
+        for (int i = 0; i < number_user; ++i) {
+            if (username == user_list[i].username) {
+                return false;
+            }
+        }
+
+        return true;
+    };
+
 
     bool in_menu = true;
     while (in_menu) {
@@ -147,9 +158,9 @@ bool IdentifyMenu::menuController() {
 
                         while (true) {
                             loginMenu();
-                            if (validateAccount(user.username, user.password, number_user, user_list) == true) break;
+                            if (validateAccountLogin(user.username, user.password, number_user, user_list) == true) break;
                             else {
-                                displayNotification(56, 18, "WRONG USERNAME OR PASSWORD", 1000);
+                                    displayNotification(56, 18, "WRONG USERNAME OR PASSWORD", 1000);
                             }
                         }
                         return true;
@@ -157,16 +168,25 @@ bool IdentifyMenu::menuController() {
                         Screen::clearConsole();
                         displayMenuBackground(false);
                         loadUserData();
-                        registerMenu();
+                        while (true) {
+                            registerMenu();
+                            if (validateAccountRegister(user.username, user.password, number_user, user_list) == true) {
+                                    saveUserData();
+                                    break;
+                            }
+                            else {
+                                    displayNotification(56, 18, "THIS USERNAME WAS TAKEN", 1000);
+                            }
+                        }
 
                         Screen::clearConsole();
                         displayMenuBackground(false);
                         loadUserData();
                         while (true) {
                             loginMenu();
-                            if (validateAccount(user.username, user.password, number_user, user_list) == true) break;
+                            if (validateAccountLogin(user.username, user.password, number_user, user_list) == true) break;
                             else {
-                                displayNotification(56, 18, "WRONG USERNAME OR PASSWORD", 1000);
+                                    displayNotification(56, 18, "WRONG USERNAME OR PASSWORD", 1000);
                             }
                         }
                         return true;
@@ -208,6 +228,7 @@ void IdentifyMenu::saveUserData() {
 
     out.close();
 }
+
 bool IdentifyMenu::loginMenu() {
     displayInformationBoard(56, 20, 25, 7);
     Screen::gotoXY(45, 18);
@@ -321,7 +342,6 @@ void IdentifyMenu::registerMenu() {
             char ch = getch();
 
             if (ch == 13) {
-                Screen::showCursor(false);
                 psw[i] = '\0';
                 break;
             }
@@ -378,12 +398,9 @@ void IdentifyMenu::registerMenu() {
         for (int i = 0; i < 100; ++i) std::cout<<" ";
     }
 
-
+    Screen::showCursor(false);
     Screen::gotoXY(40, 18);
     for (int i = 0; i < 100; ++i) std::cout<<" ";
     Screen::gotoXY(68, 22);
     for (int i = 0; i < 100; ++i) std::cout<<" ";
-
-
-    saveUserData();
 }
