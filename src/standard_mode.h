@@ -6,6 +6,7 @@
 
 #include "table.h"
 #include "game_scene.h"
+#include "player.h"
 
 struct StandardMode {
     int padding_left = 0;
@@ -20,10 +21,16 @@ struct StandardMode {
     int cell_coord_y;
     bool end_loop;
     std::vector<std::pair<int, int>> locked_list;
-    Table* TableObject;
+    Table *TableObject;
     GameScene *GameObject;
 
-    StandardMode(int, int, int, int);
+    Player *PlayerObject;
+    Player *user_list;
+    int number_user;
+    Player current_play;
+    int mistake = 10;
+
+    StandardMode(int, int, int, int, Player, int, Player *);
     ~StandardMode();
 
     void initTable();

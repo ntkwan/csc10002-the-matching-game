@@ -159,7 +159,7 @@ void Menu::displayInformationBoard(const int left, const int top, const int widt
 
 void Menu::playStandardMode() {
     Screen::clearConsole();
-    StandardMode game(size_n, size_m, 20, 3);
+    StandardMode game(size_n, size_m, 20, 3, IMenu.user, IMenu.number_user, IMenu.user_list);
     game.startGame();
 }
 

@@ -8,6 +8,7 @@
 
 #include "screen.h"
 #include "cell.h"
+#include "player.h"
 
 struct GameScene {
     int table_size_n;
@@ -30,6 +31,9 @@ struct GameScene {
     void displayUserInterface(int, int, int);
     void displayInfomationBoard(int, int, int, int);
     void displayNotification(int, int, const std::string &, int);
+    void displayUserAttributes(int, int, Player *, Player, int);
+    void loadUserData(int, int, Player *, Player *&);
+    void saveUserData(int, Player);
 };
 
 #endif // GAME_SCENE_H

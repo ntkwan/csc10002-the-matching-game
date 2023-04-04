@@ -1,11 +1,20 @@
 #include "standard_mode.h"
 
-StandardMode::StandardMode(int _table_size_n, int _table_size_m, int _padding_left, int _padding_top) {
+StandardMode::StandardMode(int _table_size_n, int _table_size_m, int _padding_left, int _padding_top, Player _player, int _number_user, Player *_user_list) {
     padding_left = _padding_left;
     padding_top = _padding_top;
 
     TableObject = new Table(_table_size_n, _table_size_m, padding_left, padding_top);
     GameObject = new GameScene(_table_size_n, _table_size_m, padding_left, padding_top);
+    PlayerObject = new Player(_player);
+    number_user = _number_user;
+    user_list = _user_list;
+
+    current_play.username = PlayerObject->username;
+    current_play.password = PlayerObject->password;
+    current_play.gamemode = "standard";
+    current_play.point = 0;
+    current_play.lvl = 0;
 
     table_size_n = _table_size_n;
     table_size_m = _table_size_m;
@@ -120,6 +129,7 @@ void StandardMode::unselectCell() {
 void StandardMode::deleteCell() {
     if (checkMatching(locked_list[0], locked_list[1], true) == false) {
         Screen::playSound("audio/mismatched.wav");
+        mistake--;
         reverse(locked_list.begin(), locked_list.end());
         for (auto cell : locked_list) {
             Screen::gotoXY(TableObject->getXInConsole(cell.first), TableObject->getYInConsole(cell.second));
@@ -209,6 +219,7 @@ void StandardMode::initTable() {
     GameObject->displayTableBorder();
     GameObject->loadTableBackground("assets/bunny.txt");
     GameObject->displayUserInterface(70, 0, STANDARD_MODE);
+    GameObject->loadUserData(STANDARD_MODE, number_user, user_list, PlayerObject);
     displayTableData();
 }
 
@@ -227,9 +238,17 @@ void StandardMode::displayTableData() {
 void StandardMode::startGame() {
     Screen::clearConsole();
     initTable();
-
     selectCell(cell_pos_x, cell_pos_y, GREEN);
-    while (end_loop == false && remained_pairs > 0) {
+    while (end_loop == false && mistake > 0 && current_play.point >= 0 && remained_pairs > 0) {
+
+        PlayerObject->point = std::max(PlayerObject->point, current_play.point);
+        GameObject->displayUserAttributes(92, 3, PlayerObject, current_play, mistake);
+
+        if (findValidPairs(false) == false) {
+            GameObject->displayNotification(80, 16, "RUN OUT OF MOVES, GAME ENDS", 1500);
+            break;
+        }
+
         switch(Screen::getConsoleInput()) {
             case 1:
                     end_loop = true;
@@ -255,26 +274,48 @@ void StandardMode::startGame() {
                     lockCell();
                     break;
             case 7:
-                    Screen::playSound("audio/hint.wav");
-                    if (findValidPairs(true) == false) {
-                        GameObject->displayNotification(80, 16, "NO HINTS FOUND, PLEASE SHUFFLE!!", 1000);
+                    if (current_play.point > 0) {
+                        current_play.point -= 5;
+                        Screen::playSound("audio/hint.wav");
+                        if (findValidPairs(true) == false) {
+                            GameObject->displayNotification(80, 16, "NO HINTS FOUND, PLEASE SHUFFLE!!", 1000);
+                        }
+                    } else {
+                            GameObject->displayNotification(75, 16, "YOU DON'T HAVE ENOUGHT POINTS TO USE HINTS", 1000);
                     }
                     break;
             case 8:
-                    Screen::playSound("audio/shuffle.wav");
-                    TableObject->shuffleTableData();
-                    while (findValidPairs(false) == false) {
+                    if (current_play.point > 0) {
+                        current_play.point -= 9;
+                        Screen::playSound("audio/shuffle.wav");
                         TableObject->shuffleTableData();
+                        while (findValidPairs(false) == false) {
+                            TableObject->shuffleTableData();
+                        }
+                        displayTableData();
+                        GameObject->displayNotification(89, 16, "TABLE SHUFFLED!!", 1000);
+                    } else {
+                        GameObject->displayNotification(75, 16, "YOU DON'T HAVE ENOUGHT POINTS TO SHUFFLE", 1000);
                     }
-                    displayTableData();
-                    GameObject->displayNotification(89, 16, "TABLE SHUFFLED!!", 1000);
                     break;
         }
     }
 
+    ++current_play.lvl;
+
     setCellState(cell_pos_x, cell_pos_y, EMPTY_BOARD);
     selectCell(cell_pos_x, cell_pos_y, WHITE);
     GameObject->displayTableBackground();
+    {
+        GameObject->displayNotification(73, 16, "DO YOU WANT TO SAVE YOUR STATS? PRESS Y TO SAVE", 3000);
+        char ch = getch();
+        if (ch == 121 || ch == 89) {
+            GameObject->displayNotification(90, 16, "GAME SAVED", 1000);
+            GameObject->saveUserData(number_user, current_play);
+        } else {
+            GameObject->displayNotification(85, 16, "GAME WAS NOT SAVED!", 1000);
+        }
+    }
     Screen::setConsoleColor(WHITE, BLACK);
 }
 
@@ -819,10 +860,11 @@ bool StandardMode::checkUMatching(std::pair<int, int> first_cell, std::pair<int,
 return false;
 }
 
-bool StandardMode::checkMatching(std::pair<int, int> first_cell, std::pair<int, int> second_cell, bool isDisplay) {
+bool StandardMode::checkMatching(std::pair<int, int> first_cell, std::pair<int, int> second_cell, bool is_display) {
     if (isCharacterEqual(first_cell, second_cell) == false) return false;
     if (checkIMatching(first_cell, second_cell) == true) {
-        if (isDisplay == true) {
+        if (is_display == true) {
+            current_play.point += 3;
             displayILine(first_cell, second_cell, false);
             Sleep(500);
             displayILine(first_cell, second_cell, true);
@@ -831,7 +873,8 @@ bool StandardMode::checkMatching(std::pair<int, int> first_cell, std::pair<int, 
     }
 
     if (checkLMatching(first_cell, second_cell) == true) {
-        if (isDisplay == true) {
+        if (is_display == true) {
+            current_play.point += 5;
             displayLLine(first_cell, second_cell, false);
             Sleep(500);
             displayLLine(first_cell, second_cell, true);
@@ -840,7 +883,8 @@ bool StandardMode::checkMatching(std::pair<int, int> first_cell, std::pair<int, 
     }
 
     if (checkZMatching(first_cell, second_cell) == true) {
-        if (isDisplay == true) {
+        if (is_display == true) {
+            current_play.point += 7;
             displayZLine(first_cell, second_cell, false);
             Sleep(500);
             displayZLine(first_cell, second_cell, true);
@@ -848,14 +892,15 @@ bool StandardMode::checkMatching(std::pair<int, int> first_cell, std::pair<int, 
         return true;
     }
 
-    if (checkUMatching(first_cell, second_cell, isDisplay) == true) {
-        if (isDisplay == true) {
+    if (checkUMatching(first_cell, second_cell, is_display) == true) {
+        if (is_display == true) {
+            current_play.point += 7;
             GameObject->cleanMatchingEffect();
         }
         return true;
     }
 
-    if (isDisplay == true) {
+    if (is_display == true) {
         GameObject->cleanMatchingEffect();
     }
 

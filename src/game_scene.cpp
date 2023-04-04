@@ -265,7 +265,6 @@ void GameScene::displayTableBackground() {
 	}
 }
 
-
 void GameScene::displayNotification(int _padding_left, int _padding_top, const std::string &text, int delayed_time) {
     Screen::setConsoleColor(WHITE, GREEN);
     Screen::gotoXY(_padding_left, _padding_top);
@@ -275,3 +274,46 @@ void GameScene::displayNotification(int _padding_left, int _padding_top, const s
     for (size_t i = 0; i < text.size(); ++i) std::cout<<" ";
 }
 
+void GameScene::displayUserAttributes(int _padding_left, int _padding_top, Player *user, Player current_play, int mistake) {
+    Screen::setConsoleColor(WHITE, PURPLE);
+
+    Screen::gotoXY(_padding_left, _padding_top);
+    std::cout<<user->username;
+    Screen::gotoXY(_padding_left, _padding_top + 2);
+    std::cout<<current_play.point;
+    Screen::gotoXY(_padding_left, _padding_top + 3);
+    std::cout<<user->point;
+    Screen::gotoXY(_padding_left, _padding_top + 5);
+    std::cout<<current_play.lvl;
+    Screen::gotoXY(_padding_left, _padding_top + 6);
+    std::cout<<user->lvl;
+    Screen::gotoXY(_padding_left, _padding_top + 10);
+    for (int i = 0; i < 10; ++i) std::cout<<" ";
+    Screen::gotoXY(_padding_left, _padding_top + 10);
+    std::cout<<mistake;
+}
+
+void GameScene::loadUserData(int _mode, int n, Player *user_list, Player *&user) {
+    std::string _gamemode;
+    if (_mode == STANDARD_MODE) _gamemode = "standard";
+    else if (_mode == DIFFICULT_MODE) _gamemode = "difficult";
+    else _gamemode = "challenge";
+
+    for (int i = 0; i < n; ++i) {
+        if (user_list[i].username == user->username && user_list[i].password == user->password) {
+            if (_gamemode == user_list[i].gamemode) {
+                user->lvl = std::max(user->lvl, user_list[i].lvl);
+                user->point = std::max(user->point, user_list[i].point);
+            }
+        }
+    }
+}
+
+void GameScene::saveUserData(int number_user, Player user) {
+    std::fstream out("user_data/database.txt", std::ios::app);
+
+    if (number_user > 0) out<<"\n";
+    out<<user.username<<"/"<<user.password<<"/"<<user.gamemode<<"/"<<user.point<<"/"<<user.lvl;
+
+    out.close();
+}

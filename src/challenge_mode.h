@@ -3,6 +3,7 @@
 
 #include "standard_mode.h"
 #include "difficult_mode.h"
+#include "menu_scene.h"
 
 struct ChallengeMode {
         int padding_left = 0;

@@ -26,12 +26,12 @@ int ChallengeMode::startGame() {
 
     if (coin_flip == 0) {
         Screen::clearConsole();
-        StandardMode GameObject(table_size_n, table_size_m, padding_left, padding_top);
-        GameObject.startGame();
+        //StandardMode GameObject(table_size_n, table_size_m, padding_left, padding_top, IMenu.);
+        //GameObject.startGame();
     } else {
         Screen::clearConsole();
-        DifficultMode GameObject(table_size_n, table_size_m, padding_left, padding_top);
-        GameObject.startGame();
+        //DifficultMode GameObject(table_size_n, table_size_m, padding_left, padding_top);
+        //GameObject.startGame();
     }
 
 return coin_flip;
