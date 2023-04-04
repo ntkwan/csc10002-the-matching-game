@@ -24,6 +24,38 @@ void IdentifyMenu::selectOption() {
     putchar(174);
 }
 
+void IdentifyMenu::displayMenuBackground(bool is_flash) {
+    std::string *game_title = new std::string[13];
+    Screen::setConsoleColor(BLACK, BLACK);
+    Screen::clearConsole();
+
+    auto loadMenuAssets = [](const std::string &path, std::string *assets) {
+       std::fstream bg(path, std::ios::in);
+
+        for (int idx = 0; !bg.eof(); ++idx) {
+            getline(bg, assets[idx]);
+        }
+
+        bg.close();
+    };
+
+    loadMenuAssets("assets/game_title.txt", game_title);
+
+    int color[] = { LIGHT_AQUA, AQUA, LIGHT_BLUE, BLUE, LIGHT_PURPLE, PURPLE, YELLOW};
+
+	int loop = (is_flash == true ? 14 : 1), colorCount = (is_flash == true ? 0 : 6), padding_left = 33, padding_top = 1;
+	while (loop--) {
+		Screen::setConsoleColor(BLACK, color[colorCount % 7]);
+        Screen::gotoXY(padding_left, padding_top);
+		for (int i = 0; i < 12; ++i) {
+            Screen::gotoXY(padding_left, padding_top + i);
+            std::cout<<game_title[i]<<"\n";
+		}
+		Sleep(100);
+		colorCount++;
+	}
+}
+
 void IdentifyMenu::unselectOption() {
     int padding_left = 59, padding_top = 18;
     Screen::setConsoleColor(BLACK, WHITE);
@@ -81,8 +113,8 @@ void IdentifyMenu::displayNotification(int _padding_left, int _padding_top, cons
     for (size_t i = 0; i < text.size(); ++i) std::cout<<" ";
 }
 
-void IdentifyMenu::menuController() {
-    menu.displayMenuBackground(true);
+bool IdentifyMenu::menuController() {
+    displayMenuBackground(true);
     displayOptionText();
 
     auto validateAccount = [](const std::string &username, const std::string &password, const int number_user, Player *user_list) {
@@ -110,7 +142,7 @@ void IdentifyMenu::menuController() {
             case 6:
                 if (current_option == 0) {
                         Screen::clearConsole();
-                        menu.displayMenuBackground(false);
+                        displayMenuBackground(false);
                         loadUserData();
 
                         while (true) {
@@ -120,16 +152,15 @@ void IdentifyMenu::menuController() {
                                 displayNotification(56, 18, "WRONG USERNAME OR PASSWORD", 1000);
                             }
                         }
-
-                        menu.menuController();
+                        return true;
                 } else if (current_option == 1) {
                         Screen::clearConsole();
-                        menu.displayMenuBackground(false);
+                        displayMenuBackground(false);
                         loadUserData();
                         registerMenu();
 
                         Screen::clearConsole();
-                        menu.displayMenuBackground(false);
+                        displayMenuBackground(false);
                         loadUserData();
                         while (true) {
                             loginMenu();
@@ -138,8 +169,7 @@ void IdentifyMenu::menuController() {
                                 displayNotification(56, 18, "WRONG USERNAME OR PASSWORD", 1000);
                             }
                         }
-
-                        menu.menuController();
+                        return true;
                 } else {
                         in_menu = false;
                 }
@@ -153,8 +183,7 @@ void IdentifyMenu::loadUserData() {
     std::string input_stream;
     Player dummy;
     int idx = 0;
-    while (!in.eof()) {
-        getline(in, input_stream, '/');
+    while (getline(in, input_stream, '/')) {
         dummy.username = input_stream;
         getline(in, input_stream, '/');
         dummy.password = input_stream;

@@ -5,7 +5,6 @@
 #include <iostream>
 #include <fstream>
 
-#include "menu_scene.h"
 #include "screen.h"
 #include "player.h"
 
@@ -17,15 +16,14 @@ struct IdentifyMenu {
     Player user_list[100];
     int number_user = 0;
 
-    Menu menu;
-
     void changeOption(int);
     void selectOption();
     void unselectOption();
-    void menuController();
+    bool menuController();
     void displayInformationBoard(const int, const int, const int, const int);
     void displayOptionText();
     void displayNotification(int, int, const std::string &, int);
+    void displayMenuBackground(bool);
 
     bool loginMenu();
     void registerMenu();

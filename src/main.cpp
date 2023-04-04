@@ -1,8 +1,8 @@
-#include "identify_scene.h"
+#include "menu_scene.h"
 
 int main() {
     Screen::setUpConsole(18);
-    IdentifyMenu menu;
+    Menu menu;
     menu.menuController();
     Screen::clearConsole();
 }

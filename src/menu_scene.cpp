@@ -175,6 +175,8 @@ void Menu::playChallengeMode() {
 }
 
 void Menu::menuController() {
+    while (IMenu.menuController() == false);
+
     Screen::playSound("audio/menu_sound.wav");
     displayMenuBackground(true);
     displayOptionText();

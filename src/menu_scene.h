@@ -8,6 +8,7 @@
 #include "standard_mode.h"
 #include "difficult_mode.h"
 #include "challenge_mode.h"
+#include "identify_scene.h"
 #include "player.h"
 
 struct Menu {
@@ -21,6 +22,8 @@ struct Menu {
     int current_option;
     int size_n;
     int size_m;
+
+    IdentifyMenu IMenu;
 
     Menu();
     ~Menu();
