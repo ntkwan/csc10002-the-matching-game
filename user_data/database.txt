@@ -1,1 +1,2 @@
-quan/1234/null/0/0
+quan/1234/standard/20/1
+vi/12345/null/0/0

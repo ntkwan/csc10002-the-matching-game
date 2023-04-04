@@ -12,5 +12,6 @@ struct Player {
     int lvl = 0;
 
     Player();
+    Player(const Player &);
 };
 #endif // PLAYER_H
