@@ -160,15 +160,6 @@ void GameScene::displayUserInterface(int _padding_left, int _padding_top, int _m
     Screen::setConsoleColor(WHITE, BLACK);
 }
 
-void GameScene::displayNotification(int _padding_left, int _padding_top, const std::string &text, int delayed_time) {
-    Screen::setConsoleColor(WHITE, GREEN);
-    Screen::gotoXY(_padding_left, _padding_top);
-    std::cout<<text;
-    Sleep(delayed_time);
-    Screen::gotoXY(_padding_left, _padding_top);
-    for (size_t i = 0; i < text.size(); ++i) std::cout<<" ";
-}
-
 void GameScene::displayTableBorder() {
     Screen::setConsoleColor(WHITE, GRAY);
     Screen::clearConsole();
@@ -272,5 +263,15 @@ void GameScene::displayTableBackground() {
             putchar(' ');
 		}
 	}
+}
+
+
+void GameScene::displayNotification(int _padding_left, int _padding_top, const std::string &text, int delayed_time) {
+    Screen::setConsoleColor(WHITE, GREEN);
+    Screen::gotoXY(_padding_left, _padding_top);
+    std::cout<<text;
+    Sleep(delayed_time);
+    Screen::gotoXY(_padding_left, _padding_top);
+    for (size_t i = 0; i < text.size(); ++i) std::cout<<" ";
 }
 

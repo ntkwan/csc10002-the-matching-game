@@ -62,30 +62,8 @@ void Menu::unselectOption() {
 
 bool Menu::inputTableSize(int _mode) {
     Screen::clearConsole();
-    auto printInfo = [](const int left, const int top, const int width, const int height) {
-        Screen::setConsoleColor(BLACK, YELLOW);
-        Screen::gotoXY(left, top);
-        putchar('-');
-        for (int i = 0; i < width; ++i) putchar('-');
-        putchar('-');
 
-        for (int i = 0; i < height; ++i)
-        {
-            Screen::gotoXY(left, top + i + 1);
-            putchar(' ');
-            Screen::gotoXY(left + width + 1, top + i + 1);
-            putchar(' ');
-            if (i == height-1) {
-                Screen::gotoXY(left, top + i + 1);
-                putchar('-');
-            }
-        }
-
-        for (int i = 0; i < width; ++i) putchar('-');
-        putchar('-');
-    };
-
-    printInfo(56, 3, 25, 10);
+    displayInformationBoard(56, 3, 25, 10);
     Screen::gotoXY(63, 4);
     std::cout<<"- TABLE SIZE -";
     Screen::gotoXY(60, 6);
@@ -155,6 +133,30 @@ bool Menu::inputTableSize(int _mode) {
 return true;
 }
 
+void Menu::displayInformationBoard(const int left, const int top, const int width, const int height) {
+    Screen::setConsoleColor(BLACK, YELLOW);
+    Screen::gotoXY(left, top);
+    putchar('-');
+    for (int i = 0; i < width; ++i) putchar('-');
+    putchar('-');
+
+    for (int i = 0; i < height; ++i)
+    {
+        Screen::gotoXY(left, top + i + 1);
+        putchar(' ');
+        Screen::gotoXY(left + width + 1, top + i + 1);
+        putchar(' ');
+        if (i == height-1)
+        {
+            Screen::gotoXY(left, top + i + 1);
+            putchar('-');
+        }
+    }
+
+    for (int i = 0; i < width; ++i) putchar('-');
+    putchar('-');
+}
+
 void Menu::playStandardMode() {
     Screen::clearConsole();
     StandardMode game(size_n, size_m, 20, 3);
@@ -174,7 +176,7 @@ void Menu::playChallengeMode() {
 
 void Menu::menuController() {
     Screen::playSound("audio/menu_sound.wav");
-    displayMenuBackground();
+    displayMenuBackground(true);
     displayOptionText();
 
     bool in_menu = true;
@@ -212,7 +214,7 @@ void Menu::menuController() {
 }
 
 void Menu::loadMenuAssets(const std::string &path, std::string *&assets) {
-    std::fstream bg(path, std::fstream::in);
+    std::fstream bg(path, std::ios::in);
 
     for (int idx = 0; !bg.eof(); ++idx) {
         getline(bg, assets[idx]);
@@ -221,17 +223,14 @@ void Menu::loadMenuAssets(const std::string &path, std::string *&assets) {
     bg.close();
 }
 
-void Menu::displayMenuBackground() {
+void Menu::displayMenuBackground(bool is_flash) {
     Screen::setConsoleColor(BLACK, BLACK);
     Screen::clearConsole();
     loadMenuAssets("assets/game_title.txt", game_title);
-    loadMenuAssets("assets/menu_option.txt", menu_option);
-    loadMenuAssets("assets/pikachu.txt", pikachu_asset);
-    loadMenuAssets("assets/bulbasaur.txt", bulbasaur_asset);
 
     int color[] = { LIGHT_AQUA, AQUA, LIGHT_BLUE, BLUE, LIGHT_PURPLE, PURPLE, YELLOW};
 
-	int loop = 14, colorCount = 0, padding_left = 33, padding_top = 1;
+	int loop = (is_flash == true ? 14 : 1), colorCount = (is_flash == true ? 0 : 6), padding_left = 33, padding_top = 1;
 	while (loop--) {
 		Screen::setConsoleColor(BLACK, color[colorCount % 7]);
         Screen::gotoXY(padding_left, padding_top);
@@ -242,9 +241,14 @@ void Menu::displayMenuBackground() {
 		Sleep(100);
 		colorCount++;
 	}
+}
 
+void Menu::displayOptionText() {
+    loadMenuAssets("assets/pikachu.txt", pikachu_asset);
+    loadMenuAssets("assets/bulbasaur.txt", bulbasaur_asset);
+    loadMenuAssets("assets/menu_option.txt", menu_option);
     Screen::setConsoleColor(BLACK, WHITE);
-    padding_left = 50, padding_top = 15;
+    int padding_left = 50, padding_top = 15;
     for (int i = 0;i < 17; ++i) {
         Screen::gotoXY(padding_left, padding_top + i);
         std::cout<<menu_option[i]<<"\n";
@@ -263,11 +267,9 @@ void Menu::displayMenuBackground() {
         Screen::gotoXY(padding_left, padding_top + i);
         std::cout<<bulbasaur_asset[i]<<"\n";
     }
-}
 
-void Menu::displayOptionText() {
     Screen::setConsoleColor(BLACK, WHITE);
-    int padding_left = 59, padding_top = 18;
+    padding_left = 59, padding_top = 18;
     for (int i = 0;i < option_slot; ++i) {
         Screen::gotoXY(padding_left, padding_top + i * 2);
         std::cout<<options[i];

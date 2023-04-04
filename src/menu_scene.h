@@ -8,6 +8,7 @@
 #include "standard_mode.h"
 #include "difficult_mode.h"
 #include "challenge_mode.h"
+#include "player.h"
 
 struct Menu {
     const std::string options[6] = {"Standard Mode", "Difficult Mode", "Challenge Mode", "Tutorial", "Leaderboard", "Exit"};
@@ -30,7 +31,12 @@ struct Menu {
     void playChallengeMode();
     void menuController();
     void loadMenuAssets(const std::string &, std::string *&);
-    void displayMenuBackground();
+    void displayMenuBackground(bool);
+    void displayInformationBoard(const int, const int, const int, const int);
+
+    void loadUserData();
+    void loginMenu();
+    void registerMenu();
 
     void changeOption(int);
     void selectOption();
