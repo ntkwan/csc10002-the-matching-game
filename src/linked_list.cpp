@@ -33,9 +33,9 @@ void LinkedList::addHead(Cell* _node) {
     head = new_node;
 }
 
-void LinkedList::addTail(Cell* _node, bool is_added) {
+void LinkedList::addTail(Cell* _node) {
     Cell* new_node = createNode(_node);
-    if (is_added == true) ++list_size;
+    ++list_size;
 
     if (isEmpty() == true) {
         head = tail = new_node;
@@ -48,6 +48,7 @@ void LinkedList::addTail(Cell* _node, bool is_added) {
 }
 
 void LinkedList::removeHead() {
+    --list_size;
     if (isEmpty() == true) return;
 
     if (head->next == nullptr) {
@@ -64,6 +65,7 @@ void LinkedList::removeHead() {
 }
 
 void LinkedList::removeTail() {
+    --list_size;
     if (isEmpty() == true) return;
 
     if (head->next == nullptr) {

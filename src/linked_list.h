@@ -19,7 +19,7 @@ struct LinkedList {
     Cell* getPos(int);
 
     void addHead(Cell*);
-    void addTail(Cell*, bool);
+    void addTail(Cell*);
     void removeHead();
     void removeTail();
     void removePos(int);

@@ -151,9 +151,8 @@ void DifficultMode::deleteCell() {
                 int y = first_cell.second;
                 Cell* dummy_node = new Cell(' ', DELETED, TableObject->getXInConsole(x), TableObject->getYInConsole(y), x, y);
 
-                TableObject->table_data[first_cell.second].addTail(dummy_node, false);
+                TableObject->table_data[first_cell.second].addTail(dummy_node);
             }
-            TableObject->table_data[first_cell.second].list_size -= 2;
         } else {
 
             for (auto cell : locked_list) {
@@ -164,8 +163,7 @@ void DifficultMode::deleteCell() {
                 int y = cell.second;
                 Cell* dummy_node = new Cell(' ', DELETED, TableObject->getXInConsole(x), TableObject->getYInConsole(y), x, y);
 
-                TableObject->table_data[cell.second].addTail(dummy_node, false);
-                TableObject->table_data[cell.second].list_size--;
+                TableObject->table_data[cell.second].addTail(dummy_node);
             }
         }
 
@@ -220,12 +218,10 @@ void DifficultMode::unselectCell() {
     cell_coord_y = TableObject->getYInConsole(cell_pos_y);
     Screen::gotoXY(cell_coord_x, cell_coord_y);
 
-    int cell_state = getCellState(cell_pos_x, cell_pos_y);
-
-    if (cell_state == LOCKED) {
+    if (getCellState(cell_pos_x, cell_pos_y) == LOCKED) {
         Screen::setConsoleColor(YELLOW, BLACK);
     } else {
-        if (cell_state == DELETED || cell_state == -1) {
+        if (getCellState(cell_pos_x, cell_pos_y) == DELETED) {
             Screen::setConsoleColor(WHITE, RED);
         } else {
             Screen::setConsoleColor(WHITE, BLACK);
@@ -236,7 +232,7 @@ void DifficultMode::unselectCell() {
         for (int current_coord_x = cell_coord_x - 3; current_coord_x <= cell_coord_x + 3; ++current_coord_x) {
             Screen::gotoXY(current_coord_x, current_coord_y);
 
-            if (cell_state == DELETED || cell_state == -1) {
+            if (getCellState(cell_pos_x, cell_pos_y) == DELETED) {
                 putchar(GameObject->table_image[current_coord_y - padding_top][current_coord_x - padding_left]);
                 continue;
             }
@@ -256,7 +252,7 @@ void DifficultMode::unselectCell() {
 void DifficultMode::lockCell() {
     int cell_state = getCellState(cell_pos_x, cell_pos_y);
 
-    if (cell_state == DELETED || cell_state == -1) return;
+    if (cell_state == DELETED) return;
 
     if (locked_list.empty() == false && cell_pos_x == locked_list[0].first && cell_pos_y == locked_list[0].second) {
         locked_list.pop_back();
@@ -391,12 +387,25 @@ bool DifficultMode::isCharacterEqual(std::pair<int,int> first_cell, std::pair<in
 }
 
 bool DifficultMode::checkIMatching(std::pair<int, int> first_cell, std::pair<int,int> second_cell) {
-	if (first_cell.second == second_cell.second && abs(first_cell.first - second_cell.first) == 1) return true;
-
 	if (first_cell.first == second_cell.first) {
-		if (second_cell.second < first_cell.second) swap(first_cell, second_cell);
-		for (int current_pos_y = first_cell.second + 1; current_pos_y < second_cell.second; ++current_pos_y){
-			if (TableObject->table_data[current_pos_y].list_size >= first_cell.first + 1) return false;
+		int start_point = first_cell.second;
+		int end_point = second_cell.second;
+		if (start_point > end_point) swapPoints(start_point, end_point);
+
+		for (int current_pos_y = start_point+1; current_pos_y < end_point; ++current_pos_y) {
+			if (getCellState(first_cell.first, current_pos_y) != DELETED) return false;
+		}
+
+		return true;
+	}
+
+	if (first_cell.second == second_cell.second) {
+		int start_point = first_cell.first;
+		int end_point = second_cell.first;
+		if (start_point > end_point) swapPoints(start_point, end_point);
+
+		for (int current_pos_x = start_point+1; current_pos_x < end_point; ++current_pos_x) {
+			if (getCellState(current_pos_x, first_cell.second) != DELETED) return false;
 		}
 
 		return true;
