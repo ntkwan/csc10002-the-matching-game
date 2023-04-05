@@ -12,10 +12,17 @@ struct ChallengeMode {
         int table_size_n;
         int table_size_m;
 
-        ChallengeMode(int, int, int, int);
+        GameScene *GameObject;
+        Player PlayerObject;
+        Player *user_list;
+        int number_user;
+        Player current_play;
+        int mistake = 3;
 
-        int startGame();
-        void loopGame();
+        ChallengeMode(int, int, int, int, Player, int, Player *);
+
+        std::pair<int, bool> startGame();
+        Player loopGame();
 };
 
 

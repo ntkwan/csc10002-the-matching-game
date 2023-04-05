@@ -10,7 +10,7 @@
 struct DifficultMode {
     int padding_left = 0;
     int padding_top = 0;
-
+    int mode;
     int table_size_n;
     int table_size_m;
     int remained_pairs;
@@ -27,9 +27,9 @@ struct DifficultMode {
     Player *user_list;
     int number_user;
     Player current_play;
-    int mistake = 10;
+    int mistake;
 
-    DifficultMode(int, int, int, int, Player, int, Player *);
+    DifficultMode(int, int, int, int, Player, int, Player *, int);
     ~DifficultMode();
 
     void initTable();
@@ -54,7 +54,7 @@ struct DifficultMode {
     void moveLeft();
     void moveRight();
 
-    Player startGame();
+    std::pair<Player, bool> startGame();
 
     void displayTableData();
 

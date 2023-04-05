@@ -8,6 +8,7 @@
 
 #define STANDARD_MODE 20
 #define DIFFICULT_MODE 42
+#define CHALLENGE_MODE 100
 
 const int CELL_LENGTH = 8;
 const int CELL_HEIGHT = 4;

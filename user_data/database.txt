@@ -1,2 +1,9 @@
 quan/1234/standard/20/1
 vi/12345/null/0/0
+quan/1234/challenge/22/2
+quan/1234/challenge/0/1
+quan/1234/standard/0/1
+quan/1234/standard/0/1
+quan/1234/standard/0/0
+quan/1234/challenge/0/1
+quan/1234/challenge/3/1

@@ -157,21 +157,22 @@ void Menu::displayInformationBoard(const int left, const int top, const int widt
     putchar('-');
 }
 
-Player Menu::playStandardMode() {
+std::pair<Player, bool> Menu::playStandardMode() {
     Screen::clearConsole();
-    StandardMode game(size_n, size_m, 20, 3, IMenu.user, IMenu.number_user, IMenu.user_list);
+    StandardMode game(size_n, size_m, 20, 3, IMenu.user, IMenu.number_user, IMenu.user_list, STANDARD_MODE);
     return game.startGame();
 }
 
-Player Menu::playDifficultMode() {
+std::pair<Player, bool> Menu::playDifficultMode() {
     Screen::clearConsole();
-    DifficultMode game(size_n, size_m, 20, 3, IMenu.user, IMenu.number_user, IMenu.user_list);
+    DifficultMode game(size_n, size_m, 20, 3, IMenu.user, IMenu.number_user, IMenu.user_list, DIFFICULT_MODE);
     return game.startGame();
 }
 
-void Menu::playChallengeMode() {
-    ChallengeMode game(0, 0, 20, 3);
-    game.loopGame();
+Player Menu::playChallengeMode() {
+    Screen::clearConsole();
+    ChallengeMode game(0, 0, 20, 3, IMenu.user, IMenu.number_user, IMenu.user_list);
+    return game.loopGame();
 }
 
 bool Menu::menuController(bool is_login) {
@@ -185,6 +186,7 @@ bool Menu::menuController(bool is_login) {
 
     displayOptionText();
     Player current_play;
+    std::pair<Player, bool> game_state;
     bool in_menu = true;
     while (in_menu) {
         switch(Screen::getConsoleInput()) {
@@ -202,10 +204,12 @@ bool Menu::menuController(bool is_login) {
                         while (inputTableSize(STANDARD_MODE) == false);
                         Screen::showCursor(false);
                         IMenu.loadUserData();
-                        current_play = playStandardMode();
+                        game_state = playStandardMode();
+                        current_play = game_state.first;
                         while (EMenu.displayGameOverScreen(36, 10, current_play) == true) {
                             IMenu.loadUserData();
-                            current_play = playStandardMode();
+                            game_state = playStandardMode();
+                            current_play = game_state.first;
                         }
                         return true;
                         break;
@@ -214,17 +218,25 @@ bool Menu::menuController(bool is_login) {
                         while (inputTableSize(DIFFICULT_MODE) == false);
                         Screen::showCursor(false);
                         IMenu.loadUserData();
-                        current_play = playDifficultMode();
+                        game_state = playDifficultMode();
+                        current_play = game_state.first;
                         while (EMenu.displayGameOverScreen(36, 10, current_play) == true) {
                             IMenu.loadUserData();
-                            current_play = playDifficultMode();
+                            game_state = playDifficultMode();
+                            current_play = game_state.first;
                         }
                         return true;
                         break;
                     case 2:
                         Screen::playSound("audio/click.wav");
                         Screen::showCursor(false);
-                        playChallengeMode();
+                        IMenu.loadUserData();
+                        current_play = playChallengeMode();
+                        while (EMenu.displayGameOverScreen(36, 10, current_play) == true) {
+                            IMenu.loadUserData();
+                            current_play = playChallengeMode();
+                        }
+                        return true;
                         break;
                     case 5:
                         in_menu = false;

@@ -11,7 +11,7 @@
 struct StandardMode {
     int padding_left = 0;
     int padding_top = 0;
-
+    int mode;
     int table_size_n;
     int table_size_m;
     int remained_pairs;
@@ -28,9 +28,9 @@ struct StandardMode {
     Player *user_list;
     int number_user;
     Player current_play;
-    int mistake = 10;
+    int mistake;
 
-    StandardMode(int, int, int, int, Player, int, Player *);
+    StandardMode(int, int, int, int, Player, int, Player *, int);
     ~StandardMode();
 
     void initTable();
@@ -53,7 +53,7 @@ struct StandardMode {
     void moveLeft();
     void moveRight();
 
-    Player startGame();
+    std::pair<Player, bool> startGame();
 
     void displayTableData();
 

@@ -31,9 +31,9 @@ struct Menu {
     ~Menu();
 
     bool inputTableSize(int);
-    Player playStandardMode();
-    Player playDifficultMode();
-    void playChallengeMode();
+    std::pair<Player, bool> playStandardMode();
+    std::pair<Player, bool> playDifficultMode();
+    Player playChallengeMode();
     bool menuController(bool);
     void loadMenuAssets(const std::string &, std::string *&);
     void displayMenuBackground(bool);

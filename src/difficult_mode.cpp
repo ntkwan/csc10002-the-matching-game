@@ -1,20 +1,21 @@
 #include "difficult_mode.h"
 
-DifficultMode::DifficultMode(int _table_size_n, int _table_size_m, int _padding_left, int _padding_top, Player _player, int _number_user, Player *_user_list) {
+DifficultMode::DifficultMode(int _table_size_n, int _table_size_m, int _padding_left, int _padding_top, Player _player, int _number_user, Player *_user_list, int _mode) {
     padding_left = _padding_left;
     padding_top = _padding_top;
-
+    mode = _mode;
     TableObject = new TableLL(_table_size_n, _table_size_m, padding_left, padding_top);
     GameObject = new GameScene(_table_size_n, _table_size_m, padding_left, padding_top);
     PlayerObject = new Player(_player);
     number_user = _number_user;
     user_list = _user_list;
+    mistake = (mode == CHALLENGE_MODE ? 3 : 10);
 
     current_play.username = PlayerObject->username;
     current_play.password = PlayerObject->password;
-    current_play.gamemode = "difficult";
-    current_play.point = 0;
-    current_play.lvl = 0;
+    current_play.gamemode = (PlayerObject->gamemode == "null" ? "difficult" : PlayerObject->gamemode);
+    current_play.point = (mode == CHALLENGE_MODE ? PlayerObject->point : 0);
+    current_play.lvl = (mode == CHALLENGE_MODE ? PlayerObject->lvl : 0);
 
     table_size_n = _table_size_n;
     table_size_m = _table_size_m;
@@ -323,7 +324,7 @@ void DifficultMode::initTable() {
     GameObject->displayTableBorder();
     GameObject->loadTableBackground("assets/charmander.txt");
     GameObject->displayUserInterface(85, 0, DIFFICULT_MODE);
-    GameObject->loadUserData(DIFFICULT_MODE, number_user, user_list, PlayerObject);
+    GameObject->loadUserData(mode, number_user, user_list, PlayerObject);
     displayTableData();
 }
 
@@ -340,7 +341,7 @@ void DifficultMode::displayTableData() {
     Screen::setConsoleColor(WHITE, BLACK);
 }
 
-Player DifficultMode::startGame() {
+std::pair<Player, bool> DifficultMode::startGame() {
     Screen::clearConsole();
     initTable();
     selectCell(cell_pos_x, cell_pos_y, GREEN);
@@ -410,7 +411,10 @@ Player DifficultMode::startGame() {
     PlayerObject->point = std::max(PlayerObject->point, current_play.point);
     GameObject->displayUserAttributes(107, 3, PlayerObject, current_play, mistake);
 
-    ++current_play.lvl;
+    if (end_loop == true) {
+        if (mode == CHALLENGE_MODE) return std::make_pair(current_play, true);
+        ++current_play.lvl;
+    }
 
     if (game_valid == true) {
         setCellState(cell_pos_x, cell_pos_y, EMPTY_BOARD);
@@ -419,10 +423,11 @@ Player DifficultMode::startGame() {
     }
 
 
-    GameObject->saveUserData(number_user, current_play);
+    if (mode != CHALLENGE_MODE) GameObject->saveUserData(number_user, current_play);
     Screen::setConsoleColor(WHITE, BLACK);
     Sleep(1500);
-return current_play;
+
+return {current_play, mistake <= 0};
 }
 
 
