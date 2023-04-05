@@ -32,6 +32,9 @@ StandardMode::~StandardMode() {
 
     delete GameObject;
     GameObject = nullptr;
+
+    delete PlayerObject;
+    PlayerObject = nullptr;
 }
 
 int StandardMode::getCellState(int _cell_pos_x, int _cell_pos_y) const { return TableObject->table_data[_cell_pos_x][_cell_pos_y].getCellState(); }

@@ -310,7 +310,6 @@ void GameScene::loadUserData(int _mode, int n, Player *user_list, Player *&user)
     for (int i = 0; i < n; ++i) {
         if (user_list[i].username == user->username && user_list[i].password == user->password) {
             if (_gamemode == user_list[i].gamemode) {
-                Screen::gotoXY(75, 4);
                 user->lvl = std::max(user->lvl, user_list[i].lvl);
                 user->point = std::max(user->point, user_list[i].point);
             }

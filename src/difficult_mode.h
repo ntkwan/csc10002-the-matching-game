@@ -23,7 +23,13 @@ struct DifficultMode {
     TableLL* TableObject;
     GameScene *GameObject;
 
-    DifficultMode(int, int, int, int);
+    Player *PlayerObject;
+    Player *user_list;
+    int number_user;
+    Player current_play;
+    int mistake = 10;
+
+    DifficultMode(int, int, int, int, Player, int, Player *);
     ~DifficultMode();
 
     void initTable();
@@ -48,7 +54,7 @@ struct DifficultMode {
     void moveLeft();
     void moveRight();
 
-    void startGame();
+    Player startGame();
 
     void displayTableData();
 

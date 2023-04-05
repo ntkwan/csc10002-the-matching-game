@@ -32,9 +32,9 @@ struct Menu {
 
     bool inputTableSize(int);
     Player playStandardMode();
-    void playDifficultMode();
+    Player playDifficultMode();
     void playChallengeMode();
-    void menuController(bool);
+    bool menuController(bool);
     void loadMenuAssets(const std::string &, std::string *&);
     void displayMenuBackground(bool);
     void displayInformationBoard(const int, const int, const int, const int);

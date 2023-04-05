@@ -163,10 +163,10 @@ Player Menu::playStandardMode() {
     return game.startGame();
 }
 
-void Menu::playDifficultMode() {
+Player Menu::playDifficultMode() {
     Screen::clearConsole();
-    DifficultMode game(size_n, size_m, 20, 3);
-    game.startGame();
+    DifficultMode game(size_n, size_m, 20, 3, IMenu.user, IMenu.number_user, IMenu.user_list);
+    return game.startGame();
 }
 
 void Menu::playChallengeMode() {
@@ -174,7 +174,7 @@ void Menu::playChallengeMode() {
     game.loopGame();
 }
 
-void Menu::menuController(bool is_login) {
+bool Menu::menuController(bool is_login) {
     if (is_login == false) {
         while (IMenu.menuController() == false);
         Screen::playSound("audio/menu_sound.wav");
@@ -201,18 +201,25 @@ void Menu::menuController(bool is_login) {
                         Screen::playSound("audio/click.wav");
                         while (inputTableSize(STANDARD_MODE) == false);
                         Screen::showCursor(false);
+                        IMenu.loadUserData();
                         current_play = playStandardMode();
                         while (EMenu.displayGameOverScreen(36, 10, current_play) == true) {
                             IMenu.loadUserData();
                             current_play = playStandardMode();
                         }
-                        menuController(true);
+                        return true;
                         break;
                     case 1:
                         Screen::playSound("audio/click.wav");
                         while (inputTableSize(DIFFICULT_MODE) == false);
                         Screen::showCursor(false);
-                        playDifficultMode();
+                        IMenu.loadUserData();
+                        current_play = playDifficultMode();
+                        while (EMenu.displayGameOverScreen(36, 10, current_play) == true) {
+                            IMenu.loadUserData();
+                            current_play = playDifficultMode();
+                        }
+                        return true;
                         break;
                     case 2:
                         Screen::playSound("audio/click.wav");
@@ -225,6 +232,8 @@ void Menu::menuController(bool is_login) {
                 }
         }
     }
+
+return false;
 }
 
 void Menu::loadMenuAssets(const std::string &path, std::string *&assets) {
