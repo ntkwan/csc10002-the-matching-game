@@ -280,6 +280,8 @@ void GameScene::displayUserAttributes(int _padding_left, int _padding_top, Playe
     Screen::gotoXY(_padding_left, _padding_top);
     std::cout<<user->username;
     Screen::gotoXY(_padding_left, _padding_top + 2);
+    for (int i = 0; i < 10; ++i) std::cout<<" ";
+    Screen::gotoXY(_padding_left, _padding_top + 2);
     std::cout<<current_play.point;
     Screen::gotoXY(_padding_left, _padding_top + 3);
     std::cout<<user->point;

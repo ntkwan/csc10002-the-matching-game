@@ -274,7 +274,7 @@ void StandardMode::startGame() {
                     lockCell();
                     break;
             case 7:
-                    if (current_play.point > 0) {
+                    if (current_play.point-5 >= 0) {
                         current_play.point -= 5;
                         Screen::playSound("audio/hint.wav");
                         if (findValidPairs(true) == false) {
@@ -285,7 +285,7 @@ void StandardMode::startGame() {
                     }
                     break;
             case 8:
-                    if (current_play.point > 0) {
+                    if (current_play.point-9 >= 0) {
                         current_play.point -= 9;
                         Screen::playSound("audio/shuffle.wav");
                         TableObject->shuffleTableData();
