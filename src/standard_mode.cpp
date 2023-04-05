@@ -242,6 +242,8 @@ void StandardMode::displayTableData() {
 std::pair<Player, bool> StandardMode::startGame() {
     Screen::clearConsole();
     initTable();
+    while (findValidPairs(false) == false) TableObject->shuffleTableData();
+
     selectCell(cell_pos_x, cell_pos_y, GREEN);
     bool game_valid = true;
     while (end_loop == false && mistake > 0 && current_play.point >= 0 && remained_pairs > 0) {
