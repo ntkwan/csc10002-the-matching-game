@@ -256,20 +256,20 @@ Player StandardMode::startGame() {
                     end_loop = true;
                     break;
             case 2:
-                    moveUp();
                     Screen::playSound("audio/ingame_cursor.wav");
+                    moveUp();
                     break;
             case 3:
-                    moveLeft();
                     Screen::playSound("audio/ingame_cursor.wav");
+                    moveLeft();
                     break;
             case 4:
-                    moveRight();
                     Screen::playSound("audio/ingame_cursor.wav");
+                    moveRight();
                     break;
             case 5:
-                    moveDown();
                     Screen::playSound("audio/ingame_cursor.wav");
+                    moveDown();
                     break;
             case 6:
                     Screen::playSound("audio/click.wav");
