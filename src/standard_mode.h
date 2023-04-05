@@ -53,7 +53,7 @@ struct StandardMode {
     void moveLeft();
     void moveRight();
 
-    void startGame();
+    Player startGame();
 
     void displayTableData();
 

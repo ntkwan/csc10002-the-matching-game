@@ -31,7 +31,7 @@ struct Menu {
     ~Menu();
 
     bool inputTableSize(int);
-    void playStandardMode();
+    Player playStandardMode();
     void playDifficultMode();
     void playChallengeMode();
     void menuController(bool);

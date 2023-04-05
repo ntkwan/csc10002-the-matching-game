@@ -157,10 +157,10 @@ void Menu::displayInformationBoard(const int left, const int top, const int widt
     putchar('-');
 }
 
-void Menu::playStandardMode() {
+Player Menu::playStandardMode() {
     Screen::clearConsole();
     StandardMode game(size_n, size_m, 20, 3, IMenu.user, IMenu.number_user, IMenu.user_list);
-    game.startGame();
+    return game.startGame();
 }
 
 void Menu::playDifficultMode() {
@@ -184,7 +184,7 @@ void Menu::menuController(bool is_login) {
     }
 
     displayOptionText();
-
+    Player current_play;
     bool in_menu = true;
     while (in_menu) {
         switch(Screen::getConsoleInput()) {
@@ -201,10 +201,11 @@ void Menu::menuController(bool is_login) {
                         Screen::playSound("audio/click.wav");
                         while (inputTableSize(STANDARD_MODE) == false);
                         Screen::showCursor(false);
-                        do {
+                        current_play = playStandardMode();
+                        while (EMenu.displayGameOverScreen(36, 10, current_play) == true) {
                             IMenu.loadUserData();
-                            playStandardMode();
-                        } while (EMenu.displayGameOverScreen(36, 10) == true);
+                            current_play = playStandardMode();
+                        }
                         menuController(true);
                         break;
                     case 1:

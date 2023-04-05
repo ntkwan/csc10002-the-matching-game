@@ -235,7 +235,7 @@ void StandardMode::displayTableData() {
     Screen::setConsoleColor(WHITE, BLACK);
 }
 
-void StandardMode::startGame() {
+Player StandardMode::startGame() {
     Screen::clearConsole();
     initTable();
     selectCell(cell_pos_x, cell_pos_y, GREEN);
@@ -316,6 +316,8 @@ void StandardMode::startGame() {
 
     GameObject->saveUserData(number_user, current_play);
     Screen::setConsoleColor(WHITE, BLACK);
+    Sleep(1500);
+return current_play;
 }
 
 bool StandardMode::isCharacterEqual(std::pair<int,int> first_cell, std::pair<int, int> second_cell) { return (getCellValue(first_cell.first, first_cell.second) == getCellValue(second_cell.first, second_cell.second)); }

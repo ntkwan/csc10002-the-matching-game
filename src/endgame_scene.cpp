@@ -1,6 +1,6 @@
 #include "endgame_scene.h"
 
-bool EndgameMenu::displayGameOverScreen(int pd_left, int pd_top) {
+bool EndgameMenu::displayGameOverScreen(int pd_left, int pd_top, Player current_play) {
     Screen::setConsoleColor(BLACK, BLACK);
     Screen::clearConsole();
     Screen::setConsoleColor(BLACK, RED);
@@ -22,12 +22,20 @@ bool EndgameMenu::displayGameOverScreen(int pd_left, int pd_top) {
         std::cout<<title[i];
     }
 
+    int padding_left = 66, padding_top = 18;
+    Screen::setConsoleColor(BLACK, YELLOW);
+    Screen::gotoXY(padding_left + 3, padding_top);
+    std::cout<<"POINTS: "<<current_play.point;
+    Screen::gotoXY(padding_left, padding_top + 1);
+    std::cout<<"LEVELS PASSED: "<<current_play.lvl;
+
     Screen::setConsoleColor(BLACK, WHITE);
-    int padding_left = 66, padding_top = 20;
+    padding_left = 66, padding_top = 22;
     for (int i = 0;i < option_slot; ++i) {
         Screen::gotoXY(padding_left, padding_top + i * 2);
         std::cout<<options[i];
     }
+
     selectOption();
 
     bool in_menu = true;
@@ -52,6 +60,7 @@ bool EndgameMenu::displayGameOverScreen(int pd_left, int pd_top) {
         }
     }
 
+
     delete[] title;
     title = nullptr;
 }
@@ -67,7 +76,7 @@ void EndgameMenu::changeOption(int _direction) {
 }
 
 void EndgameMenu::selectOption() {
-    int padding_left = 66, padding_top = 20;
+    int padding_left = 66, padding_top = 22;
     Screen::setConsoleColor(BLACK, GREEN);
 
     Screen::gotoXY(padding_left-3, padding_top+current_option*2);
@@ -81,7 +90,7 @@ void EndgameMenu::selectOption() {
 }
 
 void EndgameMenu::unselectOption() {
-    int padding_left = 66, padding_top = 20;
+    int padding_left = 66, padding_top = 22;
     Screen::setConsoleColor(BLACK, WHITE);
 
     Screen::gotoXY(padding_left-3, padding_top+current_option*2);
