@@ -274,6 +274,12 @@ void GameScene::displayNotification(int _padding_left, int _padding_top, const s
     for (size_t i = 0; i < text.size(); ++i) std::cout<<" ";
 }
 
+void GameScene::displayNotification(int _padding_left, int _padding_top, const std::string &text) {
+    Screen::setConsoleColor(WHITE, GREEN);
+    Screen::gotoXY(_padding_left, _padding_top);
+    std::cout<<text;
+}
+
 void GameScene::displayUserAttributes(int _padding_left, int _padding_top, Player *user, Player current_play, int mistake) {
     Screen::setConsoleColor(WHITE, PURPLE);
 
@@ -304,6 +310,7 @@ void GameScene::loadUserData(int _mode, int n, Player *user_list, Player *&user)
     for (int i = 0; i < n; ++i) {
         if (user_list[i].username == user->username && user_list[i].password == user->password) {
             if (_gamemode == user_list[i].gamemode) {
+                Screen::gotoXY(75, 4);
                 user->lvl = std::max(user->lvl, user_list[i].lvl);
                 user->point = std::max(user->point, user_list[i].point);
             }

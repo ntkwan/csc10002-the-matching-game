@@ -3,6 +3,6 @@
 int main() {
     Screen::setUpConsole(18);
     Menu menu;
-    menu.menuController();
+    menu.menuController(false);
     Screen::clearConsole();
 }

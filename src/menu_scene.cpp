@@ -174,11 +174,15 @@ void Menu::playChallengeMode() {
     game.loopGame();
 }
 
-void Menu::menuController() {
-    while (IMenu.menuController() == false);
+void Menu::menuController(bool is_login) {
+    if (is_login == false) {
+        while (IMenu.menuController() == false);
+        Screen::playSound("audio/menu_sound.wav");
+        displayMenuBackground(true);
+    } else {
+        displayMenuBackground(false);
+    }
 
-    Screen::playSound("audio/menu_sound.wav");
-    displayMenuBackground(true);
     displayOptionText();
 
     bool in_menu = true;
@@ -197,7 +201,11 @@ void Menu::menuController() {
                         Screen::playSound("audio/click.wav");
                         while (inputTableSize(STANDARD_MODE) == false);
                         Screen::showCursor(false);
-                        playStandardMode();
+                        do {
+                            IMenu.loadUserData();
+                            playStandardMode();
+                        } while (EMenu.displayGameOverScreen(36, 10) == true);
+                        menuController(true);
                         break;
                     case 1:
                         Screen::playSound("audio/click.wav");
@@ -209,6 +217,9 @@ void Menu::menuController() {
                         Screen::playSound("audio/click.wav");
                         Screen::showCursor(false);
                         playChallengeMode();
+                        break;
+                    case 5:
+                        in_menu = false;
                         break;
                 }
         }

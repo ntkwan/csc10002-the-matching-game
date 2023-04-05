@@ -54,6 +54,9 @@ void IdentifyMenu::displayMenuBackground(bool is_flash) {
 		Sleep(100);
 		colorCount++;
 	}
+
+	delete[] game_title;
+	game_title = nullptr;
 }
 
 void IdentifyMenu::unselectOption() {
@@ -233,6 +236,8 @@ bool IdentifyMenu::loginMenu() {
     displayInformationBoard(56, 20, 25, 7);
     Screen::gotoXY(45, 18);
     std::cout<<"USERNAME AND PASSWORD MUST BE LESS THAN 10 CHARACTERS";
+    Screen::gotoXY(55, 19);
+    std::cout<<"AND NO BACKSPACES IN THE BACK";
     Screen::gotoXY(58, 22);
     std::cout<<"USERNAME: ";
     Screen::gotoXY(58, 25);
@@ -244,7 +249,7 @@ bool IdentifyMenu::loginMenu() {
     for (int i = 0; i < 100; ++i) std::cout<<" ";
 
     auto validateInput = [](const std::string &text) {
-        if (text.size() == 0 || text.size() > 10) return false;
+        if (text.size() == 0 || text.size() > 10 || text.back() == ' ') return false;
 
         return true;
     };
@@ -300,12 +305,16 @@ bool IdentifyMenu::loginMenu() {
 
     Screen::gotoXY(40, 18);
     for (int i = 0; i < 100; ++i) std::cout<<" ";
+    Screen::gotoXY(40, 19);
+    for (int i = 0; i < 100; ++i) std::cout<<" ";
 }
 
 void IdentifyMenu::registerMenu() {
     displayInformationBoard(50, 20, 33, 10);
-    Screen::gotoXY(45, 18);
+    Screen::gotoXY(40, 18);
     std::cout<<"USERNAME AND PASSWORD MUST BE LESS THAN 10 CHARACTERS";
+    Screen::gotoXY(53, 19);
+    std::cout<<"AND NO BACKSPACES IN THE BACK";
     Screen::gotoXY(50, 22);
     std::cout<<"USERNAME: ";
     Screen::gotoXY(50, 25);
@@ -321,7 +330,7 @@ void IdentifyMenu::registerMenu() {
     for (int i = 0; i < 100; ++i) std::cout<<" ";
 
     auto validateInput = [](const std::string &text) {
-        if (text.size() == 0 || text.size() > 10) return false;
+        if (text.size() == 0 || text.size() > 10 || text.back() == ' ') return false;
 
         return true;
     };
@@ -400,6 +409,8 @@ void IdentifyMenu::registerMenu() {
 
     Screen::showCursor(false);
     Screen::gotoXY(40, 18);
+    for (int i = 0; i < 100; ++i) std::cout<<" ";
+    Screen::gotoXY(40, 19);
     for (int i = 0; i < 100; ++i) std::cout<<" ";
     Screen::gotoXY(68, 22);
     for (int i = 0; i < 100; ++i) std::cout<<" ";

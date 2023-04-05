@@ -9,6 +9,7 @@
 #include "difficult_mode.h"
 #include "challenge_mode.h"
 #include "identify_scene.h"
+#include "endgame_scene.h"
 #include "player.h"
 
 struct Menu {
@@ -24,6 +25,7 @@ struct Menu {
     int size_m;
 
     IdentifyMenu IMenu;
+    EndgameMenu EMenu;
 
     Menu();
     ~Menu();
@@ -32,7 +34,7 @@ struct Menu {
     void playStandardMode();
     void playDifficultMode();
     void playChallengeMode();
-    void menuController();
+    void menuController(bool);
     void loadMenuAssets(const std::string &, std::string *&);
     void displayMenuBackground(bool);
     void displayInformationBoard(const int, const int, const int, const int);

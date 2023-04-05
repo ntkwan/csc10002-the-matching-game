@@ -14,3 +14,5 @@ obj/Debug/src/linked_list_table.o
 obj/Debug/src/difficult_mode.o
 obj/Debug/src/challenge_mode.o
 obj/Debug/src/identify_scene.o
+obj/Debug/src/endgame_scene.o
+obj/Debug/src/player.o

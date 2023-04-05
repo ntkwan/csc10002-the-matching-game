@@ -239,13 +239,15 @@ void StandardMode::startGame() {
     Screen::clearConsole();
     initTable();
     selectCell(cell_pos_x, cell_pos_y, GREEN);
+    bool game_valid = true;
     while (end_loop == false && mistake > 0 && current_play.point >= 0 && remained_pairs > 0) {
 
         PlayerObject->point = std::max(PlayerObject->point, current_play.point);
         GameObject->displayUserAttributes(92, 3, PlayerObject, current_play, mistake);
 
         if (findValidPairs(false) == false) {
-            GameObject->displayNotification(80, 16, "RUN OUT OF MOVES, GAME ENDS", 1500);
+            GameObject->displayNotification(80, 16, "RUN OUT OF MOVES, GAME ENDS", 3000);
+            game_valid = false;
             break;
         }
 
@@ -300,22 +302,19 @@ void StandardMode::startGame() {
                     break;
         }
     }
+    PlayerObject->point = std::max(PlayerObject->point, current_play.point);
+    GameObject->displayUserAttributes(92, 3, PlayerObject, current_play, mistake);
 
     ++current_play.lvl;
 
-    setCellState(cell_pos_x, cell_pos_y, EMPTY_BOARD);
-    selectCell(cell_pos_x, cell_pos_y, WHITE);
-    GameObject->displayTableBackground();
-    {
-        GameObject->displayNotification(73, 16, "DO YOU WANT TO SAVE YOUR STATS? PRESS Y TO SAVE", 3000);
-        char ch = getch();
-        if (ch == 121 || ch == 89) {
-            GameObject->displayNotification(90, 16, "GAME SAVED", 1000);
-            GameObject->saveUserData(number_user, current_play);
-        } else {
-            GameObject->displayNotification(85, 16, "GAME WAS NOT SAVED!", 1000);
-        }
+    if (game_valid == true) {
+        setCellState(cell_pos_x, cell_pos_y, EMPTY_BOARD);
+        selectCell(cell_pos_x, cell_pos_y, WHITE);
+        GameObject->displayTableBackground();
     }
+
+
+    GameObject->saveUserData(number_user, current_play);
     Screen::setConsoleColor(WHITE, BLACK);
 }
 

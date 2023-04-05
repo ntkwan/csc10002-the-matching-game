@@ -30,7 +30,10 @@ struct GameScene {
     void displayTableBackground();
     void displayUserInterface(int, int, int);
     void displayInfomationBoard(int, int, int, int);
+
     void displayNotification(int, int, const std::string &, int);
+    void displayNotification(int, int, const std::string &);
+
     void displayUserAttributes(int, int, Player *, Player, int);
     void loadUserData(int, int, Player *, Player *&);
     void saveUserData(int, Player);
