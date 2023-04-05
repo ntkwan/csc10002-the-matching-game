@@ -239,7 +239,8 @@ bool Menu::menuController(bool is_login) {
                         return true;
                         break;
                     case 5:
-                        in_menu = false;
+                        Screen::clearConsole();
+                        exit(0);
                         break;
                 }
         }

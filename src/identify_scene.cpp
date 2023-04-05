@@ -146,6 +146,7 @@ bool IdentifyMenu::menuController() {
         switch(Screen::getConsoleInput()) {
             case 1:
                 Screen::clearConsole();
+                exit(0);
                 break;
             case 2:
                 changeOption(-1);
@@ -194,10 +195,13 @@ bool IdentifyMenu::menuController() {
                         }
                         return true;
                 } else {
-                        in_menu = false;
+                        Screen::clearConsole();
+                        exit(0);
                 }
         }
     }
+
+return false;
 }
 
 void IdentifyMenu::loadUserData() {
