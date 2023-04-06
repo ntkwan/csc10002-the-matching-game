@@ -122,11 +122,12 @@ void GameScene::displayUserInterface(int _padding_left, int _padding_top, int _m
         std::cout<<text_2;
     };
 
-    printIns("ARROWS", "MOVE", _padding_left + 5, 23);
+    printIns("ARROWS", "MOVE", _padding_left + 5, 24);
     printIns("ENTER", "SELECT CELL", _padding_left + 5, 25);
-    printIns("H", "MOVING SUGGESTIONS", _padding_left + 5, 27);
-    printIns("F", "SHUFFLE", _padding_left + 5, 29);
-    printIns("ESC", "EXIT THE GAME", _padding_left + 5, 31);
+    printIns("H", "MOVING SUGGESTIONS", _padding_left + 5, 26);
+    printIns("F", "SHUFFLE", _padding_left + 5, 27);
+    printIns("S", "SAVE THE GAME", _padding_left + 5, 28);
+    printIns("ESC", "EXIT THE GAME", _padding_left + 5, 29);
 
     if (_mode == STANDARD_MODE) {
         std::string *flowers = new std::string[20];
