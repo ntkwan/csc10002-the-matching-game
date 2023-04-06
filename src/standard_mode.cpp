@@ -1,21 +1,34 @@
 #include "standard_mode.h"
 
-StandardMode::StandardMode(int _table_size_n, int _table_size_m, int _padding_left, int _padding_top, Player _player, int _number_user, Player *_user_list, int _mode) {
+StandardMode::StandardMode(int _table_size_n, int _table_size_m, int _padding_left, int _padding_top,
+                           Player _player, int _number_user, Player *_user_list, Player *_current_play, Table *_TableObject, int _mode) {
     padding_left = _padding_left;
     padding_top = _padding_top;
     mode = _mode;
-    TableObject = new Table(_table_size_n, _table_size_m, padding_left, padding_top);
+    if (_TableObject == nullptr) TableObject = new Table(_table_size_n, _table_size_m, padding_left, padding_top);
+    else {
+            is_loaded = true;
+            TableObject = _TableObject;
+    }
     GameObject = new GameScene(_table_size_n, _table_size_m, padding_left, padding_top);
     PlayerObject = new Player(_player);
     number_user = _number_user;
     user_list = _user_list;
     mistake = (mode == CHALLENGE_MODE ? 3 : 10);
 
-    current_play.username = PlayerObject->username;
-    current_play.password = PlayerObject->password;
-    current_play.gamemode = (PlayerObject->gamemode == "null" ? "standard" : PlayerObject->gamemode);
-    current_play.point = (mode == CHALLENGE_MODE ? PlayerObject->point : 0);
-    current_play.lvl = (mode == CHALLENGE_MODE ? PlayerObject->lvl : 0);
+    if (_current_play == nullptr) {
+        current_play.username = PlayerObject->username;
+        current_play.password = PlayerObject->password;
+        current_play.gamemode = (PlayerObject->gamemode == "null" ? "standard" : PlayerObject->gamemode);
+        current_play.point = (mode == CHALLENGE_MODE ? PlayerObject->point : 0);
+        current_play.lvl = (mode == CHALLENGE_MODE ? PlayerObject->lvl : 0);
+    } else {
+        current_play.username = _current_play->username;
+        current_play.password = _current_play->password;
+        current_play.gamemode = "standard";
+        current_play.point = _current_play->point;
+        current_play.lvl = _current_play->lvl;
+    }
 
     table_size_n = _table_size_n;
     table_size_m = _table_size_m;
@@ -219,7 +232,7 @@ void StandardMode::moveRight() {
 }
 
 void StandardMode::initTable() {
-    TableObject->generateTableData();
+    if (is_loaded == false) TableObject->generateTableData();
     GameObject->displayTableBorder();
     GameObject->loadTableBackground("assets/bunny.txt");
     GameObject->displayUserInterface(70, 0, STANDARD_MODE);
@@ -306,6 +319,16 @@ std::pair<Player, bool> StandardMode::startGame() {
                         GameObject->displayNotification(75, 16, "YOU DON'T HAVE ENOUGHT POINTS TO SHUFFLE", 1000);
                     }
                     break;
+            case 9:
+                    if (mode != CHALLENGE_MODE) {
+                        Screen::playSound("audio/hint.wav");
+                        GameObject->displayNotification(89, 16, "GAME SAVED!!", 1000);
+                        SMenu.saveGame(current_play, TableObject);
+                    } else {
+                        GameObject->displayNotification(74, 16, "YOU CAN'T SAVE THE GAME IN CHALLENGE MODE", 1000);
+                    }
+                    break;
+
         }
     }
     PlayerObject->point = std::max(PlayerObject->point, current_play.point);

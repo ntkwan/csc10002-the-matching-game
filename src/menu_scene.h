@@ -10,6 +10,7 @@
 #include "challenge_mode.h"
 #include "identify_scene.h"
 #include "endgame_scene.h"
+#include "game_saving.h"
 #include "leaderboard_scene.h"
 #include "player.h"
 
@@ -28,12 +29,15 @@ struct Menu {
     IdentifyMenu IMenu;
     EndgameMenu EMenu;
     LDBoardMenu LMenu;
+    SavingMenu SMenu;
 
     Menu();
     ~Menu();
 
     bool inputTableSize(int);
     std::pair<Player, bool> playStandardMode();
+    Player playStandardMode(int, int, Player *, Table *);
+
     std::pair<Player, bool> playDifficultMode();
     Player playChallengeMode();
     bool menuController(bool);

@@ -84,14 +84,14 @@ int Screen::getConsoleInput() {
                 return 3;
             case 68: case 100:
                 return 4;
-            case 83: case 115:
-                return 5;
             case 13:
                 return 6;
             case 72: case 104:
                 return 7;
             case 70: case 102:
                 return 8;
+            case 83: case 115:
+                return 9;
             default:
                 return 0;
         }

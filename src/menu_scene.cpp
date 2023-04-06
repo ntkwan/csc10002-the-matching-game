@@ -159,8 +159,14 @@ void Menu::displayInformationBoard(const int left, const int top, const int widt
 
 std::pair<Player, bool> Menu::playStandardMode() {
     Screen::clearConsole();
-    StandardMode game(size_n, size_m, 20, 3, IMenu.user, IMenu.number_user, IMenu.user_list, STANDARD_MODE);
+    StandardMode game(size_n, size_m, 20, 3, IMenu.user, IMenu.number_user, IMenu.user_list, nullptr, nullptr, STANDARD_MODE);
     return game.startGame();
+}
+
+Player Menu::playStandardMode(int table_size_n, int table_size_m, Player *user, Table *TableObject) {
+    Screen::clearConsole();
+    StandardMode game(table_size_n, table_size_m, 20, 3, IMenu.user, IMenu.number_user, IMenu.user_list, user, TableObject, STANDARD_MODE);
+    return game.startGame().first;
 }
 
 std::pair<Player, bool> Menu::playDifficultMode() {
@@ -201,17 +207,35 @@ bool Menu::menuController(bool is_login) {
                 switch(current_option) {
                     case 0:
                         Screen::playSound("audio/click.wav");
-                        while (inputTableSize(STANDARD_MODE) == false);
-                        Screen::showCursor(false);
-                        IMenu.loadUserData();
-                        game_state = playStandardMode();
-                        current_play = game_state.first;
-                        while (EMenu.displayGameOverScreen(36, 10, current_play) == true) {
+                        Screen::clearConsole();
+                        displayMenuBackground(false);
+                        if (SMenu.menuController() == true) {
+                            while (inputTableSize(STANDARD_MODE) == false);
+                            Screen::showCursor(false);
                             IMenu.loadUserData();
                             game_state = playStandardMode();
                             current_play = game_state.first;
+                            while (EMenu.displayGameOverScreen(36, 10, current_play) == true) {
+                                IMenu.loadUserData();
+                                game_state = playStandardMode();
+                                current_play = game_state.first;
+                            }
+                            return true;
+                        } else {
+                            IMenu.loadUserData();
+                            Player *last_play = new Player;
+                            last_play->username = IMenu.user.username;
+                            last_play->password = IMenu.user.password;
+                            Table *TableObject = nullptr;
+                            SMenu.loadGame(last_play, TableObject);
+                            current_play = playStandardMode(TableObject->table_size_n, TableObject->table_size_m, last_play, TableObject);
+                            while (EMenu.displayGameOverScreen(36, 10, current_play) == true) {
+                                IMenu.loadUserData();
+                                game_state = playStandardMode();
+                                current_play = game_state.first;
+                            }
+                            return true;
                         }
-                        return true;
                         break;
                     case 1:
                         Screen::playSound("audio/click.wav");
@@ -239,6 +263,7 @@ bool Menu::menuController(bool is_login) {
                         return true;
                         break;
                     case 4:
+                        Screen::playSound("audio/click.wav");
                         LMenu.displayLDBoardScreen(33, 1);
                         return true;
                         break;

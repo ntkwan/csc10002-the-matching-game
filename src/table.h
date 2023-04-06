@@ -20,6 +20,7 @@ struct Table {
     int *occurs;
     Cell **table_data;
 
+    Table();
     Table(int, int, int, int);
     ~Table();
 
