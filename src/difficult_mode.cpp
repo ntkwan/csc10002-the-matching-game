@@ -415,8 +415,9 @@ std::pair<Player, bool> DifficultMode::startGame() {
 
     if (end_loop == true) {
         if (mode == CHALLENGE_MODE) return std::make_pair(current_play, true);
-        ++current_play.lvl;
     }
+
+    ++current_play.lvl;
 
     if (game_valid == true) {
         setCellState(cell_pos_x, cell_pos_y, EMPTY_BOARD);

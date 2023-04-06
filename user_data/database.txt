@@ -1,2 +1,13 @@
 quan/1234/standard/20/1
 vi/12345/null/0/0
+quan/1234/standard/44/0
+quan/1234/standard/42/0
+quan/1234/challenge/29/1
+vi/12345/challenge/30/1
+npc_1/1234/null/0/0
+npc_1/1234/challenge/71/1
+npc_2/1234/null/0/0
+npc_2/1234/challenge/29/1
+quan/1234/challenge/10/1
+quan/1234/challenge/16/2
+quan/1234/challenge/89/3

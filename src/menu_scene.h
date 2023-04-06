@@ -10,6 +10,7 @@
 #include "challenge_mode.h"
 #include "identify_scene.h"
 #include "endgame_scene.h"
+#include "leaderboard_scene.h"
 #include "player.h"
 
 struct Menu {
@@ -26,6 +27,7 @@ struct Menu {
 
     IdentifyMenu IMenu;
     EndgameMenu EMenu;
+    LDBoardMenu LMenu;
 
     Menu();
     ~Menu();

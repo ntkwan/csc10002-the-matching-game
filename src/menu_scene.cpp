@@ -238,6 +238,10 @@ bool Menu::menuController(bool is_login) {
                         }
                         return true;
                         break;
+                    case 4:
+                        LMenu.displayLDBoardScreen(33, 1);
+                        return true;
+                        break;
                     case 5:
                         Screen::clearConsole();
                         exit(0);
