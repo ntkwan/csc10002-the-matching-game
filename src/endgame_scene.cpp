@@ -4,6 +4,7 @@ bool EndgameMenu::displayGameOverScreen(int pd_left, int pd_top, Player current_
     Screen::setConsoleColor(BLACK, BLACK);
     Screen::clearConsole();
     Screen::setConsoleColor(BLACK, RED);
+    Screen::playSound("audio/game_over.wav");
     std::string *title = new std::string[20];
     auto loadTitle = [](const std::string &path, std::string *&title) {
         std::fstream in(path, std::fstream::in);

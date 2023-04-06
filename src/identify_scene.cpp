@@ -156,6 +156,7 @@ bool IdentifyMenu::menuController() {
                 break;
             case 6:
                 if (current_option == 0) {
+                        Screen::playSound("audio/click.wav");
                         Screen::clearConsole();
                         displayMenuBackground(false);
                         loadUserData();
@@ -169,6 +170,7 @@ bool IdentifyMenu::menuController() {
                         }
                         return true;
                 } else if (current_option == 1) {
+                        Screen::playSound("audio/click.wav");
                         Screen::clearConsole();
                         displayMenuBackground(false);
                         loadUserData();
