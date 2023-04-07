@@ -143,7 +143,7 @@ void LDBoardMenu::loadUserList() {
         }
     }
 
-    if (new_list[idx-2].username != new_list[idx-1].username) {
+    if (idx > 0) {
         user_list[number_user++] = new_list[idx-1];
     }
 
