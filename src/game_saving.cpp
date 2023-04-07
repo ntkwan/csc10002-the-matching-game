@@ -140,7 +140,15 @@ void SavingMenu::loadGame(Player *&user, TableLL *&game_state) {
         int cell_state = 0, cell_pos_x = 0, cell_pos_y = 0, cell_coord_x = 0, cell_coord_y = 0;
         char cell_value;
         for (int j = 0; j < table_size_n; ++j) {
-            in>>cell_state>>cell_value>>cell_pos_x>>cell_pos_y>>cell_coord_x>>cell_coord_y;
+            in>>cell_state;
+            if (cell_state == DELETED) {
+                cell_value = ' ';
+                in.ignore();
+                in>>cell_pos_x>>cell_pos_y>>cell_coord_x>>cell_coord_y;
+            }
+            else {
+                in>>cell_value>>cell_pos_x>>cell_pos_y>>cell_coord_x>>cell_coord_y;
+            }
             Cell* cur_node = new Cell(cell_value, cell_state, cell_coord_x, cell_coord_y, cell_pos_x, cell_pos_y);
             game_state->table_data[i].addTail(cur_node);
         }

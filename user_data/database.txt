@@ -11,3 +11,4 @@ npc_2/1234/challenge/29/1
 quan/1234/challenge/10/1
 quan/1234/challenge/16/2
 quan/1234/challenge/89/3
+quan/1234/standard/8/1
