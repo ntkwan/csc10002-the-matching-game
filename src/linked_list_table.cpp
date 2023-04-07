@@ -1,5 +1,7 @@
 #include "linked_list_table.h"
 
+TableLL::TableLL() {}
+
 TableLL::TableLL(int _table_size_n, int _table_size_m, int _padding_left, int _padding_top) {
     table_size_n = _table_size_n;
     table_size_m = _table_size_m;

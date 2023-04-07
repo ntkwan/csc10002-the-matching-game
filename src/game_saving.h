@@ -15,12 +15,15 @@ struct SavingMenu {
     const int option_slot = 2;
     int current_option = 0;
 
-    bool menuController();
+    int menuController();
     void unselectOption();
     void selectOption();
     void changeOption(int);
 
     void saveGame(Player, Table *);
+    void saveGame(Player, TableLL *);
+
     void loadGame(Player *&, Table *&);
+    void loadGame(Player *&, TableLL *&);
 };
 #endif // GAME_SAVING_H

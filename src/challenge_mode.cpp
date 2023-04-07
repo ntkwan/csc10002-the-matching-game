@@ -45,7 +45,7 @@ std::pair<int, bool> ChallengeMode::startGame() {
         is_mistaken = game_state.second;
     } else {
         Screen::clearConsole();
-        DifficultMode game(table_size_n, table_size_m, 20, 3, current_play, number_user, user_list, CHALLENGE_MODE);
+        DifficultMode game(table_size_n, table_size_m, 20, 3, current_play, number_user, user_list, nullptr, nullptr, CHALLENGE_MODE);
         std::pair<Player, bool> game_state = game.startGame();
         current_play.point = game_state.first.point;
         is_mistaken = game_state.second;

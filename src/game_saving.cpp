@@ -1,6 +1,6 @@
 #include "game_saving.h"
 
-bool SavingMenu::menuController() {
+int SavingMenu::menuController() {
     Screen::setConsoleColor(BLACK, WHITE);
     int padding_left = 65, padding_top = 20;
     for (int i = 0;i < option_slot; ++i) {
@@ -13,6 +13,8 @@ bool SavingMenu::menuController() {
     bool in_menu = true;
     while (in_menu) {
         switch(Screen::getConsoleInput()) {
+            case 1:
+                return 2;
             case 2:
                 changeOption(-1);
                 break;
@@ -24,11 +26,11 @@ bool SavingMenu::menuController() {
                 switch(current_option) {
                     case 0:
                         Screen::playSound("audio/click.wav");
-                        return true;
+                        return 1;
                         break;
                     case 1:
                         Screen::playSound("audio/click.wav");
-                        return false;
+                        return 0;
                         break;
                 }
         }
@@ -68,6 +70,26 @@ void SavingMenu::saveGame(Player user, Table *game_state) {
     out.close();
 }
 
+void SavingMenu::saveGame(Player user, TableLL *game_state) {
+    std::string path = "saves/dfclt/" + user.username + ".txt";
+    std::ofstream out(path);
+
+    out<<user.point<<" "<<user.lvl<<"\n";
+
+    int table_size_n = game_state->table_size_n;
+    int table_size_m = game_state->table_size_m;
+    out<<game_state->table_size_n<<" "<<game_state->table_size_m<<"\n";
+    for (int i = 0; i < table_size_m; ++i) {
+        for (Cell* cur_node = game_state->table_data[i].head; cur_node != nullptr; cur_node = cur_node->next) {
+            out<<cur_node->cell_state<<" "<<cur_node->cell_value<<" "
+               <<cur_node->cell_pos_x<<" "<<cur_node->cell_pos_y<<" "
+               <<cur_node->cell_coord_x<<" "<<cur_node->cell_coord_y<<"\n";
+        }
+    }
+
+    out.close();
+}
+
 void SavingMenu::loadGame(Player *&user, Table *&game_state) {
     std::string path = "saves/std/" + user->username + ".txt";
     std::ifstream in(path);
@@ -99,6 +121,32 @@ void SavingMenu::loadGame(Player *&user, Table *&game_state) {
             in>>game_state->table_data[i][j].cell_coord_x>>game_state->table_data[i][j].cell_coord_y;
         }
     }
+
+    in.close();
+}
+
+void SavingMenu::loadGame(Player *&user, TableLL *&game_state) {
+    std::string path = "saves/dfclt/" + user->username + ".txt";
+    std::ifstream in(path);
+
+    in>>user->point>>user->lvl;
+
+    int table_size_n = 0;
+    int table_size_m = 0;
+    in>>table_size_n>>table_size_m;
+
+    game_state = new TableLL(table_size_n, table_size_m, 20, 3);
+    for (int i = 0; i < table_size_m; ++i) {
+        int cell_state = 0, cell_pos_x = 0, cell_pos_y = 0, cell_coord_x = 0, cell_coord_y = 0;
+        char cell_value;
+        for (int j = 0; j < table_size_n; ++j) {
+            in>>cell_state>>cell_value>>cell_pos_x>>cell_pos_y>>cell_coord_x>>cell_coord_y;
+            Cell* cur_node = new Cell(cell_value, cell_state, cell_coord_x, cell_coord_y, cell_pos_x, cell_pos_y);
+            game_state->table_data[i].addTail(cur_node);
+        }
+    }
+
+    in.close();
 }
 
 void SavingMenu::changeOption(int _direction) {

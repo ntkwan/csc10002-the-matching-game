@@ -1,21 +1,34 @@
 #include "difficult_mode.h"
 
-DifficultMode::DifficultMode(int _table_size_n, int _table_size_m, int _padding_left, int _padding_top, Player _player, int _number_user, Player *_user_list, int _mode) {
+DifficultMode::DifficultMode(int _table_size_n, int _table_size_m, int _padding_left, int _padding_top,
+                           Player _player, int _number_user, Player *_user_list, Player *_current_play, TableLL *_TableObject, int _mode) {
     padding_left = _padding_left;
     padding_top = _padding_top;
     mode = _mode;
-    TableObject = new TableLL(_table_size_n, _table_size_m, padding_left, padding_top);
+    if (_TableObject == nullptr) TableObject = new TableLL(_table_size_n, _table_size_m, padding_left, padding_top);
+    else {
+            is_loaded = true;
+            TableObject = _TableObject;
+    }
     GameObject = new GameScene(_table_size_n, _table_size_m, padding_left, padding_top);
     PlayerObject = new Player(_player);
     number_user = _number_user;
     user_list = _user_list;
     mistake = (mode == CHALLENGE_MODE ? 3 : 10);
 
-    current_play.username = PlayerObject->username;
-    current_play.password = PlayerObject->password;
-    current_play.gamemode = (PlayerObject->gamemode == "null" ? "difficult" : PlayerObject->gamemode);
-    current_play.point = (mode == CHALLENGE_MODE ? PlayerObject->point : 0);
-    current_play.lvl = (mode == CHALLENGE_MODE ? PlayerObject->lvl : 0);
+    if (_current_play == nullptr) {
+        current_play.username = PlayerObject->username;
+        current_play.password = PlayerObject->password;
+        current_play.gamemode = (PlayerObject->gamemode == "null" ? "difficult" : PlayerObject->gamemode);
+        current_play.point = (mode == CHALLENGE_MODE ? PlayerObject->point : 0);
+        current_play.lvl = (mode == CHALLENGE_MODE ? PlayerObject->lvl : 0);
+    } else {
+        current_play.username = _current_play->username;
+        current_play.password = _current_play->password;
+        current_play.gamemode = "difficult";
+        current_play.point = _current_play->point;
+        current_play.lvl = _current_play->lvl;
+    }
 
     table_size_n = _table_size_n;
     table_size_m = _table_size_m;
@@ -83,7 +96,6 @@ void DifficultMode::displayCellValueAt(int _cell_pos_x, int _cell_pos_y, int _ba
     for (int current_coord_y = _cell_coord_y - 1; current_coord_y <= _cell_coord_y + 1; ++current_coord_y) {
         for (int current_coord_x = _cell_coord_x - 3; current_coord_x <= _cell_coord_x + 3; ++current_coord_x) {
             Screen::gotoXY(current_coord_x, current_coord_y);
-
             if (getCellState(_cell_pos_x, _cell_pos_y) == DELETED || getCellState(_cell_pos_x, _cell_pos_y) == EMPTY_BOARD) {
                 Screen::setConsoleColor(WHITE, RED);
                 putchar(GameObject->table_image[current_coord_y - padding_top][current_coord_x - padding_left]);
@@ -320,7 +332,7 @@ void DifficultMode::moveRight() {
 }
 
 void DifficultMode::initTable() {
-    TableObject->generateTableData();
+    if (is_loaded == false) TableObject->generateTableData();
     GameObject->displayTableBorder();
     GameObject->loadTableBackground("assets/charmander.txt");
     GameObject->displayUserInterface(85, 0, DIFFICULT_MODE);
@@ -406,6 +418,15 @@ std::pair<Player, bool> DifficultMode::startGame() {
                         GameObject->displayNotification(104, 16, "TABLE SHUFFLED!!", 1000);
                     } else {
                         GameObject->displayNotification(90, 16, "YOU DON'T HAVE ENOUGHT POINTS TO SHUFFLE", 1000);
+                    }
+                    break;
+            case 9:
+                    if (mode != CHALLENGE_MODE) {
+                        Screen::playSound("audio/hint.wav");
+                        GameObject->displayNotification(104, 16, "GAME SAVED!!", 1000);
+                        SMenu.saveGame(current_play, TableObject);
+                    } else {
+                        GameObject->displayNotification(89, 16, "YOU CAN'T SAVE THE GAME IN CHALLENGE MODE", 1000);
                     }
                     break;
         }

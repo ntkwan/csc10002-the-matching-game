@@ -7,7 +7,6 @@
 #include "table.h"
 #include "game_scene.h"
 #include "game_saving.h"
-#include "player.h"
 
 struct StandardMode {
     int padding_left = 0;

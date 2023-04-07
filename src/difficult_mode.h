@@ -6,6 +6,7 @@
 
 #include "linked_list_table.h"
 #include "game_scene.h"
+#include "game_saving.h"
 
 struct DifficultMode {
     int padding_left = 0;
@@ -19,9 +20,12 @@ struct DifficultMode {
     int cell_coord_x;
     int cell_coord_y;
     bool end_loop;
+    bool is_loaded;
     std::vector<std::pair<int, int>> locked_list;
     TableLL* TableObject;
     GameScene *GameObject;
+
+    SavingMenu SMenu;
 
     Player *PlayerObject;
     Player *user_list;
@@ -29,7 +33,7 @@ struct DifficultMode {
     Player current_play;
     int mistake;
 
-    DifficultMode(int, int, int, int, Player, int, Player *, int);
+    DifficultMode(int, int, int, int, Player, int, Player *, Player *, TableLL *, int);
     ~DifficultMode();
 
     void initTable();

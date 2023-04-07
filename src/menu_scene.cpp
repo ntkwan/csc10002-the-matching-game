@@ -171,8 +171,14 @@ Player Menu::playStandardMode(int table_size_n, int table_size_m, Player *user, 
 
 std::pair<Player, bool> Menu::playDifficultMode() {
     Screen::clearConsole();
-    DifficultMode game(size_n, size_m, 20, 3, IMenu.user, IMenu.number_user, IMenu.user_list, DIFFICULT_MODE);
+    DifficultMode game(size_n, size_m, 20, 3, IMenu.user, IMenu.number_user, IMenu.user_list, nullptr, nullptr, DIFFICULT_MODE);
     return game.startGame();
+}
+
+Player Menu::playDifficultMode(int table_size_n, int table_size_m, Player *user, TableLL *TableObject) {
+    Screen::clearConsole();
+    DifficultMode game(table_size_n, table_size_m, 20, 3, IMenu.user, IMenu.number_user, IMenu.user_list, user, TableObject, DIFFICULT_MODE);
+    return game.startGame().first;
 }
 
 Player Menu::playChallengeMode() {
@@ -191,9 +197,18 @@ bool Menu::menuController(bool is_login) {
     }
 
     displayOptionText();
+
     Player current_play;
     std::pair<Player, bool> game_state;
     bool in_menu = true;
+    int choice = -1;
+
+    auto validateFileOpened = [](const std::string &name) {
+        std::ifstream file(name);
+        if (!file) return false;
+    return true;
+    };
+
     while (in_menu) {
         switch(Screen::getConsoleInput()) {
             case 2:
@@ -209,7 +224,8 @@ bool Menu::menuController(bool is_login) {
                         Screen::playSound("audio/click.wav");
                         Screen::clearConsole();
                         displayMenuBackground(false);
-                        if (SMenu.menuController() == true) {
+                        choice = SMenu.menuController();
+                        if (choice == 1) {
                             while (inputTableSize(STANDARD_MODE) == false);
                             Screen::showCursor(false);
                             IMenu.loadUserData();
@@ -221,13 +237,20 @@ bool Menu::menuController(bool is_login) {
                                 current_play = game_state.first;
                             }
                             return true;
-                        } else {
+                        } else if (choice == 0) {
                             IMenu.loadUserData();
                             Player *last_play = new Player;
                             last_play->username = IMenu.user.username;
                             last_play->password = IMenu.user.password;
                             Table *TableObject = nullptr;
                             SMenu.loadGame(last_play, TableObject);
+                            if (validateFileOpened("saves/std/" + last_play->username + ".txt") == false) {
+                                Screen::setConsoleColor(BLACK, RED);
+                                Screen::gotoXY(53, 17);
+                                std::cout<<"THERE IS NO SAVE FILES AVAILABLE";
+                                Sleep(1800);
+                                return true;
+                            }
                             current_play = playStandardMode(TableObject->table_size_n, TableObject->table_size_m, last_play, TableObject);
                             while (EMenu.displayGameOverScreen(36, 10, current_play) == true) {
                                 IMenu.loadUserData();
@@ -236,21 +259,51 @@ bool Menu::menuController(bool is_login) {
                             }
                             return true;
                         }
+                        return true;
                         break;
+
                     case 1:
                         Screen::playSound("audio/click.wav");
-                        while (inputTableSize(DIFFICULT_MODE) == false);
-                        Screen::showCursor(false);
-                        IMenu.loadUserData();
-                        game_state = playDifficultMode();
-                        current_play = game_state.first;
-                        while (EMenu.displayGameOverScreen(36, 10, current_play) == true) {
+                        Screen::clearConsole();
+                        displayMenuBackground(false);
+                        choice = SMenu.menuController();
+                        if (choice == 1) {
+                            while (inputTableSize(DIFFICULT_MODE) == false);
+                                Screen::showCursor(false);
+                                IMenu.loadUserData();
+                                game_state = playDifficultMode();
+                                current_play = game_state.first;
+                                while (EMenu.displayGameOverScreen(36, 10, current_play) == true) {
+                                    IMenu.loadUserData();
+                                    game_state = playDifficultMode();
+                                    current_play = game_state.first;
+                                }
+                            return true;
+                        } else if (choice == 0) {
                             IMenu.loadUserData();
-                            game_state = playDifficultMode();
-                            current_play = game_state.first;
+                            Player *last_play = new Player;
+                            last_play->username = IMenu.user.username;
+                            last_play->password = IMenu.user.password;
+                            TableLL *TableObject = nullptr;
+                            SMenu.loadGame(last_play, TableObject);
+                            if (validateFileOpened("saves/dfclt/" + last_play->username + ".txt") == false) {
+                                Screen::setConsoleColor(BLACK, RED);
+                                Screen::gotoXY(53, 17);
+                                std::cout<<"THERE IS NO SAVE FILES AVAILABLE";
+                                Sleep(1800);
+                                return true;
+                            }
+                            current_play = playDifficultMode(TableObject->table_size_n, TableObject->table_size_m, last_play, TableObject);
+                            while (EMenu.displayGameOverScreen(36, 10, current_play) == true) {
+                                IMenu.loadUserData();
+                                game_state = playDifficultMode();
+                                current_play = game_state.first;
+                            }
+                            return true;
                         }
                         return true;
                         break;
+
                     case 2:
                         Screen::playSound("audio/click.wav");
                         Screen::showCursor(false);
@@ -262,11 +315,13 @@ bool Menu::menuController(bool is_login) {
                         }
                         return true;
                         break;
+
                     case 4:
                         Screen::playSound("audio/click.wav");
                         LMenu.displayLDBoardScreen(33, 1);
                         return true;
                         break;
+
                     case 5:
                         Screen::clearConsole();
                         exit(0);

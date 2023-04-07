@@ -20,6 +20,7 @@ struct TableLL {
     int *occurs;
     LinkedList *table_data;
 
+    TableLL();
     TableLL(int, int, int, int);
     ~TableLL();
 
