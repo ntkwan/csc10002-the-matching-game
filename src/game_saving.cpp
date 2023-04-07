@@ -38,32 +38,34 @@ int SavingMenu::menuController() {
 }
 
 void SavingMenu::saveGame(Player user, Table *game_state) {
-    std::string path = "saves/std/" + user.username + ".txt";
-    std::ofstream out(path);
+    std::string path = "saves/std/" + user.username + ".bin";
+    std::ofstream out(path, std::ios::binary);
 
-    out<<user.point<<" "<<user.lvl<<"\n";
+    out.write(reinterpret_cast<char *> (&user.point), sizeof(user.point));
+    out.write(reinterpret_cast<char *> (&user.lvl), sizeof(user.lvl));
 
     int table_size_n = game_state->table_size_n;
     int table_size_m = game_state->table_size_m;
-    out<<game_state->table_size_n<<" "<<game_state->table_size_m<<"\n";
+
+    out.write(reinterpret_cast<char *> (&table_size_n), sizeof(table_size_n));
+    out.write(reinterpret_cast<char *> (&table_size_m), sizeof(table_size_m));
+
     for (int i = 0; i < table_size_n; ++i) {
         for (int j = 0; j < table_size_m; ++j) {
-            out<<game_state->table_data[i][j].cell_state<<" ";
+            out.write(reinterpret_cast<char *> (&game_state->table_data[i][j].cell_state), sizeof(game_state->table_data[i][j].cell_state));
         }
-        out<<"\n";
     }
 
     for (int i = 0; i < table_size_n; ++i) {
         for (int j = 0; j < table_size_m; ++j) {
-            out<<game_state->table_data[i][j].cell_value<<" ";
+            out.write(reinterpret_cast<char *> (&game_state->table_data[i][j].cell_value), sizeof(game_state->table_data[i][j].cell_value));
         }
-        out<<"\n";
     }
-
 
     for (int i = 0; i < table_size_n; ++i) {
         for (int j = 0; j < table_size_m; ++j) {
-            out<<game_state->table_data[i][j].cell_coord_x<<" "<<game_state->table_data[i][j].cell_coord_y<<"\n";
+            out.write(reinterpret_cast<char *> (&game_state->table_data[i][j].cell_coord_x), sizeof(game_state->table_data[i][j].cell_coord_x));
+            out.write(reinterpret_cast<char *> (&game_state->table_data[i][j].cell_coord_y), sizeof(game_state->table_data[i][j].cell_coord_y));
         }
     }
 
@@ -71,19 +73,26 @@ void SavingMenu::saveGame(Player user, Table *game_state) {
 }
 
 void SavingMenu::saveGame(Player user, TableLL *game_state) {
-    std::string path = "saves/dfclt/" + user.username + ".txt";
-    std::ofstream out(path);
+    std::string path = "saves/dfclt/" + user.username + ".bin";
+    std::ofstream out(path, std::ios::binary);
 
-    out<<user.point<<" "<<user.lvl<<"\n";
+    out.write(reinterpret_cast<char *> (&user.point), sizeof(user.point));
+    out.write(reinterpret_cast<char *> (&user.lvl), sizeof(user.lvl));
 
     int table_size_n = game_state->table_size_n;
     int table_size_m = game_state->table_size_m;
-    out<<game_state->table_size_n<<" "<<game_state->table_size_m<<"\n";
+
+    out.write(reinterpret_cast<char *> (&table_size_n), sizeof(table_size_n));
+    out.write(reinterpret_cast<char *> (&table_size_m), sizeof(table_size_m));
+
     for (int i = 0; i < table_size_m; ++i) {
         for (Cell* cur_node = game_state->table_data[i].head; cur_node != nullptr; cur_node = cur_node->next) {
-            out<<cur_node->cell_state<<" "<<cur_node->cell_value<<" "
-               <<cur_node->cell_pos_x<<" "<<cur_node->cell_pos_y<<" "
-               <<cur_node->cell_coord_x<<" "<<cur_node->cell_coord_y<<"\n";
+            out.write(reinterpret_cast<char *> (&cur_node->cell_state), sizeof(cur_node->cell_state));
+            out.write(reinterpret_cast<char *> (&cur_node->cell_value), sizeof(cur_node->cell_value));
+            out.write(reinterpret_cast<char *> (&cur_node->cell_pos_x), sizeof(cur_node->cell_pos_x));
+            out.write(reinterpret_cast<char *> (&cur_node->cell_pos_y), sizeof(cur_node->cell_pos_y));
+            out.write(reinterpret_cast<char *> (&cur_node->cell_coord_x), sizeof(cur_node->cell_coord_x));
+            out.write(reinterpret_cast<char *> (&cur_node->cell_coord_y), sizeof(cur_node->cell_coord_y));
         }
     }
 
@@ -91,26 +100,28 @@ void SavingMenu::saveGame(Player user, TableLL *game_state) {
 }
 
 void SavingMenu::loadGame(Player *&user, Table *&game_state) {
-    std::string path = "saves/std/" + user->username + ".txt";
-    std::ifstream in(path);
+    std::string path = "saves/std/" + user->username + ".bin";
+    std::ifstream in(path, std::ios::binary);
 
-    in>>user->point>>user->lvl;
+    in.read(reinterpret_cast<char *> (&user->point), 4);
+    in.read(reinterpret_cast<char *> (&user->lvl), 4);
 
     int table_size_n = 0;
     int table_size_m = 0;
-    in>>table_size_n>>table_size_m;
+    in.read(reinterpret_cast<char *> (&table_size_n), 4);
+    in.read(reinterpret_cast<char *> (&table_size_m), 4);
 
     game_state = new Table(table_size_n, table_size_m, 20, 3);
 
     for (int i = 0; i < table_size_n; ++i) {
         for (int j = 0; j < table_size_m; ++j) {
-            in>>game_state->table_data[i][j].cell_state;
+            in.read(reinterpret_cast<char *> (&game_state->table_data[i][j].cell_state), 4);
         }
     }
 
     for (int i = 0; i < table_size_n; ++i) {
         for (int j = 0; j < table_size_m; ++j) {
-            in>>game_state->table_data[i][j].cell_value;
+            in.read(reinterpret_cast<char *> (&game_state->table_data[i][j].cell_value), 1);
         }
     }
 
@@ -118,7 +129,8 @@ void SavingMenu::loadGame(Player *&user, Table *&game_state) {
         for (int j = 0; j < table_size_m; ++j) {
             game_state->table_data[i][j].cell_pos_x = i;
             game_state->table_data[i][j].cell_pos_y = j;
-            in>>game_state->table_data[i][j].cell_coord_x>>game_state->table_data[i][j].cell_coord_y;
+            in.read(reinterpret_cast<char *> (&game_state->table_data[i][j].cell_coord_x), 4);
+            in.read(reinterpret_cast<char *> (&game_state->table_data[i][j].cell_coord_y), 4);
         }
     }
 
@@ -126,29 +138,30 @@ void SavingMenu::loadGame(Player *&user, Table *&game_state) {
 }
 
 void SavingMenu::loadGame(Player *&user, TableLL *&game_state) {
-    std::string path = "saves/dfclt/" + user->username + ".txt";
-    std::ifstream in(path);
+    std::string path = "saves/dfclt/" + user->username + ".bin";
+    std::ifstream in(path, std::ios::binary);
 
-    in>>user->point>>user->lvl;
+    in.read(reinterpret_cast<char *> (&user->point), 4);
+    in.read(reinterpret_cast<char *> (&user->lvl), 4);
 
     int table_size_n = 0;
     int table_size_m = 0;
-    in>>table_size_n>>table_size_m;
+    in.read(reinterpret_cast<char *> (&table_size_n), 4);
+    in.read(reinterpret_cast<char *> (&table_size_m), 4);
 
     game_state = new TableLL(table_size_n, table_size_m, 20, 3);
+
     for (int i = 0; i < table_size_m; ++i) {
         int cell_state = 0, cell_pos_x = 0, cell_pos_y = 0, cell_coord_x = 0, cell_coord_y = 0;
         char cell_value;
         for (int j = 0; j < table_size_n; ++j) {
-            in>>cell_state;
-            if (cell_state == DELETED) {
-                cell_value = ' ';
-                in.ignore();
-                in>>cell_pos_x>>cell_pos_y>>cell_coord_x>>cell_coord_y;
-            }
-            else {
-                in>>cell_value>>cell_pos_x>>cell_pos_y>>cell_coord_x>>cell_coord_y;
-            }
+            in.read(reinterpret_cast<char *> (&cell_state), 4);
+            in.read(reinterpret_cast<char *> (&cell_value), 1);
+            in.read(reinterpret_cast<char *> (&cell_pos_x), 4);
+            in.read(reinterpret_cast<char *> (&cell_pos_y), 4);
+            in.read(reinterpret_cast<char *> (&cell_coord_x), 4);
+            in.read(reinterpret_cast<char *> (&cell_coord_y), 4);
+
             Cell* cur_node = new Cell(cell_value, cell_state, cell_coord_x, cell_coord_y, cell_pos_x, cell_pos_y);
             game_state->table_data[i].addTail(cur_node);
         }

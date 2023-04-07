@@ -244,7 +244,7 @@ bool Menu::menuController(bool is_login) {
                             last_play->password = IMenu.user.password;
                             Table *TableObject = nullptr;
                             SMenu.loadGame(last_play, TableObject);
-                            if (validateFileOpened("saves/std/" + last_play->username + ".txt") == false) {
+                            if (validateFileOpened("saves/std/" + last_play->username + ".bin") == false) {
                                 Screen::setConsoleColor(BLACK, RED);
                                 Screen::gotoXY(53, 17);
                                 std::cout<<"THERE IS NO SAVE FILES AVAILABLE";
@@ -286,7 +286,7 @@ bool Menu::menuController(bool is_login) {
                             last_play->password = IMenu.user.password;
                             TableLL *TableObject = nullptr;
                             SMenu.loadGame(last_play, TableObject);
-                            if (validateFileOpened("saves/dfclt/" + last_play->username + ".txt") == false) {
+                            if (validateFileOpened("saves/dfclt/" + last_play->username + ".bin") == false) {
                                 Screen::setConsoleColor(BLACK, RED);
                                 Screen::gotoXY(53, 17);
                                 std::cout<<"THERE IS NO SAVE FILES AVAILABLE";
