@@ -13,7 +13,7 @@ struct IdentifyMenu {
     const int option_slot = 3;
 
     Player user;
-    Player user_list[100];
+    Player user_list[1000];
     int number_user = 0;
 
     void changeOption(int);

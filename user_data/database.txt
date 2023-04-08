@@ -12,3 +12,8 @@ quan/1234/challenge/10/1
 quan/1234/challenge/16/2
 quan/1234/challenge/89/3
 quan/1234/standard/8/1
+bhthong/fit@hcmus/challenge/10/1
+bhthong/fit@hcmus/challenge/12/1
+bhthong/fit@hcmus/challenge/12/1
+bhthong/fit@hcmus/challenge/15/1
+bhthong/fit@hcmus/challenge/20/1
