@@ -316,6 +316,12 @@ bool Menu::menuController(bool is_login) {
                         return true;
                         break;
 
+                    case 3:
+                        Screen::playSound("audio/click.wav");
+                        TMenu.displayGameTutorial();
+                        return true;
+                        break;
+
                     case 4:
                         Screen::playSound("audio/click.wav");
                         LMenu.displayLDBoardScreen(33, 1);

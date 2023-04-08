@@ -78,12 +78,6 @@ int Screen::getConsoleInput() {
         switch(input_key) {
             case 27:
                 return 1;
-            case 87: case 119:
-                return 2;
-            case 65: case 97:
-                return 3;
-            case 68: case 100:
-                return 4;
             case 13:
                 return 6;
             case 72: case 104:

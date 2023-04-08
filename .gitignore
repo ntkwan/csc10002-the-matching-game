@@ -18,3 +18,4 @@ obj/Debug/src/endgame_scene.o
 obj/Debug/src/player.o
 obj/Debug/src/game_saving.o
 obj/Debug/src/leaderboard_scene.o
+obj/Debug/src/tutorial_scene.o

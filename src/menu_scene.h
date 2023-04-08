@@ -12,6 +12,7 @@
 #include "endgame_scene.h"
 #include "game_saving.h"
 #include "leaderboard_scene.h"
+#include "tutorial_scene.h"
 #include "player.h"
 
 struct Menu {
@@ -30,6 +31,7 @@ struct Menu {
     EndgameMenu EMenu;
     LDBoardMenu LMenu;
     SavingMenu SMenu;
+    TutorialMenu TMenu;
 
     Menu();
     ~Menu();
