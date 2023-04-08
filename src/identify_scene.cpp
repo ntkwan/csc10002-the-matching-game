@@ -116,8 +116,9 @@ void IdentifyMenu::displayNotification(int _padding_left, int _padding_top, cons
     for (size_t i = 0; i < text.size(); ++i) std::cout<<" ";
 }
 
-bool IdentifyMenu::menuController() {
-    displayMenuBackground(true);
+bool IdentifyMenu::menuController(bool is_logout) {
+    if (is_logout == false) displayMenuBackground(true);
+    else displayMenuBackground(false);
     displayOptionText();
 
     auto validateAccountLogin = [](const std::string &username, const std::string &password, const int number_user, Player *user_list) {

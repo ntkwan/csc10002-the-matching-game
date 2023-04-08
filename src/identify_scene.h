@@ -19,7 +19,7 @@ struct IdentifyMenu {
     void changeOption(int);
     void selectOption();
     void unselectOption();
-    bool menuController();
+    bool menuController(bool);
     void displayInformationBoard(const int, const int, const int, const int);
     void displayOptionText();
     void displayNotification(int, int, const std::string &, int);

@@ -16,8 +16,8 @@
 #include "player.h"
 
 struct Menu {
-    const std::string options[6] = {"Standard Mode", "Difficult Mode", "Challenge Mode", "Tutorial", "Leaderboard", "Exit"};
-    const int option_slot = 6;
+    const std::string options[7] = {"Standard Mode", "Difficult Mode", "Challenge Mode", "Tutorial", "Leaderboard", "Logout", "Exit"};
+    const int option_slot = 7;
 
     std::string* game_title;
     std::string* menu_option;

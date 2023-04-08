@@ -33,7 +33,7 @@ void Menu::changeOption(int _direction) {
 }
 
 void Menu::selectOption() {
-    int padding_left = 59, padding_top = 18;
+    int padding_left = 59, padding_top = 17;
     Screen::setConsoleColor(BLACK, GREEN);
 
     Screen::gotoXY(padding_left-3, padding_top+current_option*2);
@@ -47,7 +47,7 @@ void Menu::selectOption() {
 }
 
 void Menu::unselectOption() {
-    int padding_left = 59, padding_top = 18;
+    int padding_left = 59, padding_top = 17;
     Screen::setConsoleColor(BLACK, WHITE);
 
     Screen::gotoXY(padding_left-3, padding_top+current_option*2);
@@ -189,7 +189,7 @@ Player Menu::playChallengeMode() {
 
 bool Menu::menuController(bool is_login) {
     if (is_login == false) {
-        while (IMenu.menuController() == false);
+        while (IMenu.menuController(false) == false);
         Screen::playSound("audio/menu_sound.wav");
         displayMenuBackground(true);
     } else {
@@ -327,8 +327,11 @@ bool Menu::menuController(bool is_login) {
                         LMenu.displayLDBoardScreen(33, 1);
                         return true;
                         break;
-
                     case 5:
+                        IMenu.menuController(true);
+                        return true;
+                        break;
+                    case 6:
                         Screen::clearConsole();
                         exit(0);
                         break;
@@ -395,7 +398,7 @@ void Menu::displayOptionText() {
     }
 
     Screen::setConsoleColor(BLACK, WHITE);
-    padding_left = 59, padding_top = 18;
+    padding_left = 59, padding_top = 17;
     for (int i = 0;i < option_slot; ++i) {
         Screen::gotoXY(padding_left, padding_top + i * 2);
         std::cout<<options[i];
