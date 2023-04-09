@@ -57,7 +57,7 @@ void LDBoardMenu::displayLDBoardScreen(int pd_left, int pd_top) {
     Screen::gotoXY(padding_left, padding_top + 1);
     for (int i = 0; i < 45; ++i) std::cout<<"-";
 
-    padding_left = 0, padding_top = 13;
+    padding_left = 0, padding_top = 22;
     Screen::setConsoleColor(BLACK, LIGHT_YELLOW);
     loadTitle("assets/big_pikachu.txt", title);
     for (int i = 0; i < 20; ++i) {
@@ -65,7 +65,7 @@ void LDBoardMenu::displayLDBoardScreen(int pd_left, int pd_top) {
         std::cout<<title[i];
     }
 
-    padding_left = 90, padding_top = 13;
+    padding_left = 90, padding_top = 22;
     Screen::setConsoleColor(BLACK, YELLOW);
     loadTitle("assets/diglett.txt", title);
     for (int i = 0; i < 20; ++i) {

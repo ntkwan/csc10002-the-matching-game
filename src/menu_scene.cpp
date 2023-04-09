@@ -33,7 +33,7 @@ void Menu::changeOption(int _direction) {
 }
 
 void Menu::selectOption() {
-    int padding_left = 59, padding_top = 17;
+    int padding_left = 59, padding_top = 23;
     Screen::setConsoleColor(BLACK, GREEN);
 
     Screen::gotoXY(padding_left-3, padding_top+current_option*2);
@@ -47,16 +47,16 @@ void Menu::selectOption() {
 }
 
 void Menu::unselectOption() {
-    int padding_left = 59, padding_top = 17;
+    int padding_left = 59, padding_top = 23;
     Screen::setConsoleColor(BLACK, WHITE);
 
-    Screen::gotoXY(padding_left-3, padding_top+current_option*2);
+    Screen::gotoXY(padding_left - 3, padding_top+current_option*2);
     putchar(' ');
 
     Screen::gotoXY(padding_left, padding_top+current_option*2);
     std::cout<<options[current_option];
 
-    Screen::gotoXY(padding_left+21, padding_top+current_option*2);
+    Screen::gotoXY(padding_left + 21, padding_top+current_option*2);
     putchar(' ');
 }
 
@@ -359,7 +359,7 @@ void Menu::displayMenuBackground(bool is_flash) {
 
     int color[] = { LIGHT_AQUA, AQUA, LIGHT_BLUE, BLUE, LIGHT_PURPLE, PURPLE, YELLOW};
 
-	int loop = (is_flash == true ? 14 : 1), colorCount = (is_flash == true ? 0 : 6), padding_left = 33, padding_top = 1;
+	int loop = (is_flash == true ? 14 : 1), colorCount = (is_flash == true ? 0 : 6), padding_left = 36, padding_top = 1;
 	while (loop--) {
 		Screen::setConsoleColor(BLACK, color[colorCount % 7]);
         Screen::gotoXY(padding_left, padding_top);
@@ -377,28 +377,28 @@ void Menu::displayOptionText() {
     loadMenuAssets("assets/bulbasaur.txt", bulbasaur_asset);
     loadMenuAssets("assets/menu_option.txt", menu_option);
     Screen::setConsoleColor(BLACK, WHITE);
-    int padding_left = 50, padding_top = 15;
+    int padding_left = 50, padding_top = 21;
     for (int i = 0;i < 17; ++i) {
         Screen::gotoXY(padding_left, padding_top + i);
         std::cout<<menu_option[i]<<"\n";
     }
 
     Screen::setConsoleColor(BLACK, YELLOW);
-    padding_left = 10, padding_top = 18;
+    padding_left = 10, padding_top = 25;
     for (int i = 0;i < 13; ++i) {
         Screen::gotoXY(padding_left, padding_top + i);
         std::cout<<pikachu_asset[i]<<"\n";
     }
 
     Screen::setConsoleColor(BLACK, YELLOW);
-    padding_left = 100, padding_top = 15;
+    padding_left = 100, padding_top = 22;
     for (int i = 0;i < 17; ++i) {
         Screen::gotoXY(padding_left, padding_top + i);
         std::cout<<bulbasaur_asset[i]<<"\n";
     }
 
     Screen::setConsoleColor(BLACK, WHITE);
-    padding_left = 59, padding_top = 17;
+    padding_left = 59, padding_top = 23;
     for (int i = 0;i < option_slot; ++i) {
         Screen::gotoXY(padding_left, padding_top + i * 2);
         std::cout<<options[i];

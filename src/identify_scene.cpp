@@ -43,7 +43,7 @@ void IdentifyMenu::displayMenuBackground(bool is_flash) {
 
     int color[] = { LIGHT_AQUA, AQUA, LIGHT_BLUE, BLUE, LIGHT_PURPLE, PURPLE, YELLOW};
 
-	int loop = (is_flash == true ? 14 : 1), colorCount = (is_flash == true ? 0 : 6), padding_left = 33, padding_top = 1;
+	int loop = (is_flash == true ? 14 : 1), colorCount = (is_flash == true ? 0 : 6), padding_left = 36, padding_top = 1;
 	while (loop--) {
 		Screen::setConsoleColor(BLACK, color[colorCount % 7]);
         Screen::gotoXY(padding_left, padding_top);

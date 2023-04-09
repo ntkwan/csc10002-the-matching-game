@@ -148,14 +148,12 @@ void GameScene::displayUserInterface(int _padding_left, int _padding_top, int _m
             }
         };
 
-        int n = loadFlowersAssets("assets/left_flowers.txt", flowers);
+        int n = loadFlowersAssets("assets/flowers.txt", flowers);
         _padding_left = 0;
-        _padding_top = 28;
+        _padding_top = 36;
         Screen::setConsoleColor(WHITE, GREEN);
-        displayFlowersAssets(flowers, n, _padding_left, _padding_top);
-
-        n = loadFlowersAssets("assets/right_flowers.txt", flowers);
-        displayFlowersAssets(flowers, n, _padding_left + 122, _padding_top - 1);
+        displayFlowersAssets(flowers, n - 4, _padding_left, _padding_top);
+        displayFlowersAssets(flowers, n - 4, _padding_left + 70, _padding_top);
     }
 
     Screen::setConsoleColor(WHITE, BLACK);
