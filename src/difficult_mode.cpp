@@ -357,6 +357,7 @@ std::pair<Player, bool> DifficultMode::startGame() {
     Screen::clearConsole();
     initTable();
     while (findValidPairs(false) == false) TableObject->shuffleTableData();
+    displayTableData();
 
     selectCell(cell_pos_x, cell_pos_y, GREEN);
     bool game_valid = true;
