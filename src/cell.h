@@ -20,26 +20,26 @@ struct Cell {
     int cell_pos_y;
     int cell_coord_x;
     int cell_coord_y;
-    Cell *next;
-    Cell *prev;
+    Cell *next;                             //the next cell on linked list
+    Cell *prev;                             //the previous cell on linked list
 
-    Cell();
-    Cell(Cell*);
-    Cell(char, char, int, int, int, int);
+    Cell();                                 //structure constructor
+    Cell(Cell*);                            //assign another cell to the current cell
+    Cell(char, char, int, int, int, int);   //assign cell elements
 
-    char getCellValue() const;
-    int getCellState() const;
-    int getCellCoordX() const;
-    int getCellCoordY() const;
-    int getCellPosX() const;
-    int getCellPosY() const;
+    char getCellValue() const;              //get the character which cell contains
+    int getCellState() const;               //get the state which cell contains (there are 4 states: FREE, LOCKED, DELETED, EMPTY BOARD)
+    int getCellCoordX() const;              //get the cell's x coordination for displaying
+    int getCellCoordY() const;              //get the cell's y coordination for displaying
+    int getCellPosX() const;                //get the cell's row position on 2D dynamically allocated array
+    int getCellPosY() const;                //get the cell's column position  on 2D dynamically allocated array
 
-    void setCellValue(char);
-    void setCellState(int);
-    void setCellCoordX(int);
-    void setCellCoordY(int);
-    void setCellPosX(int);
-    void setCellPosY(int);
+    void setCellValue(char);                //assign new character to the cell
+    void setCellState(int);                 //assign new state to the cell
+    void setCellCoordX(int);                //assign new cell's x coordination
+    void setCellCoordY(int);                //assign new cell's y coordination
+    void setCellPosX(int);                  //assign new cell's row position
+    void setCellPosY(int);                  //assign new cell's column position
 };
 
 #endif // CELL_H

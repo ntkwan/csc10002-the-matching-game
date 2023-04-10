@@ -6,24 +6,19 @@
 #include "menu_scene.h"
 
 struct ChallengeMode {
-        int padding_left = 0;
-        int padding_top = 0;
+        int table_size_n;           //to generate a random number for table's row size
+        int table_size_m;           //to generate a random number for table's column size
 
-        int table_size_n;
-        int table_size_m;
+        GameScene *GameObject;      //to save user data when game ends
+        Player *user_list;          //to maintain user list to other scenes
+        int number_user;            //to maintain number of users to other scenes
+        Player current_play;        //to receive current playing information from previous scene to other scenes
+        const int mistake = 3;      //each level of challenge mode will be 3 mistakes fixed
 
-        GameScene *GameObject;
-        Player PlayerObject;
-        Player *user_list;
-        int number_user;
-        Player current_play;
-        int mistake = 3;
+        ChallengeMode(int, int, Player, int, Player *); //structure constructor
 
-        ChallengeMode(int, int, int, int, Player, int, Player *);
-
-        std::pair<int, bool> startGame();
-        Player loopGame();
+        std::pair<int, bool> startGame();   //to generate a random number for table's size and randomize difficulty stage
+        Player loopGame();                  //to loop the game until the player making mistakes for 3 times or stop playing by pressing ESC button
 };
-
 
 #endif // CHALLENGE_MODE_H

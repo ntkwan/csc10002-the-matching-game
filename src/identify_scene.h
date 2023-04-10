@@ -25,7 +25,7 @@ struct IdentifyMenu {
     void displayNotification(int, int, const std::string &, int);
     void displayMenuBackground(bool);
 
-    bool loginMenu();
+    void loginMenu();
     void registerMenu();
     void loadUserData();
     void saveUserData();

@@ -239,7 +239,7 @@ void IdentifyMenu::saveUserData() {
     out.close();
 }
 
-bool IdentifyMenu::loginMenu() {
+void IdentifyMenu::loginMenu() {
     displayInformationBoard(56, 20, 25, 7);
     Screen::gotoXY(45, 18);
     std::cout<<"USERNAME AND PASSWORD MUST BE LESS THAN 10 CHARACTERS";

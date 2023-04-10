@@ -64,6 +64,8 @@ bool EndgameMenu::displayGameOverScreen(int pd_left, int pd_top, Player current_
 
     delete[] title;
     title = nullptr;
+
+return false;
 }
 
 void EndgameMenu::changeOption(int _direction) {

@@ -1,18 +1,15 @@
 #include "challenge_mode.h"
 
-ChallengeMode::ChallengeMode(int _table_size_n, int _table_size_m, int _padding_left, int _padding_top, Player _player, int _number_user, Player *_user_list) {
-    padding_top = _padding_top;
-    padding_left = padding_left;
+ChallengeMode::ChallengeMode(int _table_size_n, int _table_size_m, Player _player, int _number_user, Player *_user_list) {
     table_size_n = _table_size_n;
     table_size_m = _table_size_m;
 
     GameObject = new GameScene(0, 0, 0, 0);
-    PlayerObject = _player;
     number_user = _number_user;
     user_list = _user_list;
 
-    current_play.username = PlayerObject.username;
-    current_play.password = PlayerObject.password;
+    current_play.username = _player.username;
+    current_play.password = _player.password;
     current_play.gamemode = "challenge";
     current_play.point = 0;
     current_play.lvl = 0;
@@ -76,4 +73,6 @@ Player ChallengeMode::loopGame() {
             return current_play;
         }
     }
+
+return current_play;
 }

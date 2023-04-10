@@ -183,7 +183,7 @@ Player Menu::playDifficultMode(int table_size_n, int table_size_m, Player *user,
 
 Player Menu::playChallengeMode() {
     Screen::clearConsole();
-    ChallengeMode game(0, 0, 20, 3, IMenu.user, IMenu.number_user, IMenu.user_list);
+    ChallengeMode game(0, 0, IMenu.user, IMenu.number_user, IMenu.user_list);
     return game.loopGame();
 }
 
