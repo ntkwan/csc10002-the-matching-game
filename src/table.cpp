@@ -42,7 +42,7 @@ void Table::generateTableData() {
         int char_gen = rand() % 26;
         while (occurs[char_gen] > max_distinct_number) char_gen = rand() % 26;
 
-        character_list[i] = character_list[i+1] = rand() % 26;
+        character_list[i] = character_list[i+1] = char_gen;
         ++occurs[char_gen];
     }
 

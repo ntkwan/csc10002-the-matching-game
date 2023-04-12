@@ -36,26 +36,26 @@ struct Menu {
     Menu();
     ~Menu();
 
-    bool inputTableSize(int);
-    std::pair<Player, bool> playStandardMode();
-    Player playStandardMode(int, int, Player *, Table *);
+    bool inputTableSize(int);                   //create custom table size
+    std::pair<Player, bool> playStandardMode(); //init and start playing standard mode
+    Player playStandardMode(int, int, Player *, Table *); //has the same functionality as the above but for standard mode save files
 
-    std::pair<Player, bool> playDifficultMode();
-    Player playDifficultMode(int, int, Player *, TableLL *);
+    std::pair<Player, bool> playDifficultMode(); //init and start playing difficult mode
+    Player playDifficultMode(int, int, Player *, TableLL *); //has the same functionality as the above but for difficult mode save files
 
-    Player playChallengeMode();
-    bool menuController(bool);
-    void loadMenuAssets(const std::string &, std::string *&);
-    void displayMenuBackground(bool);
-    void displayInformationBoard(const int, const int, const int, const int);
+    Player playChallengeMode(); //init and start playing challenge mode
+    bool menuController(bool);  //handle menu screen
+    void loadMenuAssets(const std::string &, std::string *&); //load menu assets to be displayed
+    void displayMenuBackground(bool);  //display menu effects and game titles
+    void displayInformationBoard(const int, const int, const int, const int); //display in-game user interface
 
-    void loadUserData();
-    void loginMenu();
-    void registerMenu();
+    void loadUserData(); //import user data
+    void loginMenu(); //display login screen
+    void registerMenu(); //display register screen
 
-    void changeOption(int);
-    void selectOption();
-    void unselectOption();
-    void displayOptionText();
+    void changeOption(int); //change current option (use to iterate through options)
+    void selectOption(); //select current option
+    void unselectOption(); //unselect current option
+    void displayOptionText(); //display menu options
 };
 #endif // MENU_SCENE_H
